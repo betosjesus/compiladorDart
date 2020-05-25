@@ -288,10 +288,10 @@ def p_literal(p):
                 | NUMBER
                 | LITERAL_STRING'''
                 
-    if p[1] == 'ID':          
+    if isinstance(p[1],str) and (p[1][0] != "\"" or p[1][0] != "'"):
         p[0] = sa.CallLiteralId(p[1])
     elif len(p) == 2 and isinstance(p[1], sa.listLiteral):
-         p[0] = sa.CallLiteralListLiteral(p[1])
+        p[0] = sa.CallLiteralListLiteral(p[1])
     elif len(p) == 2 and isinstance(p[1], sa.booleanLiteral):
         p[0] = sa.CallLiteralBooleanLiteral(p[1])
     else:
@@ -300,15 +300,10 @@ def p_literal(p):
 
 def p_listLiteral(p): 
     '''listLiteral : LCON RCON
-                   | ID LCON expressionList RCON 
-                   | ID LCON expressionList COMMA RCON
-                   | LCON expressionList RCON 
-                   | LCON expressionList COMMA RCON'''
+                   | LCON expressionList RCON '''
     # if (len(p) == 4):
     #     p[0] = sa.CallIdListlistLiteral(p[1])
-    if (len(p) == 5 and isinstance(p[3], sa.expressionList)):
-        p[0] = sa.CallIdExpListlistLiteral(p[1], p[3])
-    elif len(p) == 4:
+    if isinstance(p[2], sa.expressionList):
         p[0] = sa.ExpressionListlistLiteral(p[2])
 
 
@@ -322,12 +317,13 @@ def p_booleanLiteral(p):
 
 
 def p_expresionList(p):
-    ''' expressionList : expression 
+    ''' expressionList : expression COMMA
+                       | expression
                        | expression COMMA expressionList '''
-    if (isinstance(p[1], sa.expression)):
+    if len(p) == 2 or len(p) == 3:
         p[0] = sa.ConcreteExpression(p[1])
     else:
-        p[0] = sa.CallExpressionList(p[1],p[3])
+        p[0] = sa.CallExpressionList(p[1], p[3])
 
 
 def p_returnStatement(p):
@@ -450,10 +446,11 @@ data =  '''
 void siftDown(int a, int start, int end) {
     
     for (int i = 1; i < arr; i++){
-        var key = arr[i];
+        var a = [1, 2, 3,];
         int j = i - 1;
     }
-
+    if (true){var a = [1, 2, 'andre'];}
+    
 }
 
  '''
@@ -463,3 +460,4 @@ result = parser.parse(debug=True)
 
 visitor = vis.Visitor()
 result.accept(visitor)
+3 + 4

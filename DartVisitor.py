@@ -1,4 +1,7 @@
 import DartSintaxeAbstrata as sa
+def is_literal(literal):
+    return isinstance(literal, int) or isinstance(literal, str) or isinstance (literal, float)
+
 
 class Visitor:
 
@@ -151,7 +154,7 @@ class Visitor:
     
     def visitConcreteExpressionStatement(self, concreteExpressionStatement):
         # print("visitConcreteExpressionStatement")
-        if concreteExpressionStatement.expressionStatement == ';': 
+        if concreteExpressionStatement.expressionStatement == ';':
             print(concreteExpressionStatement.expressionStatement, end='\n')
         else:
             concreteExpressionStatement.expressionStatement.accept(self)
@@ -310,7 +313,7 @@ class Visitor:
 
     ''' addExpression '''
     def visitCallMultExpression(self, callMultExpression):
-        # print("visitCallMultExpression")
+        #print("visitCallMultExpression")
         callMultExpression.multExpression.accept(self)
         
     def visitCallAddExpressionMult(self, callAddExpressionMult):
@@ -325,7 +328,7 @@ class Visitor:
 
     ''' multExpression '''
     def visitCallUnaryExp(self, callUnaryExp):
-        # print("visitCallUnaryExp")
+        #print("visitCallUnaryExp")
         callUnaryExp.unaryExpression.accept(self)
     
     def visitCallUnaryExpMultExpression(self, callUnaryExpMultExpression):
@@ -342,11 +345,11 @@ class Visitor:
 
     ''' unaryExpression '''
     def visitCallprimaryExpression(self, callprimaryExpression):
-        # print("visitCallprimaryExpression")
+        #print("visitCallprimaryExpression")
         callprimaryExpression.primary.accept(self)
     
     def visitCallfunctioncall(self, callfunctioncall):
-        # print("visitCallfunctioncall")
+        #print("visitCallfunctioncall")
         callfunctioncall.functionCall.accept(self)
 
     def visitConcreteunaryExpression(self, concreteunaryExpression):
@@ -368,14 +371,14 @@ class Visitor:
     ''' primary '''
     def visitCallPrimaryLiteral(self, callPrimaryLiteral):
         # print("visitCallPrimaryLiteral")
-        print(callPrimaryLiteral.literal, end='')
-        
-
-    def visitCallPrimaryExpression(self, callPrimaryExpression):
-        # print("visitCallNormalFormalParameters")
-        print(' ( ', end='')
-        callPrimaryExpression.expression.accept(self)
-        print(' ) ', end='')
+        if is_literal(callPrimaryLiteral.literal):
+            if (isinstance(callPrimaryLiteral.literal, str)):
+                print('\'', end='');
+            print(callPrimaryLiteral.literal, end='')
+            if (isinstance(callPrimaryLiteral.literal, str)):
+                print('\'' , end='');
+        else:
+            callPrimaryLiteral.literal.accept(self)
         
 
     ''' literal '''
@@ -384,7 +387,7 @@ class Visitor:
         callLiteralListLiteral.listLiteral.accept(self)
 
     def visitCallLiteralBooleanLiteral(self, callLiteralBooleanLiteral):
-        # print("visitCallLiteralBooleanLiteral")
+        #print("visitCallLiteralBooleanLiteral")
         callLiteralBooleanLiteral.booleanLiteral.accept(self)
 
     def visitCallLiteralId(self, callLiteralId):
@@ -416,11 +419,11 @@ class Visitor:
 
     ''' booleanLiteral'''
     def visitbooleanLiteralTrue(self, booleanLiteralTrue):
-        # print("visitbooleanLiteralTrue")
+        #print("visitbooleanLiteralTrue")
         print(booleanLiteralTrue.true, end='')
 
     def visitbooleanLiteralFalse(self, booleanLiteralFalse):
-        # print("visitbooleanLiteralFalse")
+        #print("visitbooleanLiteralFalse")
         print(booleanLiteralFalse.false, end='')
 
 

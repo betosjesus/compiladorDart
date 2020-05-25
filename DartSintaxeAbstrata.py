@@ -626,13 +626,13 @@ class booleanLiteral(metaclass=ABCMeta):
     def accept(self, visitor):
         pass
 
-class booleanLiteralTrue(listLiteral):
+class booleanLiteralTrue(booleanLiteral):
     def __init__(self, true):
         self.true = true
     def accept(self, visitor):
         visitor.visitbooleanLiteralTrue(self)
 
-class booleanLiteralFalse(listLiteral):
+class booleanLiteralFalse(booleanLiteral):
     def __init__(self, false):
         self.false = false
     def accept(self, visitor):
