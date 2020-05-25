@@ -17,7 +17,7 @@ tokens = reservadas + [
        # Operators (+,-,*,/,%,==,<,>,<=,>=,!=,!,||,&&,++)
          'SOMA', 'SUBTRAIR', 'VEZES', 'DIVIDIR', 'RESTO',
          'IGUAL', 'MENOR', 'MAIOR', 'MENORI', 'MAIORI',
-         'NEG', 'OR', 'AND',
+         'NEG', 'NOT', 'OR', 'AND',
          'ATRIBUIR', 'SOMASOMA', 'SUBSUB',
       # Delimitadores ( ) [ ] { } , . ; :
          'LPAREN', 'RPAREN', 'LCON', 'RCON', 'LCHAV', 'RCHAV',
@@ -58,6 +58,7 @@ t_MAIOR = r'>'
 t_MENORI = r'<='
 t_MAIORI = r'>='
 t_NEG = r'!='
+t_NOT = r'!'
 t_OR = r'\|\|'
 t_AND = r'&&'
 t_ATRIBUIR = r'='

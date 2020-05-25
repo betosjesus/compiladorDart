@@ -39,9 +39,13 @@ class Visitor:
         print(concretevariableDeclaration.id, end='')
 
     ''' decIdentifier'''
+    def visitDeclaredIdentifierType(self, declaredIdentifierType):
+        # print("visitDeclaredIdentifierType")
+        declaredIdentifierType.voidOrType.accept(self)
+        print(declaredIdentifierType.id, end='')
+    
     def visitDeclaredIdentifierId(self, declaredIdentifierId):
         # print("visitDeclaredIdentifierId")
-        declaredIdentifierId.voidOrType.accept(self)
         print(declaredIdentifierId.id, end='')
 
     ''' VoidOrType'''
@@ -92,12 +96,12 @@ class Visitor:
     ''' simlpleFormalParameter '''
     def visitCallFinalConstVarOrTypeId(self, callFinalConstVarOrTypeId):
         # print("visitCallFinalConstVarOrTypeId")
-        print(callFinalConstVarOrTypeId.ID, end='')
+        print(callFinalConstVarOrTypeId.id, end='')
 
     def visitCallVoidOrType(self, callVoidOrType):
         # print("visitCallVoidOrType")        
         callVoidOrType.voidOrType.accept(self)
-        print(callVoidOrType.ID, end='')
+        print(callVoidOrType.id, end='')
     
     def visitCallParameterExpression(self, callParameterExpression):
         # print("visitCallParameterExpression")        
@@ -153,8 +157,7 @@ class Visitor:
             concreteExpressionStatement.expressionStatement.accept(self)
 
     def visitConcreteReturnStatement(self, concreteReturnStatement):
-        #print("visitConcreteReturnStatement")
-        #print (isinstance(concreteReturnStatement.returnStatement, sa.ReturnStatementExpression ))
+        #print("visitConcreteReturnStatement"))
         concreteReturnStatement.returnStatement.accept(self)
     
     def visitConcreteIfStatement(self, concreteIfStatement):
@@ -198,9 +201,17 @@ class Visitor:
         # print("visitCallDeclaredIdentifier")
         callDeclaredIdentifier.declaredIdentifier.accept(self)
 
-    def visitCallVarExpression(self, callVarExpression):
-        # print("visitCallVarExpression")
-        callVarExpression.expression.accept(self)
+    def visitCallDeclaredInitializedIdentifierList(self, callDeclaredInitializedIdentifierList):
+        # print("visitCallDeclaredInitializedIdentifierList")
+        callDeclaredInitializedIdentifierList.declaredIdentifier.accept(self)
+        print(' = ', end='')
+        callDeclaredInitializedIdentifierList.listLiteral.accept(self)
+
+    def visitCallDeclaredInitializedIdentifierListLiteral(self, callDeclaredInitializedIdentifierListLiteral):
+        # print("visitCallDeclaredInitializedIdentifierListLiteral")
+        callDeclaredInitializedIdentifierListLiteral.declaredIdentifier.accept(self)
+        print(' = ', end='')
+        callDeclaredInitializedIdentifierListLiteral.listLiteral.accept(self)
 
     def visitCallDeclaredInitializedIdentifier(self, callDeclaredInitializedIdentifier):
         # print("visitCallDeclaredInitializedIdentifier")
@@ -208,61 +219,18 @@ class Visitor:
         print(' = ', end='')
         callDeclaredInitializedIdentifier.expression.accept(self)
 
-    def visitCallDeclaredIdentifierComma(self, callDeclaredIdentifierComma):
-        # print("visitCallDeclaredIdentifierComma")
-        callDeclaredIdentifierComma.declaredIdentifier.accept(self)
-        print(' = ', end='')
-        callDeclaredIdentifierComma.expression.accept(self)
-        print(' , ', end='')
-        callDeclaredIdentifierComma.initializedVariableDeclaration.accept(self)
-
-    def visitCallDeclaredIdentifierIniti(self, callDeclaredIdentifierIniti):
-        # print("visitCallDeclaredIdentifierIniti")
-        callDeclaredIdentifierIniti.declaredIdentifier.accept(self)
-        print(' , ', end='')
-        callDeclaredIdentifierIniti.initializedVariableDeclaration.accept(self)
-
-    def visitDeclaredIdCommaInit(self, declaredIdCommaInit):
-        # print("visitDeclaredIdCommaInit")
-        print(declaredIdCommaInit.declaredIdentifier, end='')
-        print(' , ', end='')
-        declaredIdCommaInit.initializedVariableDeclaration.accept(self)
-
-    def visitIdInit(self, idInit):
-        # print("visitIdInit")
-        print(idInit.id, end='')
-        print(' = ', end='')
-        idInit.expression.accept(self)
-
-
-    def visitIdAtribuirList(self, idAtribuirList):
-        # print("visitIdAtribuirList")
-        print(idAtribuirList.id, end='')
-        print(' = ', end='')
-        print(idAtribuirList.id2, end='')
-        idAtribuirList.listLiteral.accept(self)
-
-    def visitIdListLiteral(self, idListLiteral):
-        # print("visitIdListLiteral")
-        print(idListLiteral.id, end='')
-        idListLiteral.listLiteral.accept(self)
-        print(' = ', end='')
-        idListLiteral.expression.accept(self)
-        
-    def visitConcreteIdInit(self, concreteIdInit):
-        # print("visitConcreteIdInit")
-        print(concreteIdInit.id, end='')
-        print(' = ', end='')
-        concreteIdInit.expression.accept(self)
-        print(' , ', end='')
-        concreteIdInit.initializedVariableDeclaration.accept(self)
-
     def visitIdInitList(self, idInitList):
         # print("visitIdInitList")
-        idInitList.declaredIdentifier.accept(self)
         idInitList.listLiteral.accept(self)
         print(' = ', end='')
         idInitList.expression.accept(self)
+
+
+    def visitCallIdListAtribuirIdList(self, callIdListAtribuirIdList):
+        # print("visitCallIdListAtribuirIdList")
+        callIdListAtribuirIdList.listLiteral.accept(self)
+        print(' = ', end='')
+        callIdListAtribuirIdList.listLiteral2.accept(self)
 
 
     ''' expressionStatement '''
@@ -278,13 +246,7 @@ class Visitor:
     '''expression '''
     def visitCallExpression(self, callExpression):
         # print("visitCallExpression")
-        callExpression.constantExpression.accept(self)
-
-
-    ''' constantExpression '''
-    def visitCallConstantExpression(self, callConstantExpression):
-        # print("visitCallConstantExpression")
-        callConstantExpression.orExpression.accept(self)
+        callExpression.orExpression.accept(self)
 
 
     ''' orExpression '''
@@ -302,43 +264,34 @@ class Visitor:
     ''' andExpression '''
     def visitCalligualExpression(self, calligualExpression):
         # print("visitCalligualExpression")
-        calligualExpression.igualExpression.accept(self)
+        calligualExpression.equalityExpression.accept(self)
     
     def visitCallAndExpressionIgual(self, callAndExpressionIgual):
         # print("visitCallAndExpressionIgual")
         callAndExpressionIgual.andExpression.accept(self)
         print(' && ', end='')
-        callAndExpressionIgual.igualExpression.accept(self)
+        callAndExpressionIgual.equalityExpression.accept(self)
 
-
-    ''' igualExpression '''
-    def visitCalldiferenteExpression(self, calldiferenteExpression):
-        # print("visitCalldiferenteExpression")
-        calldiferenteExpression.diferenteExpression.accept(self)
     
-    def visitExpressionIGUALExpression(self, expressionIGUALExpression):
-        # print("visitExpressionIGUALExpression")
-        expressionIGUALExpression.igualExpression.accept(self)
-        print(' == ', end='')
-        expressionIGUALExpression.diferenteExpression.accept(self)
-
-
-    ''' diferenteExpression '''
+    ''' equalityExpression '''
     def visitCallRelacionalExpression(self, callRelacionalExpression):
         # print("visitCallRelacionalExpression")
         callRelacionalExpression.relacionalExpression.accept(self)
-    
-    def visitCallRelacionalExpressionDif(self, callRelacionalExpressionDif):
-        # print("visitCallRelacionalExpressionDif")
-        callRelacionalExpressionDif.relacionalExpression.accept(self)
-        print(' != ', end='')
-        callRelacionalExpressionDif.diferenteExpression.accept(self)
+
+    def visitCallEqualityExpression(self, callEqualityExpression):
+        # print("visitCallEqualityExpression")
+        callEqualityExpression.equalityExpression.accept(self)
+        if callEqualityExpression.operation   ==  '==':
+            print(' == ', end='')
+        else:
+            print(' != ', end='')
+        callEqualityExpression.relacionalExpression.accept(self)
         
 
     ''' relacionalExpression '''
     def visitCallUnary(self, callUnary):
         # print("visitCallUnary")
-        callUnary.unaryExpression.accept(self)
+        callUnary.addExpression.accept(self)
         
     
     def visitCallConcretExpression(self, callConcretExpression):
@@ -352,29 +305,14 @@ class Visitor:
             print(' >= ', end='')
         else:
             print(' >= ', end='')
-        callConcretExpression.unaryExpression.accept(self)
+        callConcretExpression.addExpression.accept(self)
 
-
-    ''' unaryExpression '''
-    def visitCalladdExpression(self, calladdExpression):
-        # print("visitCalladdExpression")
-        calladdExpression.addExpression.accept(self)
-
-    def visitConcreteunaryExpression(self, callConcretExpression):
-        # print("visitConcreteunaryExpression")
-        callConcretExpression.unaryExpression.accept(self)
-        if callConcretExpression.operation == '++':
-            print(' ++ ', end='')
-        else:
-            print(' -- ', end='')
-    
 
     ''' addExpression '''
     def visitCallMultExpression(self, callMultExpression):
         # print("visitCallMultExpression")
-        callMultExpression.addExpression.accept(self)
+        callMultExpression.multExpression.accept(self)
         
-
     def visitCallAddExpressionMult(self, callAddExpressionMult):
         # print("visitCallAddExpressionMult")
         callAddExpressionMult.addExpression.accept(self)
@@ -386,37 +324,38 @@ class Visitor:
         
 
     ''' multExpression '''
-    def visitCallprimary(self, callprimary):
-        # print("visitCallprimary")
-        callprimary.primary.accept(self)
+    def visitCallUnaryExp(self, callUnaryExp):
+        # print("visitCallUnaryExp")
+        callUnaryExp.unaryExpression.accept(self)
     
-    def visitCallprimaryMultExpression(self, callprimaryMultExpression):
-        # print("visitCallprimaryMultExpression")
-        callprimaryMultExpression.multExpression.accept(self)
-        callprimaryMultExpression.addExpression.accept(self)
-        if callprimaryMultExpression.operation   == '*':
+    def visitCallUnaryExpMultExpression(self, callUnaryExpMultExpression):
+        # print("visitCallUnaryExpMultExpression")
+        callUnaryExpMultExpression.multExpression.accept(self)
+        if callUnaryExpMultExpression.operation   == '*':
             print(' * ', end='')
-        elif callprimaryMultExpression.operation == '/':
+        elif callUnaryExpMultExpression.operation == '/':
             print(' / ', end='')
-        elif callprimaryMultExpression.operation == '%':
+        else:
             print(' % ', end='')
-        callprimaryMultExpression.primary.accept(self)
-    
-    def visitCallfunctionCall(self, callfunctionCall):
-        # print("visitCallfunctionCall")
-        callfunctionCall.functionCall.accept(self)
+        callUnaryExpMultExpression.unaryExpression.accept(self)
 
-    def visitCallprimaryFunctionCall(self, callprimaryFunctionCall):
-        # print("visitCallprimaryFunctionCall")
-        callprimaryFunctionCall.multExpression.accept(self)
-        callprimaryFunctionCall.addExpression.accept(self)
-        if callprimaryFunctionCall.operation   == '*':
-            print(' * ', end='')
-        elif callprimaryFunctionCall.operation == '/':
-            print(' / ', end='')
-        elif callprimaryFunctionCall.operation == '%':
-            print(' % ', end='')
-        callprimaryFunctionCall.functionCall.accept(self)
+
+    ''' unaryExpression '''
+    def visitCallprimaryExpression(self, callprimaryExpression):
+        # print("visitCallprimaryExpression")
+        callprimaryExpression.primary.accept(self)
+    
+    def visitCallfunctioncall(self, callfunctioncall):
+        # print("visitCallfunctioncall")
+        callfunctioncall.functionCall.accept(self)
+
+    def visitConcreteunaryExpression(self, concreteunaryExpression):
+        # print("visitConcreteunaryExpression")
+        concreteunaryExpression.unaryExpression.accept(self)
+        if concreteunaryExpression.operation == '++':
+            print(' ++ ', end='')
+        else:
+            print(' -- ', end='')
 
 
     ''' functionCall '''
@@ -444,21 +383,45 @@ class Visitor:
         # print("visitCallLiteralListLiteral")
         callLiteralListLiteral.listLiteral.accept(self)
 
-    # def visitCallLiteralBooleanLiteral(self, callLiteralBooleanLiteral):
-    #     # print("visitCallLiteralBooleanLiteral")
-    #     callLiteralBooleanLiteral.booleanLiteral.accept(self)
+    def visitCallLiteralBooleanLiteral(self, callLiteralBooleanLiteral):
+        # print("visitCallLiteralBooleanLiteral")
+        callLiteralBooleanLiteral.booleanLiteral.accept(self)
 
     def visitCallLiteralId(self, callLiteralId):
         # print("visitCallLiteralId")
-        print(callLiteralId.ID, end='')
+        print(callLiteralId.id, end='')
         
 
     ''' listLiteral'''
+
+    def visitCallIdListlistLiteral(self, callIdListlistLiteral):
+        # print("visitCallIdListlistLiteral")
+        print(callIdListlistLiteral.id, end='')
+        print((' [ '), end='')
+        print((' ] '), end='')
+
+    def visitCallIdExpListlistLiteral(self, callIdExpListlistLiteral):
+        # print("visitCallIdExpListlistLiteral")
+        print(callIdExpListlistLiteral.id, end='')
+        print((' [ '), end='')
+        callIdExpListlistLiteral.expressionList.accept(self)
+        print((' ] '), end='')
+
     def visitExpressionListlistLiteral(self, expressionListlistLiteral):
         # print("visitExpressionListlistLiteral")
         print((' [ '), end='')
         expressionListlistLiteral.expressionList.accept(self)
         print((' ] '), end='')
+
+
+    ''' booleanLiteral'''
+    def visitbooleanLiteralTrue(self, booleanLiteralTrue):
+        # print("visitbooleanLiteralTrue")
+        print(booleanLiteralTrue.true, end='')
+
+    def visitbooleanLiteralFalse(self, booleanLiteralFalse):
+        # print("visitbooleanLiteralFalse")
+        print(booleanLiteralFalse.false, end='')
 
 
     ''' expressionList'''
@@ -476,13 +439,13 @@ class Visitor:
     " ReturnStatementExpression "
     def visitReturnStatementExpression(self, returnStatementExpression):
         #print("visitReturnStatementExpression")
-        if returnStatementExpression.expression != 'return':
-            print(' return ', end='')
+        if returnStatementExpression.expression != ';':
+            print('return ', end='')
             returnStatementExpression.expression.accept(self)
-            print('; ', end='\n')
+            print('; ', end='')
         else:
-            print(' return ', end='')
-            print('; ', end='\n')
+            print('return ', end='')
+            print('; ', end='')
 
 
     ''' ifStatement '''

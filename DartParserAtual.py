@@ -30,8 +30,13 @@ def p_variableDeclaration(p):
 
 
 def p_declaredIdentifier(p):
-    ''' declaredIdentifier : voidOrType ID'''
-    p[0] = sa.DeclaredIdentifierId(p[1],p[2])
+    ''' declaredIdentifier : voidOrType ID 
+                           | ID'''
+    if len(p) == 3:
+        p[0] = sa.DeclaredIdentifierType(p[1],p[2])
+    else:
+        p[0] = sa.DeclaredIdentifierId(p[1])
+
 
 
 def p_voidOrType(p):
@@ -62,7 +67,7 @@ def p_functionSignature(p):
 
 def p_formalParameterList(p):
     ''' formalParameterList : LPAREN RPAREN 
-                            | LPAREN normalFormalParameters RPAREN'''
+                            | LPAREN normalFormalParameters RPAREN '''
     if len(p) == 4:    
         p[0] = sa.CallNormalFormalParameters(p[2])
     else:
@@ -84,7 +89,7 @@ def p_simlpleFormalParameter(p):
                               | voidOrType ID
                               | expression'''
 
-    if(len(p) == 2 and p[1] == 'ID'):
+    if(len(p) == 2 and isinstance(p[1], str)):
         p[0] = sa.CallFinalConstVarOrTypeId(p[1])
     elif(len(p) == 3):
         p[0] = sa.CallVoidOrType(p[1],p[2])
@@ -159,34 +164,21 @@ def p_localVariableDeclaration(p):
 def p_initializedVariableDeclaration(p):
     ''' initializedVariableDeclaration : declaredIdentifier
                                        | declaredIdentifier ATRIBUIR expression
-                                       | declaredIdentifier listLiteral ATRIBUIR expression
-                                       | ID listLiteral ATRIBUIR expression
-                                       | ID ATRIBUIR ID listLiteral
-                                       | ID ATRIBUIR expression
+                                       | listLiteral ATRIBUIR expression
+                                       | declaredIdentifier ATRIBUIR listLiteral
+                                       | listLiteral ATRIBUIR listLiteral
                                        ''' 
                                        
-# int a;                                
-# int a = 1;
-# int a[2] = 1;                                    
-# a = 1;
-# a[1] = 1;
-# a = a[1]
-                          
-                                        
     if (len(p) == 2):
         p[0] = sa.CallDeclaredIdentifier(p[1])
     elif (len(p) == 4 and isinstance(p[3], sa.expression)):
         p[0] = sa.CallDeclaredInitializedIdentifier(p[1], p[3])
-    elif (len(p) == 5 and isinstance(p[1], sa.declaredIdentifier)):
-        p[0] = sa.IdInitList(p[1], p[2], p[4])
-    elif(len(p) == 5 and isinstance(p[4], sa.expression)):
-        p[0] = sa.IdListLiteral(p[1], p[2], p[4])
-    elif (len(p) == 5 and isinstance(p[4], sa.listLiteral)):
-        p[0] = sa.IdAtribuirList(p[1], p[3], p[4])
+    elif (len(p) == 4 and isinstance(p[1], sa.listLiteral)):
+        p[0] = sa.IdInitList(p[1], p[3])
+    elif (len(p) == 4 and p[2] == '='):
+        p[0] = sa.CallDeclaredInitializedIdentifierListLiteral(p[1], p[3])
     else:
-        p[0] = sa.IdInit(p[1], p[3])
-    # elif (len (p) == 4 and isinstance(p[1], sa.declaredIdentifier)):
-    #     p[0] = sa.IdInitList(p[1], p[3])
+        p[0] = sa.CallIdListAtribuirIdList(p[1], p[3])
 
 
 def p_expressionStatement(p):
@@ -199,14 +191,8 @@ def p_expressionStatement(p):
 
 
 def p_expression(p): 
-    ''' expression : constantExpression'''
+    ''' expression : orExpression'''
     p[0] = sa.CallExpression(p[1])
-
-
-def p_constantExpression(p):
-    '''constantExpression : orExpression'''
-    p[0] = sa.CallConstantExpression(p[1])
-
 
 def p_orExpression(p):
     ''' orExpression : andExpression
@@ -218,52 +204,35 @@ def p_orExpression(p):
 
 
 def p_andExpression(p):
-    '''andExpression : igualExpression
-                    | andExpression AND igualExpression'''
+    '''andExpression : equalityExpression
+                    | andExpression AND equalityExpression'''
     if(len(p) == 2):
         p[0] = sa.CalligualExpression(p[1])
     else:
         p[0] = sa.CallAndExpressionIgual(p[1], p[2], p[3])
 
-
-def p_igualExpression(p):
-    '''igualExpression : diferenteExpression
-                    | igualExpression IGUAL diferenteExpression'''
-    if(len(p) == 2):
-        p[0] = sa.CalldiferenteExpression(p[1])
-    else:
-        p[0] = sa.ExpressionIGUALExpression(p[1], p[2], p[3])
-
-
-def p_diferenteExpression(p):
-    '''diferenteExpression : relacionalExpression
-                           | diferenteExpression NEG relacionalExpression'''
+def p_equalityExpression(p):
+    '''equalityExpression : relacionalExpression
+                          | equalityExpression IGUAL relacionalExpression 
+                          | equalityExpression NEG relacionalExpression '''
+    
     if(len(p) == 2):
         p[0] = sa.CallRelacionalExpression(p[1])
     else:
-        p[0] = sa.CallRelacionalExpressionDif(p[1], p[2], p[3])
+        p[0] = sa.CallEqualityExpression(p[1], p[2], p[3])
 
 
 def p_relacionalExpression(p):
-    '''relacionalExpression : unaryExpression
-                    | relacionalExpression MENOR unaryExpression
-                    | relacionalExpression MAIOR unaryExpression
-                    | relacionalExpression MENORI unaryExpression
-                    | relacionalExpression MAIORI unaryExpression'''
+    '''relacionalExpression : addExpression
+                    | relacionalExpression MENOR addExpression
+                    | relacionalExpression MAIOR addExpression
+                    | relacionalExpression MENORI addExpression
+                    | relacionalExpression MAIORI addExpression'''
     if(len(p) == 2):
         p[0] = sa.CallUnary(p[1])
     else:
         p[0] = sa.CallConcretExpression(p[1], p[2], p[3])
 
-def p_unaryExpression(p):
-    '''unaryExpression : addExpression
-                       | unaryExpression SOMASOMA
-                       | unaryExpression SUBSUB'''
-                    
-    if(len(p) == 2 and isinstance(p[1], sa.addExpression)):
-        p[0] = sa.CalladdExpression(p[1])
-    else:
-        p[0] = sa.ConcreteunaryExpression(p[1], p[2])
 
 def p_addExpression(p):
     '''addExpression : multExpression 
@@ -274,23 +243,31 @@ def p_addExpression(p):
     else:
         p[0] = sa.CallAddExpressionMult(p[1], p[2], p[3])
 
+
 def p_multExpression(p):
-    '''multExpression : primary 
-                      | multExpression VEZES primary
-                      | multExpression DIVIDIR primary
-                      | multExpression RESTO primary
-                      | functionCall 
-                      | multExpression VEZES functionCall
-                      | multExpression DIVIDIR functionCall
-                      | multExpression RESTO functionCall'''
-    if len(p) == 2 and isinstance(p[1], sa.primary):
-        p[0] = sa.Callprimary(p[1])
-    elif len(p) == 4 and isinstance(p[3], sa.primary):
-        p[0] = sa.CallprimaryMultExpression(p[1], p[2], p[3])
-    elif len(p) == 2 and isinstance(p[1], sa.functionCall):
-        p[0] = sa.CallfunctionCall(p[1])
+    '''multExpression : unaryExpression 
+                      | multExpression VEZES unaryExpression
+                      | multExpression DIVIDIR unaryExpression
+                      | multExpression RESTO unaryExpression'''
+    if len(p) == 2:
+        p[0] = sa.CallUnaryExp(p[1])
     else:
-        p[0] = sa.CallprimaryFunctionCall(p[1], p[2], p[3])
+        p[0] = sa.CallUnaryExpMultExpression(p[1], p[2], p[3])
+        
+
+def p_unaryExpression(p):
+    '''unaryExpression : primary
+                       | functionCall
+                       | unaryExpression SOMASOMA
+                       | unaryExpression SUBSUB'''
+                    
+    if(len(p) == 2 and isinstance(p[1], sa.primary)):
+        p[0] = sa.CallprimaryExpression(p[1])
+    elif (len(p) == 2 and isinstance(p[1], sa.functionCall)):
+        p[0] = sa.Callfunctioncall(p[1])
+    else:
+        p[0] = sa.ConcreteunaryExpression(p[1], p[2])
+
 
 def p_functionCall(p):
     '''functionCall : functionSignature'''
@@ -305,38 +282,43 @@ def p_primary(p):
         p[0] = sa.CallPrimaryExpression(p[2])
 
 def p_literal(p):
-    ''' literal : NUMBER
-                | LITERAL_STRING
-                | ID 
-                | listLiteral'''
+    ''' literal : ID 
+                | listLiteral
+                | booleanLiteral 
+                | NUMBER
+                | LITERAL_STRING'''
+                
     if p[1] == 'ID':          
         p[0] = sa.CallLiteralId(p[1])
-    elif len(p) == 3:
+    elif len(p) == 2 and isinstance(p[1], sa.listLiteral):
          p[0] = sa.CallLiteralListLiteral(p[1])
+    elif len(p) == 2 and isinstance(p[1], sa.booleanLiteral):
+        p[0] = sa.CallLiteralBooleanLiteral(p[1])
     else:
         p[0] = p[1]
-                # | booleanLiteral 
-                # | ID listLiteral
-                # | listLiteral
-    # if (len(p) == 2 and isinstance(p[1], sa.listLiteral)):
-        # p[0] = sa.CallLiteralListLiteral(p[1])
-    # else:
-        # p[0] = sa.CallLiteralIdList(p[1], p[2])
 
 
 def p_listLiteral(p): 
-    '''listLiteral : LCON RCON 
+    '''listLiteral : LCON RCON
+                   | ID LCON expressionList RCON 
+                   | ID LCON expressionList COMMA RCON
                    | LCON expressionList RCON 
-                   | LCON expressionList COMMA RCON '''
-    p[0] = sa.ExpressionListlistLiteral(p[2])
+                   | LCON expressionList COMMA RCON'''
+    # if (len(p) == 4):
+    #     p[0] = sa.CallIdListlistLiteral(p[1])
+    if (len(p) == 5 and isinstance(p[3], sa.expressionList)):
+        p[0] = sa.CallIdExpListlistLiteral(p[1], p[3])
+    elif len(p) == 4:
+        p[0] = sa.ExpressionListlistLiteral(p[2])
 
-# def p_booleanLiteral(p): 
-#     ''' booleanLiteral : TRUE 
-#                        | FALSE '''
-#     # if(len(p) == 2 and p[1] == 'TRUE'):
-#         # p[0] = sa.booleanLiteralTrue(p[1])
-#     # else:
-#         # p[0] = sa.booleanLiteralFalse(p[1])
+
+def p_booleanLiteral(p): 
+    ''' booleanLiteral : TRUE 
+                       | FALSE '''
+    if(len(p) == 2 and p[1] == 'TRUE'):
+        p[0] = sa.booleanLiteralTrue(p[1])
+    else:
+        p[0] = sa.booleanLiteralFalse(p[1])
 
 
 def p_expresionList(p):
@@ -351,8 +333,7 @@ def p_expresionList(p):
 def p_returnStatement(p):
     ''' returnStatement : RETURN PCOMMA 
                         | RETURN expression PCOMMA'''
-    if (len(p) == 4):
-        p[0] = sa.ReturnStatementExpression(p[2])
+    p[0] = sa.ReturnStatementExpression(p[2])
 
 
 def p_ifStatement(p):
@@ -466,15 +447,15 @@ lexer = lex.lex()
         ###############
 data =  '''  
 
-int n;
+void siftDown(int a, int start, int end) {
+    
+    for (int i = 1; i < arr; i++){
+        var key = arr[i];
+        int j = i - 1;
+    }
 
-void fact(int n)
-{
-   int a = 3;
-   int a[temp] = 3;
-   f[temp] = 30  + 2;
-   a = f[temp];
-}    
+}
+
  '''
 lexer.input(data)
 parser = yacc.yacc()
@@ -488,3 +469,12 @@ result.accept(visitor)
 
 # Declaracao de var
 # chavs
+# https://github.com/wataken44/pydent/blob/master/pydent.py
+
+# https://github.com/jamiesonbecker/pyindent/blob/master/pyindent/pyindent.py
+
+# https://github.com/JustLikeComet/pythonIndent/blob/master/indentPython.py
+
+# https://dcc.ufrj.br/~fabiom/comp/04JFlex.pdf
+
+# https://github.com/rabiaaydmr/Python-Program-File-Indentation-Check-with-Stacks-/blob/master/DynIntStack.h
