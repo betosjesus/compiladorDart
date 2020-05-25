@@ -463,18 +463,3 @@ result = parser.parse(debug=True)
 
 visitor = vis.Visitor()
 result.accept(visitor)
-
-
-
-
-# Declaracao de var
-# chavs
-# https://github.com/wataken44/pydent/blob/master/pydent.py
-
-# https://github.com/jamiesonbecker/pyindent/blob/master/pyindent/pyindent.py
-
-# https://github.com/JustLikeComet/pythonIndent/blob/master/indentPython.py
-
-# https://dcc.ufrj.br/~fabiom/comp/04JFlex.pdf
-
-# https://github.com/rabiaaydmr/Python-Program-File-Indentation-Check-with-Stacks-/blob/master/DynIntStack.h
