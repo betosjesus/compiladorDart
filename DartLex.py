@@ -76,7 +76,7 @@ t_PONTOS = r':'
 
 t_INTEGER = r'\d+'
 t_FLOAT = r'((\d*\.\d+)(E[\+-]?\d+)?|([1-9]\d*E[\+-]?\d+))'
-LITERAL_STRING = r'\".*?\"'
+t_LITERAL_STRING = r'\"([^\\\n]|(\\.))*?\" | \'([^\\\n]|(\\.))*?\''
 
 
 def t_ID(t):
@@ -95,3 +95,11 @@ def t_NUMBER(t):
 def t_error(t):
    print("Illegal character '%s'" % t.value[0])
    t.lexer.skip(1)
+
+def  t_COMMENT_MONOLINE(t):
+    r'//.*'
+    pass
+
+def  t_ccode_comment(t):
+   r'(/\*(.|\n)*?\*/) | (//.*)'
+   pass

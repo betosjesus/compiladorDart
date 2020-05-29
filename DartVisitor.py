@@ -52,15 +52,14 @@ class Visitor:
         print(declaredIdentifierId.id, end='')
 
     ''' VoidOrType'''
-    def visitVoidOrType(self, voidOrType):
-        # print("visitVoidOrType")
-        print(voidOrType.type, end=' ')
-        #voidOrType.type.accept(self)
+    def visitConcreteVoidOrType(self, concretevoidOrType):
+        # print("visitConcreteVoidOrType")
+        print(concretevoidOrType.type, end=' ')
+        #concretevoidOrType.type.accept(self)
 
     def visitVoidOrTypeV(self, voidOrTypeV):
         # print("visitVoidOrTypeV")
         print(voidOrTypeV.void, end=' ')
-#-----------------------------------------------------------------
 
     ''' functionSignature '''
     def visitCallFormalParameterListId(self, callFormalParameterListId):
@@ -120,9 +119,14 @@ class Visitor:
     ''' block '''
     def visitCallBlockStatements(self, callBlockStatements):
         # print("visitCallBlockStatements")
-        print('{ ', end='\n')
-        callBlockStatements.statements.accept(self)
-        print('}', end='\n')
+        if callBlockStatements.statements != None:
+            print('{ ', end='\n')
+            callBlockStatements.statements.accept(self)
+            print('}', end='\n')
+        else:
+            print('{ ', end='\n')
+            print('}', end='\n')
+
 
 
     ''' statements '''
@@ -307,7 +311,7 @@ class Visitor:
         elif callConcretExpression.operation == '>=':
             print(' >= ', end='')
         else:
-            print(' >= ', end='')
+            print(' <= ', end='')
         callConcretExpression.addExpression.accept(self)
 
 
@@ -344,9 +348,9 @@ class Visitor:
 
 
     ''' unaryExpression '''
-    def visitCallprimaryExpression(self, callprimaryExpression):
-        #print("visitCallprimaryExpression")
-        callprimaryExpression.primary.accept(self)
+    def visitConcreteprimaryExpression(self, concreteprimaryExpression):
+        #print("visitConcreteprimaryExpression")
+        concreteprimaryExpression.primary.accept(self)
     
     def visitCallfunctioncall(self, callfunctioncall):
         #print("visitCallfunctioncall")
@@ -365,7 +369,6 @@ class Visitor:
     def visitConcretFunctionCall(self, concretFunctionCall):
         # print("visitConcretFunctionCall")
         concretFunctionCall.functionSignature.accept(self)
-        
 
 
     ''' primary '''
@@ -380,6 +383,12 @@ class Visitor:
         else:
             callPrimaryLiteral.literal.accept(self)
         
+    def visitCallPrimaryExpression(self, callPrimaryExpression):
+        # print("visitCallPrimaryExpression")
+        print('(', end='');
+        callPrimaryExpression.expression.accept(self)        
+        print(')', end='');
+
 
     ''' literal '''
     def visitCallLiteralListLiteral(self, callLiteralListLiteral):
@@ -415,6 +424,13 @@ class Visitor:
         print((' [ '), end='')
         expressionListlistLiteral.expressionList.accept(self)
         print((' ] '), end='')
+
+
+    '''listLiteralID '''
+    def visitCallListlistLiteralID(self, callListlistLiteralID):
+        # print("visitCallListlistLiteralID")
+        print(callListlistLiteralID.id, end='')
+        callListlistLiteralID.listLiteral.accept(self)
 
 
     ''' booleanLiteral'''

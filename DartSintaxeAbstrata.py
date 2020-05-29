@@ -81,11 +81,11 @@ class voidOrType(metaclass=ABCMeta):
     def accept(self, visitor):
         pass
 
-class VoidOrType(voidOrType):
+class ConcreteVoidOrType(voidOrType):
     def __init__(self, type):
         self.type = type
     def accept(self, visitor):
-        visitor.visitVoidOrType(self)
+        visitor.visitConcreteVoidOrType(self)
 
 class VoidOrTypeV(voidOrType):
     def __init__(self, void):
@@ -518,11 +518,11 @@ class unaryExpression(metaclass=ABCMeta):
     def accept(self, visitor):
         pass
     
-class CallprimaryExpression(unaryExpression):
+class ConcreteprimaryExpression(unaryExpression):
     def __init__(self, primary):
         self.primary = primary
     def accept(self, visitor):
-        visitor.visitCallprimaryExpression(self)
+        visitor.visitConcreteprimaryExpression(self)
 
 class Callfunctioncall(unaryExpression):
     def __init__(self, functionCall):
@@ -618,6 +618,20 @@ class ExpressionListlistLiteral(listLiteral):
         self.expressionList = expressionList
     def accept(self, visitor):
         visitor.visitExpressionListlistLiteral(self)
+
+
+'''listLiteralID e classes concretas '''
+class listLiteralID(metaclass=ABCMeta):
+    @abstractmethod
+    def accept(self, visitor):
+        pass
+
+class CallListlistLiteralID(listLiteral):
+    def __init__(self, id, listLiteral):
+        self.id = id
+        self.listLiteral = listLiteral
+    def accept(self, visitor):
+        visitor.visitCallListlistLiteralID(self)
 
 
 ''' booleanLiteral e classes concretas '''

@@ -2,7 +2,7 @@ import ply.yacc as yacc
 from DartLex import *
 import DartSintaxeAbstrata as sa
 import DartVisitor as vis
-
+# import DartSemanticVisitor as sv
 
 def p_topLevelDefinition(p):
     ''' topLevel : variableDeclaration PCOMMA
@@ -37,15 +37,13 @@ def p_declaredIdentifier(p):
     else:
         p[0] = sa.DeclaredIdentifierId(p[1])
 
-
-
 def p_voidOrType(p):
     '''voidOrType : type
                   | VOID'''
     if p[1] == 'void':
         p[0] = sa.VoidOrTypeV(p[1])
     else:
-        p[0] = sa.VoidOrType(p[1])
+        p[0] = sa.ConcreteVoidOrType(p[1])
               
 
 def p_type(p):
@@ -58,7 +56,7 @@ def p_type(p):
 
 def p_functionSignature(p):
     ''' functionSignature : ID formalParameterList
-                          | voidOrType ID formalParameterList'''
+                          | voidOrType ID formalParameterList '''
     if(len(p) == 3):
         p[0] = sa.CallFormalParameterListId(p[1], p[2])
     else: 
@@ -164,11 +162,9 @@ def p_localVariableDeclaration(p):
 def p_initializedVariableDeclaration(p):
     ''' initializedVariableDeclaration : declaredIdentifier
                                        | declaredIdentifier ATRIBUIR expression
-                                       | listLiteral ATRIBUIR expression
                                        | declaredIdentifier ATRIBUIR listLiteral
-                                       | listLiteral ATRIBUIR listLiteral
-                                       ''' 
-                                       
+                                       | listLiteralID ATRIBUIR expression
+                                       '''                                     
     if (len(p) == 2):
         p[0] = sa.CallDeclaredIdentifier(p[1])
     elif (len(p) == 4 and isinstance(p[3], sa.expression)):
@@ -262,7 +258,7 @@ def p_unaryExpression(p):
                        | unaryExpression SUBSUB'''
                     
     if(len(p) == 2 and isinstance(p[1], sa.primary)):
-        p[0] = sa.CallprimaryExpression(p[1])
+        p[0] = sa.ConcreteprimaryExpression(p[1])
     elif (len(p) == 2 and isinstance(p[1], sa.functionCall)):
         p[0] = sa.Callfunctioncall(p[1])
     else:
@@ -283,11 +279,10 @@ def p_primary(p):
 
 def p_literal(p):
     ''' literal : ID 
-                | listLiteral
                 | booleanLiteral 
+                | listLiteralID
                 | NUMBER
-                | LITERAL_STRING'''
-                
+                | LITERAL_STRING'''              
     if isinstance(p[1],str) and (p[1][0] != "\"" or p[1][0] != "'"):
         p[0] = sa.CallLiteralId(p[1])
     elif len(p) == 2 and isinstance(p[1], sa.listLiteral):
@@ -299,13 +294,14 @@ def p_literal(p):
 
 
 def p_listLiteral(p): 
-    '''listLiteral : LCON RCON
-                   | LCON expressionList RCON '''
+    '''listLiteral : LCON expressionList RCON '''
     # if (len(p) == 4):
     #     p[0] = sa.CallIdListlistLiteral(p[1])
-    if isinstance(p[2], sa.expressionList):
-        p[0] = sa.ExpressionListlistLiteral(p[2])
+    p[0] = sa.ExpressionListlistLiteral(p[2])
 
+def p_listLiteralID(p): 
+    '''listLiteralID : ID listLiteral '''
+    p[0] = sa.CallListlistLiteralID(p[1], p[2])
 
 def p_booleanLiteral(p): 
     ''' booleanLiteral : TRUE 
@@ -443,21 +439,65 @@ lexer = lex.lex()
         ###############
 data =  '''  
 
-void siftDown(int a, int start, int end) {
-    
-    for (int i = 1; i < arr; i++){
-        var a = [1, 2, 3,];
-        int j = i - 1;
-    }
-    if (true){var a = [1, 2, 'andre'];}
-    
+void heapSort(int a) {
+  int count = a;
+ 
+  heapify(a, count);
+ 
+  int end = count - 1;
+  while (end > 0) {
+    int tmp = a[end];
+    a[end] = a[0];
+    a[0] = tmp;
+ 
+    siftDown(a, 0, end - 1);
+    end--;
+  }
 }
 
- '''
+void heapify(int a, int count) {
+  int start = (count - 2)/2;
+
+  while (start >= 0) {
+    siftDown(a, start, count - 1);
+    start--;
+  }
+}
+
+void siftDown(int a, int start, int end) {
+
+  int root = start;
+  while (root*2 + 1 <= end) {
+    int child = root*2 + 1;
+    if (child + 1 <= end && a[child] < a[child + 1]) {
+      child = child+1;
+    } 
+ 
+    if (a[root] < a[child]) {
+      int tmp = a[root];
+      a[root] = a[child];
+      a[child] = tmp;
+      root = child; 
+    } else {
+      return;
+    }
+  }
+ 
+}
+
+void main() {
+  var arr=[1,5,2,7,3,9,4,6,8];
+  print("antesSort");
+  print(arr);
+  heapSort(arr);
+  print("depoisSort");
+  print(arr);
+}
+'''
 lexer.input(data)
 parser = yacc.yacc()
 result = parser.parse(debug=True)
 
+# visitor = sv.SemanticVisitor()
 visitor = vis.Visitor()
 result.accept(visitor)
-3 + 4
