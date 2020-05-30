@@ -1,4 +1,5 @@
 import DartSintaxeAbstrata as sa
+
 def is_literal(literal):
     return isinstance(literal, int) or isinstance(literal, str) or isinstance (literal, float)
 
@@ -96,10 +97,6 @@ class Visitor:
     
 
     ''' simlpleFormalParameter '''
-    def visitCallFinalConstVarOrTypeId(self, callFinalConstVarOrTypeId):
-        # print("visitCallFinalConstVarOrTypeId")
-        print(callFinalConstVarOrTypeId.id, end='')
-
     def visitCallVoidOrType(self, callVoidOrType):
         # print("visitCallVoidOrType")        
         callVoidOrType.voidOrType.accept(self)
@@ -208,12 +205,6 @@ class Visitor:
         # print("visitCallDeclaredIdentifier")
         callDeclaredIdentifier.declaredIdentifier.accept(self)
 
-    def visitCallDeclaredInitializedIdentifierList(self, callDeclaredInitializedIdentifierList):
-        # print("visitCallDeclaredInitializedIdentifierList")
-        callDeclaredInitializedIdentifierList.declaredIdentifier.accept(self)
-        print(' = ', end='')
-        callDeclaredInitializedIdentifierList.listLiteral.accept(self)
-
     def visitCallDeclaredInitializedIdentifierListLiteral(self, callDeclaredInitializedIdentifierListLiteral):
         # print("visitCallDeclaredInitializedIdentifierListLiteral")
         callDeclaredInitializedIdentifierListLiteral.declaredIdentifier.accept(self)
@@ -226,18 +217,11 @@ class Visitor:
         print(' = ', end='')
         callDeclaredInitializedIdentifier.expression.accept(self)
 
-    def visitIdInitList(self, idInitList):
-        # print("visitIdInitList")
-        idInitList.listLiteral.accept(self)
-        print(' = ', end='')
-        idInitList.expression.accept(self)
-
-
-    def visitCallIdListAtribuirIdList(self, callIdListAtribuirIdList):
+    def visitCallIdListAtribuirIdList(self, callIdListIdAtribuirExpression):
         # print("visitCallIdListAtribuirIdList")
-        callIdListAtribuirIdList.listLiteral.accept(self)
+        callIdListIdAtribuirExpression.listLiteralID.accept(self)
         print(' = ', end='')
-        callIdListAtribuirIdList.listLiteral2.accept(self)
+        callIdListIdAtribuirExpression.expression.accept(self)
 
 
     ''' expressionStatement '''
@@ -254,7 +238,6 @@ class Visitor:
     def visitCallExpression(self, callExpression):
         # print("visitCallExpression")
         callExpression.orExpression.accept(self)
-
 
     ''' orExpression '''
     def visitCallandExpression(self, callandExpression):
@@ -300,7 +283,7 @@ class Visitor:
         # print("visitCallUnary")
         callUnary.addExpression.accept(self)
         
-    
+
     def visitCallConcretExpression(self, callConcretExpression):
         # print("visitCallConcretExpression")
         callConcretExpression.relacionalExpression.accept(self)
@@ -405,20 +388,6 @@ class Visitor:
         
 
     ''' listLiteral'''
-
-    def visitCallIdListlistLiteral(self, callIdListlistLiteral):
-        # print("visitCallIdListlistLiteral")
-        print(callIdListlistLiteral.id, end='')
-        print((' [ '), end='')
-        print((' ] '), end='')
-
-    def visitCallIdExpListlistLiteral(self, callIdExpListlistLiteral):
-        # print("visitCallIdExpListlistLiteral")
-        print(callIdExpListlistLiteral.id, end='')
-        print((' [ '), end='')
-        callIdExpListlistLiteral.expressionList.accept(self)
-        print((' ] '), end='')
-
     def visitExpressionListlistLiteral(self, expressionListlistLiteral):
         # print("visitExpressionListlistLiteral")
         print((' [ '), end='')

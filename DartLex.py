@@ -103,3 +103,7 @@ def  t_COMMENT_MONOLINE(t):
 def  t_ccode_comment(t):
    r'(/\*(.|\n)*?\*/) | (//.*)'
    pass
+
+def t_BRANCO(t):
+   r'[ \t]'
+   pass

@@ -152,12 +152,6 @@ class simlpleFormalParameter(metaclass=ABCMeta):
     @abstractmethod
     def accept(self, visitor):
         pass
-    
-class CallFinalConstVarOrTypeId(simlpleFormalParameter):
-    def __init__(self, id):
-        self.id = id
-    def accept(self, visitor):
-        visitor.visitCallFinalConstVarOrTypeId(self)  
 
 class CallVoidOrType(simlpleFormalParameter):
     def __init__(self, voidOrType, id):
@@ -324,27 +318,12 @@ class CallDeclaredIdentifier(initializedVariableDeclaration):
     def accept(self, visitor):
         visitor.visitCallDeclaredIdentifier(self)
 
-
 class CallDeclaredInitializedIdentifier(initializedVariableDeclaration):
     def __init__(self, declaredIdentifier, expression):
         self.declaredIdentifier = declaredIdentifier
         self.expression = expression
     def accept(self, visitor):
         visitor.visitCallDeclaredInitializedIdentifier(self)
-
-class IdInitList(initializedVariableDeclaration):
-    def __init__(self, listLiteral, expression):
-        self.listLiteral = listLiteral
-        self.expression = expression
-    def accept(self, visitor):
-        visitor.visitIdInitList(self)
-
-class CallDeclaredInitializedIdentifierList(initializedVariableDeclaration):
-    def __init__(self, declaredIdentifier, id, listLiteral):
-        self.declaredIdentifier = declaredIdentifier
-        self.listLiteral = listLiteral
-    def accept(self, visitor):
-        visitor.visitCallDeclaredInitializedIdentifierList(self)
 
 class CallDeclaredInitializedIdentifierListLiteral(initializedVariableDeclaration):
     def __init__(self, declaredIdentifier, listLiteral):
@@ -353,10 +332,10 @@ class CallDeclaredInitializedIdentifierListLiteral(initializedVariableDeclaratio
     def accept(self, visitor):
         visitor.visitCallDeclaredInitializedIdentifierListLiteral(self)
 
-class CallIdListAtribuirIdList(initializedVariableDeclaration):
-    def __init__(self, listLiteral, listLiteral2):
-        self.listLiteral = listLiteral
-        self.listLiteral2 = listLiteral2
+class CallIdListIdAtribuirExpression(initializedVariableDeclaration):
+    def __init__(self, listLiteralID, expression):
+        self.listLiteralID = listLiteralID
+        self.expression = expression
     def accept(self, visitor):
         visitor.visitCallIdListAtribuirIdList(self)
 
@@ -599,19 +578,6 @@ class listLiteral(metaclass=ABCMeta):
     @abstractmethod
     def accept(self, visitor):
         pass
-
-class CallIdListlistLiteral(listLiteral):
-    def __init__(self, id):
-        self.id = id
-    def accept(self, visitor):
-        visitor.visitCallIdListlistLiteral(self)
-
-class CallIdExpListlistLiteral(listLiteral):
-    def __init__(self, id, expressionList):
-        self.id = id
-        self.expressionList = expressionList
-    def accept(self, visitor):
-        visitor.visitCallIdExpListlistLiteral(self)
 
 class ExpressionListlistLiteral(listLiteral):
     def __init__(self, expressionList):

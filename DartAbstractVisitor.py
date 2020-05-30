@@ -79,10 +79,6 @@ class AbstractVisitor(metaclass=ABCMeta):
 
     ''' simlpleFormalParameter '''
     @abstractmethod 
-    def visitCallFinalConstVarOrTypeId(self, callFinalConstVarOrTypeId):
-        pass
-
-    @abstractmethod 
     def visitCallVoidOrType(self, callVoidOrType):
         pass
     
@@ -144,9 +140,9 @@ class AbstractVisitor(metaclass=ABCMeta):
     # def visitConcreteForStatement(self, concreteForStatement):
     #     pass
 
-    # @abstractmethod 
-    # def visitConcreteWhileStatement(self, concreteWhileStatement):
-    #     pass
+    @abstractmethod 
+    def visitConcreteWhileStatement(self, concreteWhileStatement):
+        pass
 
     # @abstractmethod 
     # def visitConcreteDoStatement(self, concreteDoStatement):
@@ -161,200 +157,183 @@ class AbstractVisitor(metaclass=ABCMeta):
     #     pass
 
 
-    # ''' localVariableDeclaration'''
-    # @abstractmethod 
-    # def visitCallLocalInitializedVariableDeclaration(self, callLocalInitializedVariableDeclaration):
-    #     pass
-        
-
-    # ''' initializedVariableDeclaration '''
-    # @abstractmethod 
-    # def visitCallDeclaredIdentifier(self, callDeclaredIdentifier):
-    #     pass
-
-    # @abstractmethod 
-    # def visitCallDeclaredInitializedIdentifierList(self, callDeclaredInitializedIdentifierList):
-    #     pass
-
-    # @abstractmethod 
-    # def visitCallDeclaredInitializedIdentifierListLiteral(self, callDeclaredInitializedIdentifierListLiteral):
-    #     pass
-
-    # @abstractmethod 
-    # def visitCallDeclaredInitializedIdentifier(self, callDeclaredInitializedIdentifier):
-    #     pass
-
-    # @abstractmethod 
-    # def visitIdInitList(self, idInitList):
-    #     pass
-
-    # @abstractmethod 
-    # def visitCallIdListAtribuirIdList(self, callIdListAtribuirIdList):
-    #     pass
-
-
-    # ''' expressionStatement '''
-    # @abstractmethod 
-    # def visitConcretexpression(self, concretexpression):
-    #     pass
-
-
-    # '''expression '''
-    # @abstractmethod 
-    # def visitCallExpression(self, callExpression):
-    #     pass
-
-
-    # ''' orExpression '''
-    # @abstractmethod 
-    # def visitCallandExpression(self, callandExpression):
-    #     pass
-
-    # @abstractmethod 
-    # def visitExpressionORexpression(self, expressionORexpression):
-    #     pass
-
-
-    # ''' andExpression '''
-    # @abstractmethod 
-    # def visitCalligualExpression(self, calligualExpression):
-    #     pass
-    
-    # @abstractmethod 
-    # def visitCallAndExpressionIgual(self, callAndExpressionIgual):
-    #     pass
-
-    
-    # ''' equalityExpression '''
-    # @abstractmethod 
-    # def visitCallRelacionalExpression(self, callRelacionalExpression):
-    #     pass
-
-    # @abstractmethod 
-    # def visitCallEqualityExpression(self, callEqualityExpression):
-    #     pass
-        
-
-    # ''' relacionalExpression '''
-    # @abstractmethod 
-    # def visitCallUnary(self, callUnary):
-    #     pass
-        
-    
-    # @abstractmethod 
-    # def visitCallConcretExpression(self, callConcretExpression):
-    #     pass
-
-
-    # ''' addExpression '''
-    # @abstractmethod 
-    # def visitCallMultExpression(self, callMultExpression):
-    #     pass
-        
-    # @abstractmethod 
-    # def visitCallAddExpressionMult(self, callAddExpressionMult):
-    #     pass
-        
-
-    # ''' multExpression '''
-    # @abstractmethod 
-    # def visitCallUnaryExp(self, callUnaryExp):
-    #     pass
-    
-    # @abstractmethod 
-    # def visitCallUnaryExpMultExpression(self, callUnaryExpMultExpression):
-    #     pass
-
-
-    # ''' unaryExpression '''
-    # @abstractmethod 
-    # def visitConcreteprimaryExpression(self, concreteprimaryExpression):
-    #     pass
-    
-    # @abstractmethod 
-    # def visitCallfunctioncall(self, callfunctioncall):
-    #      pass
-
-    # @abstractmethod 
-    # def visitConcreteunaryExpression(self, concreteunaryExpression):
-    #     pass
-
-
-    # ''' functionCall '''
-    # @abstractmethod 
-    # def visitConcretFunctionCall(self, concretFunctionCall):
-    #     pass
-
-
-    # ''' primary '''
-    # @abstractmethod 
-    # def visitCallPrimaryLiteral(self, callPrimaryLiteral):
-    #     pass
-        
-    # @abstractmethod 
-    # def visitCallPrimaryExpression(self, callPrimaryExpression):
-    #     pass
-
-
-    # ''' literal '''
-    # @abstractmethod 
-    # def visitCallLiteralListLiteral(self, callLiteralListLiteral):
-    #     pass
-
-    # @abstractmethod 
-    # def visitCallLiteralBooleanLiteral(self, callLiteralBooleanLiteral):
-    #     pass
-
-    # @abstractmethod 
-    # def visitCallLiteralId(self, callLiteralId):
-    #     pass
-        
-
-    # ''' listLiteral'''
-    # @abstractmethod 
-    # def visitCallIdListlistLiteral(self, callIdListlistLiteral):
-    #     pass
-
-    # @abstractmethod 
-    # def visitCallIdExpListlistLiteral(self, callIdExpListlistLiteral):
-    #     pass
-
-    # @abstractmethod 
-    # def visitExpressionListlistLiteral(self, expressionListlistLiteral):
-    #     pass
-
-
-    # '''listLiteralID '''
-    # @abstractmethod 
-    # def visitCallListlistLiteralID(self, callListlistLiteralID):
-    #     pass
-
-
-    # ''' booleanLiteral'''
-    # @abstractmethod 
-    # def visitbooleanLiteralTrue(self, booleanLiteralTrue):
-    #     pass
-
-
-    # @abstractmethod 
-    # def visitbooleanLiteralFalse(self, booleanLiteralFalse):
-    #     pass
-
-
-    # ''' expressionList'''
-    # @abstractmethod
-    # def visitConcreteExpression(self, concreteExpression):
-    #     pass
-
-    # @abstractmethod 
-    # def visitCallExpressionList(self, callExpressionList):
-    #     pass
-
-
-    " ReturnStatementExpression "
+    ''' localVariableDeclaration'''
     @abstractmethod 
-    def visitReturnStatementExpression(self, returnStatementExpression):
+    def visitCallLocalInitializedVariableDeclaration(self, callLocalInitializedVariableDeclaration):
         pass
+        
+
+    ''' initializedVariableDeclaration '''
+    @abstractmethod 
+    def visitCallDeclaredIdentifier(self, callDeclaredIdentifier):
+        pass
+
+    @abstractmethod 
+    def visitCallDeclaredInitializedIdentifierListLiteral(self, callDeclaredInitializedIdentifierListLiteral):
+        pass
+
+    @abstractmethod 
+    def visitCallDeclaredInitializedIdentifier(self, callDeclaredInitializedIdentifier):
+        pass
+
+    @abstractmethod 
+    def visitCallIdListAtribuirIdList(self, callIdListAtribuirIdList):
+        pass
+
+    ''' expressionStatement '''
+    @abstractmethod 
+    def visitConcretexpression(self, concretexpression):
+        pass
+
+
+    '''expression '''
+    @abstractmethod 
+    def visitCallExpression(self, callExpression):
+        pass
+
+
+    ''' orExpression '''
+    @abstractmethod 
+    def visitCallandExpression(self, callandExpression):
+        pass
+
+    @abstractmethod 
+    def visitExpressionORexpression(self, expressionORexpression):
+        pass
+
+
+    ''' andExpression '''
+    @abstractmethod 
+    def visitCalligualExpression(self, calligualExpression):
+        pass
+    
+    @abstractmethod 
+    def visitCallAndExpressionIgual(self, callAndExpressionIgual):
+        pass
+
+    
+    ''' equalityExpression '''
+    @abstractmethod 
+    def visitCallRelacionalExpression(self, callRelacionalExpression):
+        pass
+
+    @abstractmethod 
+    def visitCallEqualityExpression(self, callEqualityExpression):
+        pass
+        
+
+    ''' relacionalExpression '''
+    @abstractmethod 
+    def visitCallUnary(self, callUnary):
+        pass
+        
+    
+    @abstractmethod 
+    def visitCallConcretExpression(self, callConcretExpression):
+        pass
+
+
+    ''' addExpression '''
+    @abstractmethod 
+    def visitCallMultExpression(self, callMultExpression):
+        pass
+        
+    @abstractmethod 
+    def visitCallAddExpressionMult(self, callAddExpressionMult):
+        pass
+        
+
+    ''' multExpression '''
+    @abstractmethod 
+    def visitCallUnaryExp(self, callUnaryExp):
+        pass
+    
+    @abstractmethod 
+    def visitCallUnaryExpMultExpression(self, callUnaryExpMultExpression):
+        pass
+
+
+    ''' unaryExpression '''
+    @abstractmethod 
+    def visitConcreteprimaryExpression(self, concreteprimaryExpression):
+        pass
+    
+    @abstractmethod 
+    def visitCallfunctioncall(self, callfunctioncall):
+         pass
+
+    @abstractmethod 
+    def visitConcreteunaryExpression(self, concreteunaryExpression):
+        pass
+
+
+    ''' functionCall '''
+    @abstractmethod 
+    def visitConcretFunctionCall(self, concretFunctionCall):
+        pass
+
+
+    ''' primary '''
+    @abstractmethod 
+    def visitCallPrimaryLiteral(self, callPrimaryLiteral):
+        pass
+        
+    @abstractmethod 
+    def visitCallPrimaryExpression(self, callPrimaryExpression):
+        pass
+
+
+    ''' literal '''
+    @abstractmethod 
+    def visitCallLiteralListLiteral(self, callLiteralListLiteral):
+        pass
+
+    @abstractmethod 
+    def visitCallLiteralBooleanLiteral(self, callLiteralBooleanLiteral):
+        pass
+
+    @abstractmethod 
+    def visitCallLiteralId(self, callLiteralId):
+        pass
+        
+
+    ''' listLiteral'''
+    @abstractmethod 
+    def visitExpressionListlistLiteral(self, expressionListlistLiteral):
+        pass
+
+
+    '''listLiteralID '''
+    @abstractmethod 
+    def visitCallListlistLiteralID(self, callListlistLiteralID):
+        pass
+
+
+    ''' booleanLiteral'''
+    @abstractmethod 
+    def visitbooleanLiteralTrue(self, booleanLiteralTrue):
+        pass
+
+
+    @abstractmethod 
+    def visitbooleanLiteralFalse(self, booleanLiteralFalse):
+        pass
+
+
+    ''' expressionList'''
+    @abstractmethod
+    def visitConcreteExpression(self, concreteExpression):
+        pass
+
+    @abstractmethod 
+    def visitCallExpressionList(self, callExpressionList):
+        pass
+
+
+    # " ReturnStatementExpression "
+    # @abstractmethod 
+    # def visitReturnStatementExpression(self, returnStatementExpression):
+    #     pass
 
 
     # ''' ifStatement '''
@@ -401,10 +380,10 @@ class AbstractVisitor(metaclass=ABCMeta):
     #     pass
 
    
-    # ''' whileStatement  '''
-    # @abstractmethod 
-    # def visitWhileStatementExpressionStatement(self, whileStatementExpressionStatement):
-    #     pass
+    ''' whileStatement  '''
+    @abstractmethod 
+    def visitWhileStatementExpressionStatement(self, whileStatementExpressionStatement):
+        pass
 
 
     # ''' doStatement '''

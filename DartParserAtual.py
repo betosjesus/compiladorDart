@@ -2,7 +2,7 @@ import ply.yacc as yacc
 from DartLex import *
 import DartSintaxeAbstrata as sa
 import DartVisitor as vis
-# import DartSemanticVisitor as sv
+import DartSemanticVisitor as sv
 
 def p_topLevelDefinition(p):
     ''' topLevel : variableDeclaration PCOMMA
@@ -83,15 +83,11 @@ def p_normalFormalParameters(p):
 
 
 def p_simlpleFormalParameter(p):
-    ''' simpleFormalParameter : ID 
-                              | voidOrType ID
+    ''' simpleFormalParameter : voidOrType ID
                               | expression'''
-
-    if(len(p) == 2 and isinstance(p[1], str)):
-        p[0] = sa.CallFinalConstVarOrTypeId(p[1])
-    elif(len(p) == 3):
+    if(len(p) == 3):
         p[0] = sa.CallVoidOrType(p[1],p[2])
-    elif len(p) == 2 and isinstance(p[1], sa.expression):
+    else:
         p[0] = sa.CallParameterExpression(p[1])
 
 
@@ -169,12 +165,10 @@ def p_initializedVariableDeclaration(p):
         p[0] = sa.CallDeclaredIdentifier(p[1])
     elif (len(p) == 4 and isinstance(p[3], sa.expression)):
         p[0] = sa.CallDeclaredInitializedIdentifier(p[1], p[3])
-    elif (len(p) == 4 and isinstance(p[1], sa.listLiteral)):
-        p[0] = sa.IdInitList(p[1], p[3])
     elif (len(p) == 4 and p[2] == '='):
         p[0] = sa.CallDeclaredInitializedIdentifierListLiteral(p[1], p[3])
     else:
-        p[0] = sa.CallIdListAtribuirIdList(p[1], p[3])
+        p[0] = sa.CallIdListIdAtribuirExpression(p[1], p[3])
 
 
 def p_expressionStatement(p):
@@ -192,7 +186,7 @@ def p_expression(p):
 
 def p_orExpression(p):
     ''' orExpression : andExpression
-                    | orExpression OR andExpression'''
+                     | orExpression OR andExpression'''
     if (len(p) == 2):
         p[0] = sa.CallandExpression(p[1])
     else:
@@ -201,7 +195,7 @@ def p_orExpression(p):
 
 def p_andExpression(p):
     '''andExpression : equalityExpression
-                    | andExpression AND equalityExpression'''
+                     | andExpression AND equalityExpression'''
     if(len(p) == 2):
         p[0] = sa.CalligualExpression(p[1])
     else:
@@ -272,7 +266,7 @@ def p_functionCall(p):
 def p_primary(p): 
     ''' primary : literal 
                 | LPAREN expression RPAREN '''
-    if len(p) == 2 :
+    if len(p) == 2:
         p[0] = sa.CallPrimaryLiteral(p[1])
     else:
         p[0] = sa.CallPrimaryExpression(p[2])
@@ -295,8 +289,6 @@ def p_literal(p):
 
 def p_listLiteral(p): 
     '''listLiteral : LCON expressionList RCON '''
-    # if (len(p) == 4):
-    #     p[0] = sa.CallIdListlistLiteral(p[1])
     p[0] = sa.ExpressionListlistLiteral(p[2])
 
 def p_listLiteralID(p): 
@@ -438,14 +430,14 @@ lexer = lex.lex()
 #     Test it out     #
         ###############
 data =  '''  
-
 void heapSort(int a) {
-  int count = a;
+  int count = a + r;
  
   heapify(a, count);
  
+/*  
   int end = count - 1;
-  while (end > 0) {
+  while (f > f) {
     int tmp = a[end];
     a[end] = a[0];
     a[0] = tmp;
@@ -453,8 +445,11 @@ void heapSort(int a) {
     siftDown(a, 0, end - 1);
     end--;
   }
+*/
+
 }
 
+/*
 void heapify(int a, int count) {
   int start = (count - 2)/2;
 
@@ -493,11 +488,12 @@ void main() {
   print("depoisSort");
   print(arr);
 }
+*/
 '''
 lexer.input(data)
 parser = yacc.yacc()
 result = parser.parse(debug=True)
 
-# visitor = sv.SemanticVisitor()
-visitor = vis.Visitor()
+visitor = sv.SemanticVisitor()
+# visitor = vis.Visitor()
 result.accept(visitor)
