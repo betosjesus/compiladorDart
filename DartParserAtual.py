@@ -66,11 +66,10 @@ def p_functionSignature(p):
 def p_formalParameterList(p):
     ''' formalParameterList : LPAREN RPAREN 
                             | LPAREN normalFormalParameters RPAREN '''
-    if len(p) == 4:    
+    if len(p) == 4:
         p[0] = sa.CallNormalFormalParameters(p[2])
     else:
         p[0] = sa.CallNormalFormalParameters(None)
-
 
 
 def p_normalFormalParameters(p):
@@ -430,65 +429,19 @@ lexer = lex.lex()
 #     Test it out     #
         ###############
 data =  '''  
-void heapSort(int a) {
-  int count = a + r;
- 
-  heapify(a, count);
- 
-/*  
-  int end = count - 1;
-  while (f > f) {
-    int tmp = a[end];
-    a[end] = a[0];
-    a[0] = tmp;
- 
-    siftDown(a, 0, end - 1);
-    end--;
-  }
-*/
 
+int soma(int a, int b)
+{
+    return a + b;
 }
 
-/*
-void heapify(int a, int count) {
-  int start = (count - 2)/2;
-
-  while (start >= 0) {
-    siftDown(a, start, count - 1);
-    start--;
-  }
+void main()
+{
+    int a;
+    int b;
+    soma (a,b);
 }
 
-void siftDown(int a, int start, int end) {
-
-  int root = start;
-  while (root*2 + 1 <= end) {
-    int child = root*2 + 1;
-    if (child + 1 <= end && a[child] < a[child + 1]) {
-      child = child+1;
-    } 
- 
-    if (a[root] < a[child]) {
-      int tmp = a[root];
-      a[root] = a[child];
-      a[child] = tmp;
-      root = child; 
-    } else {
-      return;
-    }
-  }
- 
-}
-
-void main() {
-  var arr=[1,5,2,7,3,9,4,6,8];
-  print("antesSort");
-  print(arr);
-  heapSort(arr);
-  print("depoisSort");
-  print(arr);
-}
-*/
 '''
 lexer.input(data)
 parser = yacc.yacc()

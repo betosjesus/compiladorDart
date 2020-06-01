@@ -56,7 +56,6 @@ class Visitor:
     def visitConcreteVoidOrType(self, concretevoidOrType):
         # print("visitConcreteVoidOrType")
         print(concretevoidOrType.type, end=' ')
-        #concretevoidOrType.type.accept(self)
 
     def visitVoidOrTypeV(self, voidOrTypeV):
         # print("visitVoidOrTypeV")
@@ -359,18 +358,18 @@ class Visitor:
         # print("visitCallPrimaryLiteral")
         if is_literal(callPrimaryLiteral.literal):
             if (isinstance(callPrimaryLiteral.literal, str)):
-                print('\'', end='');
+                print('\'', end='')
             print(callPrimaryLiteral.literal, end='')
             if (isinstance(callPrimaryLiteral.literal, str)):
-                print('\'' , end='');
+                print('\'' , end='')
         else:
             callPrimaryLiteral.literal.accept(self)
         
     def visitCallPrimaryExpression(self, callPrimaryExpression):
         # print("visitCallPrimaryExpression")
-        print('(', end='');
+        print('(', end='')
         callPrimaryExpression.expression.accept(self)        
-        print(')', end='');
+        print(')', end='')
 
 
     ''' literal '''

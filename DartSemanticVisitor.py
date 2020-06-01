@@ -42,7 +42,7 @@ class SemanticVisitor(AbstractVisitor):
         variableDeclarationID.declaredIdentifier.accept(self)
 
     def visitConcretevariableDeclaration(self, concretevariableDeclaration):
-        concretevariableDeclaration.variableDeclaration.accept(self)
+       return[concretevariableDeclaration.id] + concretevariableDeclaration.variableDeclaration.accept(self)
        
 
     ''' decIdentifier '''
@@ -50,12 +50,12 @@ class SemanticVisitor(AbstractVisitor):
         st.addVar(declaredIdentifierType.id, declaredIdentifierType.voidOrType)
         
     def visitDeclaredIdentifierId(self, declaredIdentifierId):
-       return [declaredIdentifierId.id]
+        return [declaredIdentifierId.id]
 
 
     ''' voidOrType '''
     def visitConcreteVoidOrType(self, concretevoidOrType):
-        return [concretevoidOrType.type]
+        return [concretevoidOrType.type(self)]
 
     def visitVoidOrTypeV(self, voidOrTypeV):        
         return [voidOrTypeV.void]
@@ -63,11 +63,25 @@ class SemanticVisitor(AbstractVisitor):
     
     ''' functionSignature '''
     def visitCallFormalParameterListId(self, callFormalParameterListId):
-        callFormalParameterListId.formalParameterList.accept(self)
-        return [callFormalParameterListId.id]
+        bindable = st.getBindable(callFormalParameterListId.id)
+        if (bindable != None and bindable[st.BINDABLE] == st.FUNCTION):
+            typeParams = callFormalParameterListId.formalParameterList.accept(self)
+            if (list(bindable[st.PARAMS][1::2]) == typeParams):
+                return bindable[st.TYPE]
+            callFormalParameterListId.accept(self.printer)
+            print("\n\t[Erro] Chamada de funcao invalida. Tipos passados na chamada sao:", typeParams)
+            print('\tenquanto que os tipos definidos no metodo sao:', bindable[st.PARAMS][1::2], '\n')
+        # elif (bindable != None and bindable[st.BINDABLE] == st.FUNCTION):
+            return bindable[st.TYPE]
+        # callFormalParameterListId.accept(self.printer)
+            print("\n\t[Erro] Chamada de funcao invalida. O id", callFormalParameterListId.id, "nao eh de uma funcao, nao foi definido ou foi definido apos esta funcao\n")
+        else:
+            callFormalParameterListId.accept(self.printer)
+            print("\n\t[Erro] Chamada de funcao invalida. O id", callFormalParameterListId.id,
+                  "nao eh de uma funcao, nao foi definido ou foi definido apos esta funcao\n")
+        return None
     
     def visitCallFormalParameterListvoidOrType(self, callFormalParameterListvoidOrType):
-        callFormalParameterListvoidOrType.voidOrType.accept(self)
         params = {}
         if (callFormalParameterListvoidOrType.formalParameterList != None):
             params = callFormalParameterListvoidOrType.formalParameterList.accept(self)
@@ -75,8 +89,8 @@ class SemanticVisitor(AbstractVisitor):
         else:
             st.addFunction(callFormalParameterListvoidOrType.id, params, callFormalParameterListvoidOrType.voidOrType)
         st.beginScope(callFormalParameterListvoidOrType.id)
-        for k in range(0, len(params), 2):
-            st.addVar(params[k], params[k+1])
+        # for k in range(0, len(params), 2):
+        #     st.addVar(params[k], params[k+1])
     
 
     ''' formalParameterList'''
@@ -87,20 +101,18 @@ class SemanticVisitor(AbstractVisitor):
 
     ''' normalFormalParameters '''
     def visitCallNormalFormalParameter(self, normalFormalParameter):
-        normalFormalParameter.simpleFormalParameter.accept(self)
+        return [normalFormalParameter.simpleFormalParameter.accept(self)]
     
     def visitNormalFormalParametersRepetition(self, normalFormalParametersRepetition):
-        normalFormalParametersRepetition.simpleFormalParameter.accept(self)
-        normalFormalParametersRepetition.normalFormalParameters.accept(self)
+        return [normalFormalParametersRepetition.simpleFormalParameter.accept(self)] + normalFormalParametersRepetition.normalFormalParameters.accept(self)
     
 
     ''' simlpleFormalParameter'''
     def visitCallVoidOrType(self, callVoidOrType):     
-        callVoidOrType.voidOrType.accept(self)
-        return [callVoidOrType.id]
+        st.addVar(callVoidOrType.id, callVoidOrType.voidOrType)
     
     def visitCallParameterExpression(self, callParameterExpression):        
-        callParameterExpression.expression.accept(self)
+        return [callParameterExpression.expression.accept(self)]
     
 
     ''' functionBody '''
@@ -183,11 +195,19 @@ class SemanticVisitor(AbstractVisitor):
 
     ''' returnStatement'''
     def visitReturnStatementExpression(self, returnStatementExpression):
-        returnStatementExpression.expression.accept(self)
+        typeExp = returnStatementExpression.expression.accept(self)
+        scope = st.symbolTable[-1][st.SCOPE]
+        bindable = st.getBindable(scope)
+        if (typeExp != bindable[st.TYPE]):
+            returnStatementExpression.accept(self.printer)
+            print('\t[Erro] O retorno da funcao', scope, 'eh do tipo', bindable[st.TYPE],end='')
+            print(' no entanto, o retorno passado foi do tipo', typeExp, '\n')
+        st.endScope()
 
     ''' expressionStatement '''
     def visitConcretexpression(self, concretexpression):
         concretexpression.expression.accept(self)
+
 
     '''expression '''
     def visitCallExpression(self, callExpression):
@@ -261,6 +281,7 @@ class SemanticVisitor(AbstractVisitor):
             print(' eh do tipo', type2,'\n')
         return c
 
+
     ''' multExpression '''
     def visitCallUnaryExp(self, callUnaryExp):
         callUnaryExp.unaryExpression.accept(self)
@@ -305,9 +326,13 @@ class SemanticVisitor(AbstractVisitor):
 
     def visitCallLiteralBooleanLiteral(self, callLiteralBooleanLiteral):
         callLiteralBooleanLiteral.booleanLiteral.accept(self)
+        return st.BOOL
 
     def visitCallLiteralId(self, callLiteralId):
-       return [callLiteralId.id]
+        idName = st.getBindable(callLiteralId.id)
+        if (idName != None):
+            return idName[st.TYPE]
+        return None
 
     ''' listLiteral'''
     def visitExpressionListlistLiteral(self, expressionListlistLiteral):
@@ -316,9 +341,7 @@ class SemanticVisitor(AbstractVisitor):
 
     '''listLiteralID '''
     def visitCallListlistLiteralID(self, callListlistLiteralID):
-        return [callListlistLiteralID.id]
-        callListlistLiteralID.listLiteral.accept(self)
-
+        return [callListlistLiteralID.id] + callListlistLiteralID.listLiteral.accept(self)
 
     ''' booleanLiteral'''
     def visitbooleanLiteralTrue(self, booleanLiteralTrue):
@@ -351,7 +374,7 @@ class SemanticVisitor(AbstractVisitor):
         if (type != st.BOOL):
             whileStatementExpressionStatement.expression.accept(self.printer)
             print ("\n\t[Erro] A expressao ", end='')
-            whileStatementExpressionStatement.exp.accept(self.printer)
+            whileStatementExpressionStatement.expression.accept(self.printer)
             print(" eh", type, end='')
             print (". Deveria ser boolean\n")
         whileStatementExpressionStatement.statement.accept(self)
