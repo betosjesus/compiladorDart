@@ -47,7 +47,7 @@ class SemanticVisitor(AbstractVisitor):
 
     ''' decIdentifier '''
     def visitDeclaredIdentifierType(self, declaredIdentifierType):
-        st.addVar(declaredIdentifierType.id, declaredIdentifierType.voidOrType)
+        st.addVar(declaredIdentifierType.id, declaredIdentifierType.voidOrType.type)
         
     def visitDeclaredIdentifierId(self, declaredIdentifierId):
         return [declaredIdentifierId.id]
@@ -85,18 +85,19 @@ class SemanticVisitor(AbstractVisitor):
         params = {}
         if (callFormalParameterListvoidOrType.formalParameterList != None):
             params = callFormalParameterListvoidOrType.formalParameterList.accept(self)
-            st.addFunction(callFormalParameterListvoidOrType.id, params, callFormalParameterListvoidOrType.voidOrType)
+            st.addFunction(callFormalParameterListvoidOrType.id, params, callFormalParameterListvoidOrType.voidOrType.type)
         else:
-            st.addFunction(callFormalParameterListvoidOrType.id, params, callFormalParameterListvoidOrType.voidOrType)
+            st.addFunction(callFormalParameterListvoidOrType.id, params, callFormalParameterListvoidOrType.voidOrType.type)
         st.beginScope(callFormalParameterListvoidOrType.id)
-        # for k in range(0, len(params), 2):
-        #     st.addVar(params[k], params[k+1])
-    
+        print("[visitCallFormalParameterListvoidOrType]", params)
+        for k in range(0, len(params), 2):
+            st.addVar(params[k], params[k+1])
+        return params
 
     ''' formalParameterList'''
     def visitCallNormalFormalParameters(self, callNormalFormalParameters):
         if (callNormalFormalParameters.normalFormalParameters != None):
-            callNormalFormalParameters.normalFormalParameters.accept(self)
+            return callNormalFormalParameters.normalFormalParameters.accept(self)
     
 
     ''' normalFormalParameters '''
@@ -104,12 +105,15 @@ class SemanticVisitor(AbstractVisitor):
         return [normalFormalParameter.simpleFormalParameter.accept(self)]
     
     def visitNormalFormalParametersRepetition(self, normalFormalParametersRepetition):
-        return [normalFormalParametersRepetition.simpleFormalParameter.accept(self)] + normalFormalParametersRepetition.normalFormalParameters.accept(self)
-    
+        if (normalFormalParametersRepetition.normalFormalParameters.accept(self) != None):
+            return [normalFormalParametersRepetition.simpleFormalParameter.accept(self)] + normalFormalParametersRepetition.normalFormalParameters.accept(self)
+        else:
+            return [normalFormalParametersRepetition.simpleFormalParameter.accept(self)]
 
     ''' simlpleFormalParameter'''
     def visitCallVoidOrType(self, callVoidOrType):     
-        st.addVar(callVoidOrType.id, callVoidOrType.voidOrType)
+        return st.INT
+        #st.addVar(callVoidOrType.id, callVoidOrType.voidOrType.type)
     
     def visitCallParameterExpression(self, callParameterExpression):        
         return [callParameterExpression.expression.accept(self)]
@@ -330,6 +334,7 @@ class SemanticVisitor(AbstractVisitor):
 
     def visitCallLiteralId(self, callLiteralId):
         idName = st.getBindable(callLiteralId.id)
+        print ("[visitCallLiteralId]", st.symbolTable)
         if (idName != None):
             return idName[st.TYPE]
         return None

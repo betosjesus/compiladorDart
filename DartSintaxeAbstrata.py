@@ -12,21 +12,21 @@ class TopLevelDefinitionVariable(topLevelDefinition):
     def __init__(self, variableDeclaration):
         self.variableDeclaration = variableDeclaration
     def accept(self, visitor):
-        visitor.visitTopLevelDefinitionVariable(self)
+        return visitor.visitTopLevelDefinitionVariable(self)
         
 class TopLevelDefinitionVariableRepetition(topLevelDefinition):
     def __init__(self, variableDeclaration, topLevel):
         self.variableDeclaration = variableDeclaration
         self.topLevel = topLevel
     def accept(self, visitor):
-        visitor.visitTopLevelDefinitionVariableRepetition(self)
+        return visitor.visitTopLevelDefinitionVariableRepetition(self)
 
 class TopLevelDefinitionFunction(topLevelDefinition):
     def __init__(self, functionSignature, functionBody):
         self.functionSignature = functionSignature 
         self.functionBody = functionBody
     def accept(self, visitor):
-        visitor.visitTopLevelDefinitionFunction(self)
+        return visitor.visitTopLevelDefinitionFunction(self)
 
 class TopLevelDefinitionFunctionRepetition(topLevelDefinition):
     def __init__(self, functionSignature, functionBody, topLevel):
@@ -34,7 +34,7 @@ class TopLevelDefinitionFunctionRepetition(topLevelDefinition):
         self.functionBody = functionBody
         self.topLevel = topLevel
     def accept(self, visitor):
-        visitor.visitTopLevelDefinitionFunctionRepetition(self)
+        return visitor.visitTopLevelDefinitionFunctionRepetition(self)
 
 
 ''' variableDeclaration e classes concretas '''
@@ -47,14 +47,14 @@ class VariableDeclarationID(variableDeclaration):
     def __init__(self, declaredIdentifier):
         self.declaredIdentifier = declaredIdentifier
     def accept(self, visitor):
-        visitor.visitVariableDeclarationID(self)
+        return visitor.visitVariableDeclarationID(self)
 
 class ConcretevariableDeclaration(variableDeclaration):
     def __init__(self, variableDeclaration, id):
         self.variableDeclaration = variableDeclaration
         self.id = id
     def accept(self, visitor):
-        visitor.visitConcretevariableDeclaration(self)
+        return visitor.visitConcretevariableDeclaration(self)
 
 ''' decIdentifier e classes concretas '''
 class declaredIdentifier(metaclass=ABCMeta):
@@ -67,13 +67,13 @@ class DeclaredIdentifierType(declaredIdentifier):
         self.voidOrType = voidOrType 
         self.id = id 
     def accept(self, visitor):
-        visitor.visitDeclaredIdentifierType(self)
+        return visitor.visitDeclaredIdentifierType(self)
 
 class DeclaredIdentifierId(declaredIdentifier):
     def __init__(self, id):
         self.id = id 
     def accept(self, visitor):
-        visitor.visitDeclaredIdentifierId(self)
+        return visitor.visitDeclaredIdentifierId(self)
 
 ''' voidOrType e classes concretas '''
 class voidOrType(metaclass=ABCMeta):
@@ -85,13 +85,13 @@ class ConcreteVoidOrType(voidOrType):
     def __init__(self, type):
         self.type = type
     def accept(self, visitor):
-        visitor.visitConcreteVoidOrType(self)
+        return visitor.visitConcreteVoidOrType(self)
 
 class VoidOrTypeV(voidOrType):
     def __init__(self, void):
         self.void = void
     def accept(self, visitor):
-        visitor.visitVoidOrTypeV(self)
+        return visitor.visitVoidOrTypeV(self)
 
 ''' functionSignature e classes concretas '''
 class functionSignature(metaclass=ABCMeta):
@@ -104,7 +104,7 @@ class CallFormalParameterListId(functionSignature):
         self.id = id
         self.formalParameterList = formalParameterList
     def accept(self, visitor):
-        visitor.visitCallFormalParameterListId(self)
+        return visitor.visitCallFormalParameterListId(self)
 
 class CallFormalParameterListvoidOrType(functionSignature):
     def __init__(self, voidOrType, id, formalParameterList):
@@ -112,7 +112,7 @@ class CallFormalParameterListvoidOrType(functionSignature):
         self.id = id
         self.formalParameterList = formalParameterList
     def accept(self, visitor):
-       visitor.visitCallFormalParameterListvoidOrType(self)
+       return visitor.visitCallFormalParameterListvoidOrType(self)
 
 
 ''' formalParameterList e classes concretas '''
@@ -125,7 +125,7 @@ class CallNormalFormalParameters(formalParameterList):
     def __init__(self, normalFormalParameters):
         self.normalFormalParameters = normalFormalParameters
     def accept(self, visitor):
-        visitor.visitCallNormalFormalParameters(self)
+        return visitor.visitCallNormalFormalParameters(self)
 
 
 ''' normalFormalParameters e classes concretas '''
@@ -138,14 +138,14 @@ class CallNormalFormalParameter(normalFormalParameters):
     def __init__(self, simpleFormalParameter):
         self.simpleFormalParameter = simpleFormalParameter
     def accept(self, visitor):
-        visitor.visitCallNormalFormalParameter(self)
+        return visitor.visitCallNormalFormalParameter(self)
 
 class NormalFormalParametersRepetition(normalFormalParameters):
     def __init__(self, simpleFormalParameter, normalFormalParameters):
         self.simpleFormalParameter = simpleFormalParameter
         self.normalFormalParameters = normalFormalParameters
     def accept(self, visitor):
-        visitor.visitNormalFormalParametersRepetition(self)
+        return visitor.visitNormalFormalParametersRepetition(self)
         
 ''' simlpleFormalParameter e classes concretas '''
 class simlpleFormalParameter(metaclass=ABCMeta):
@@ -158,13 +158,13 @@ class CallVoidOrType(simlpleFormalParameter):
         self.voidOrType = voidOrType
         self.id = id
     def accept(self, visitor):
-        visitor.visitCallVoidOrType(self)  
+        return visitor.visitCallVoidOrType(self)  
 
 class CallParameterExpression(simlpleFormalParameter):
     def __init__(self, expression):
         self.expression = expression
     def accept(self, visitor):
-        visitor.visitCallParameterExpression(self)  
+        return visitor.visitCallParameterExpression(self)  
     
 
 ''' functionBody e classes concretas '''
@@ -177,7 +177,7 @@ class CallFunctionBody(functionBody):
     def __init__(self, block):
         self.block = block
     def accept(self, visitor):
-        visitor.visitCallFunctionBody(self)
+        return visitor.visitCallFunctionBody(self)
 
 
 ''' block e classes concretas '''
@@ -190,7 +190,7 @@ class CallBlockStatements(block):
     def __init__(self, statements):
         self.statements = statements
     def accept(self, visitor):
-        visitor.visitCallBlockStatements(self)
+        return visitor.visitCallBlockStatements(self)
 
 
 ''' statements e classes concretas '''
@@ -204,13 +204,13 @@ class ConcretStatements(statements):
         self.statement = statement
         self.statements = statements
     def accept(self, visitor):
-        visitor.visitConcretStatements(self)
+        return visitor.visitConcretStatements(self)
 
 class ConcretStatement(statements):
     def __init__(self, statement):
         self.statement = statement
     def accept(self, visitor):
-        visitor.visitConcretStatement(self)
+        return visitor.visitConcretStatement(self)
 
 
 ''' statement e classes concretas '''
@@ -223,7 +223,7 @@ class StatementNonLabelledStatement(statement):
     def __init__(self, nonLabelledStatement):
         self.nonLabelledStatement = nonLabelledStatement
     def accept(self, visitor):
-        visitor.visitStatementNonLabelledStatement(self)
+        return visitor.visitStatementNonLabelledStatement(self)
 
 
 ''' nonLabelledStatement e classes concretas '''
@@ -236,61 +236,61 @@ class  ConcreteExpressionStatement(nonLabelledStatement):
     def __init__(self, expressionStatement):
         self.expressionStatement = expressionStatement
     def accept(self, visitor):
-        visitor.visitConcreteExpressionStatement(self)
+        return visitor.visitConcreteExpressionStatement(self)
 
 class NonLabelledStatementblock(nonLabelledStatement):
     def __init__(self, block):
         self.block = block
     def accept(self, visitor):
-        visitor.visitNonLabelledStatementblock(self)
+        return visitor.visitNonLabelledStatementblock(self)
 
 class LocalVariableDeclaration(nonLabelledStatement):
     def __init__(self, localVariableDeclaration):
         self.localVariableDeclaration = localVariableDeclaration
     def accept(self, visitor):
-        visitor.visitLocalVariableDeclaration(self)
+        return visitor.visitLocalVariableDeclaration(self)
 
 class  ConcreteReturnStatement(nonLabelledStatement):
     def __init__(self, returnStatement):
         self.returnStatement = returnStatement
     def accept(self, visitor):
-        visitor.visitConcreteReturnStatement(self)
+        return visitor.visitConcreteReturnStatement(self)
 
 class ConcreteIfStatement(nonLabelledStatement):
     def __init__(self, ifStatement):
         self.ifStatement = ifStatement
     def accept(self, visitor):
-        visitor.visitConcreteIfStatement(self)
+        return visitor.visitConcreteIfStatement(self)
 
 class ConcreteForStatement(nonLabelledStatement):
     def __init__(self, forStatement):
         self.forStatement = forStatement
     def accept(self, visitor):
-        visitor.visitConcreteForStatement(self)
+        return visitor.visitConcreteForStatement(self)
 
 class ConcreteWhileStatement(nonLabelledStatement):
     def __init__(self, whileStatement):
         self.whileStatement = whileStatement
     def accept(self, visitor):
-        visitor.visitConcreteWhileStatement(self)
+        return visitor.visitConcreteWhileStatement(self)
 
 class  ConcreteDoStatement(nonLabelledStatement):
     def __init__(self, doStatement):
         self.doStatement = doStatement
     def accept(self, visitor):
-        visitor.visitConcreteDoStatement(self)
+        return visitor.visitConcreteDoStatement(self)
     
 class ConcreteSwitchStatement(nonLabelledStatement):
     def __init__(self, switchStatement):
         self.switchStatement = switchStatement
     def accept(self, visitor):
-        visitor.visitConcreteSwitchStatement(self)
+        return visitor.visitConcreteSwitchStatement(self)
 
 class ConcreteBreakStatement(nonLabelledStatement):
     def __init__(self, breakStatement):
         self.breakStatement = breakStatement
     def accept(self, visitor):
-        visitor.visitConcreteBreakStatement(self)
+        return visitor.visitConcreteBreakStatement(self)
 
 
 ''' localVariableDeclaration e classes concretas '''
@@ -303,7 +303,7 @@ class CallLocalInitializedVariableDeclaration(localVariableDeclaration):
     def __init__(self, initializedVariableDeclaration):
         self.initializedVariableDeclaration = initializedVariableDeclaration
     def accept(self, visitor):
-        visitor.visitCallLocalInitializedVariableDeclaration(self)
+        return visitor.visitCallLocalInitializedVariableDeclaration(self)
 
 
 ''' initializedVariableDeclaration e classes concretas '''
@@ -316,28 +316,28 @@ class CallDeclaredIdentifier(initializedVariableDeclaration):
     def __init__(self, declaredIdentifier):
         self.declaredIdentifier = declaredIdentifier
     def accept(self, visitor):
-        visitor.visitCallDeclaredIdentifier(self)
+        return visitor.visitCallDeclaredIdentifier(self)
 
 class CallDeclaredInitializedIdentifier(initializedVariableDeclaration):
     def __init__(self, declaredIdentifier, expression):
         self.declaredIdentifier = declaredIdentifier
         self.expression = expression
     def accept(self, visitor):
-        visitor.visitCallDeclaredInitializedIdentifier(self)
+        return visitor.visitCallDeclaredInitializedIdentifier(self)
 
 class CallDeclaredInitializedIdentifierListLiteral(initializedVariableDeclaration):
     def __init__(self, declaredIdentifier, listLiteral):
         self.declaredIdentifier = declaredIdentifier
         self.listLiteral = listLiteral
     def accept(self, visitor):
-        visitor.visitCallDeclaredInitializedIdentifierListLiteral(self)
+        return visitor.visitCallDeclaredInitializedIdentifierListLiteral(self)
 
 class CallIdListIdAtribuirExpression(initializedVariableDeclaration):
     def __init__(self, listLiteralID, expression):
         self.listLiteralID = listLiteralID
         self.expression = expression
     def accept(self, visitor):
-        visitor.visitCallIdListAtribuirIdList(self)
+        return visitor.visitCallIdListAtribuirIdList(self)
 
 
 ''' expressionStatement e classes concretas '''
@@ -350,7 +350,7 @@ class Concretexpression(expressionStatement):
     def __init__(self, expression):
         self.expression = expression
     def accept(self, visitor):
-        visitor.visitConcretexpression(self)
+        return visitor.visitConcretexpression(self)
 
 
 ''' expression e classes concretas '''
@@ -363,7 +363,7 @@ class CallExpression(expression):
     def __init__(self, orExpression):
         self.orExpression = orExpression
     def accept(self, visitor):
-        visitor.visitCallExpression(self)
+        return visitor.visitCallExpression(self)
 
 
 ''' orExpression e classes concretas '''
@@ -376,7 +376,7 @@ class CallandExpression(orExpression):
     def __init__(self, andExpression):
         self.andExpression = andExpression
     def accept(self, visitor):
-        visitor.visitCallandExpression(self)
+        return visitor.visitCallandExpression(self)
         
 class ExpressionORexpression(orExpression):
     def __init__(self, orExpression, operation, andExpression):
@@ -384,7 +384,7 @@ class ExpressionORexpression(orExpression):
         self.operation = operation
         self.andExpression = andExpression
     def accept(self, visitor):
-        visitor.visitExpressionORexpression(self)
+        return visitor.visitExpressionORexpression(self)
 
 
 ''' andExpression e classes concretas '''
@@ -397,7 +397,7 @@ class CalligualExpression(andExpression):
     def __init__(self, equalityExpression):
         self.equalityExpression = equalityExpression
     def accept(self, visitor):
-        visitor.visitCalligualExpression(self)
+        return visitor.visitCalligualExpression(self)
 
 class CallAndExpressionIgual(andExpression):
     def __init__(self, andExpression, operation, equalityExpression):
@@ -405,7 +405,7 @@ class CallAndExpressionIgual(andExpression):
         self.operation = operation
         self.equalityExpression = equalityExpression
     def accept(self, visitor):
-        visitor.visitCallAndExpressionIgual(self)
+        return visitor.visitCallAndExpressionIgual(self)
 
 
 ''' equalityExpression e classes concretas '''
@@ -418,7 +418,7 @@ class CallRelacionalExpression(equalityExpression):
     def __init__(self, relacionalExpression):
         self.relacionalExpression = relacionalExpression
     def accept(self, visitor):
-        visitor.visitCallRelacionalExpression(self)
+        return visitor.visitCallRelacionalExpression(self)
 
 class CallEqualityExpression(equalityExpression):
     def __init__(self, equalityExpression, operation, relacionalExpression):
@@ -426,7 +426,7 @@ class CallEqualityExpression(equalityExpression):
         self.operation = operation
         self.relacionalExpression = relacionalExpression
     def accept(self, visitor):
-        visitor.visitCallEqualityExpression(self)
+        return visitor.visitCallEqualityExpression(self)
 
 
 ''' relacionalExpression e classes concretas '''
@@ -439,7 +439,7 @@ class CallUnary(relacionalExpression):
     def __init__(self, addExpression):
         self.addExpression = addExpression
     def accept(self, visitor):
-        visitor.visitCallUnary(self)
+        return visitor.visitCallUnary(self)
     
 class CallConcretExpression(relacionalExpression):
     def __init__(self, relacionalExpression, operation, addExpression):
@@ -447,7 +447,7 @@ class CallConcretExpression(relacionalExpression):
         self.operation = operation
         self.addExpression = addExpression
     def accept(self, visitor):
-        visitor.visitCallConcretExpression(self)
+        return visitor.visitCallConcretExpression(self)
 
 
 ''' addExpression e classes concretas '''
@@ -460,7 +460,7 @@ class CallMultExpression(addExpression):
     def __init__(self, multExpression):
         self.multExpression = multExpression
     def accept(self, visitor):
-        visitor.visitCallMultExpression(self)
+        return visitor.visitCallMultExpression(self)
 
 class CallAddExpressionMult(addExpression):
     def __init__(self, addExpression, operation, multExpression):
@@ -468,7 +468,7 @@ class CallAddExpressionMult(addExpression):
         self.operation = operation
         self.multExpression = multExpression
     def accept(self, visitor):
-        visitor.visitCallAddExpressionMult(self)
+        return visitor.visitCallAddExpressionMult(self)
 
 ''' multExpression e classes concretas '''
 class multExpression(metaclass=ABCMeta):
@@ -480,7 +480,7 @@ class CallUnaryExp(multExpression):
     def __init__(self, unaryExpression):
         self.unaryExpression = unaryExpression
     def accept(self, visitor):
-        visitor.visitCallUnaryExp(self)
+        return visitor.visitCallUnaryExp(self)
 
 class CallUnaryExpMultExpression(multExpression):
     def __init__(self, multExpression, operation, unaryExpression):
@@ -488,7 +488,7 @@ class CallUnaryExpMultExpression(multExpression):
         self.operation = operation
         self.unaryExpression = unaryExpression
     def accept(self, visitor):
-        visitor.visitCallUnaryExpMultExpression(self)
+        return visitor.visitCallUnaryExpMultExpression(self)
 
 
 ''' unaryExpression e classes concretas '''
@@ -501,20 +501,20 @@ class ConcreteprimaryExpression(unaryExpression):
     def __init__(self, primary):
         self.primary = primary
     def accept(self, visitor):
-        visitor.visitConcreteprimaryExpression(self)
+        return visitor.visitConcreteprimaryExpression(self)
 
 class Callfunctioncall(unaryExpression):
     def __init__(self, functionCall):
         self.functionCall = functionCall
     def accept(self, visitor):
-        visitor.visitCallfunctioncall(self)
+        return visitor.visitCallfunctioncall(self)
 
 class ConcreteunaryExpression(unaryExpression):
     def __init__(self, unaryExpression, operation):
         self.unaryExpression = unaryExpression
         self.operation = operation
     def accept(self, visitor):
-        visitor.visitConcreteunaryExpression(self)
+        return visitor.visitConcreteunaryExpression(self)
 
 
 ''' functionCall e classes concretas '''
@@ -527,7 +527,7 @@ class ConcretFunctionCall(functionCall):
     def __init__(self, functionSignature):
         self.functionSignature = functionSignature
     def accept(self, visitor):
-        visitor.visitConcretFunctionCall(self)
+        return visitor.visitConcretFunctionCall(self)
 
 
 ''' primary e classes concretas '''
@@ -540,13 +540,13 @@ class CallPrimaryLiteral(primary):
     def __init__(self, literal):
         self.literal = literal
     def accept(self, visitor):
-        visitor.visitCallPrimaryLiteral(self)
+        return visitor.visitCallPrimaryLiteral(self)
 
 class CallPrimaryExpression(primary):
     def __init__(self, expression):
         self.expression = expression
     def accept(self, visitor):
-        visitor.visitCallPrimaryExpression(self)
+        return visitor.visitCallPrimaryExpression(self)
 
 ''' literal e classes concretas '''
 class literal(metaclass=ABCMeta):
@@ -558,19 +558,19 @@ class CallLiteralListLiteral(literal):
     def __init__(self, listLiteral):
         self.listLiteral = listLiteral
     def accept(self, visitor):
-        visitor.visitCallLiteralListLiteral(self)
+        return visitor.visitCallLiteralListLiteral(self)
 
 class CallLiteralBooleanLiteral(literal):
     def __init__(self, booleanLiteral):
         self.booleanLiteral = booleanLiteral
     def accept(self, visitor):
-        visitor.visitCallLiteralBooleanLiteral(self)
+        return visitor.visitCallLiteralBooleanLiteral(self)
 
 class CallLiteralId(literal):
     def __init__(self, id):
         self.id = id
     def accept(self, visitor):
-        visitor.visitCallLiteralId(self)
+        return visitor.visitCallLiteralId(self)
 
 
 ''' listLiteral e classes concretas '''
@@ -583,7 +583,7 @@ class ExpressionListlistLiteral(listLiteral):
     def __init__(self, expressionList):
         self.expressionList = expressionList
     def accept(self, visitor):
-        visitor.visitExpressionListlistLiteral(self)
+        return visitor.visitExpressionListlistLiteral(self)
 
 
 '''listLiteralID e classes concretas '''
@@ -597,7 +597,7 @@ class CallListlistLiteralID(listLiteral):
         self.id = id
         self.listLiteral = listLiteral
     def accept(self, visitor):
-        visitor.visitCallListlistLiteralID(self)
+        return visitor.visitCallListlistLiteralID(self)
 
 
 ''' booleanLiteral e classes concretas '''
@@ -610,13 +610,13 @@ class booleanLiteralTrue(booleanLiteral):
     def __init__(self, true):
         self.true = true
     def accept(self, visitor):
-        visitor.visitbooleanLiteralTrue(self)
+        return visitor.visitbooleanLiteralTrue(self)
 
 class booleanLiteralFalse(booleanLiteral):
     def __init__(self, false):
         self.false = false
     def accept(self, visitor):
-        visitor.visitbooleanLiteralFalse(self)
+        return visitor.visitbooleanLiteralFalse(self)
 
 
 ''' expressionList e classes concretas '''
@@ -629,14 +629,14 @@ class ConcreteExpression(expressionList):
     def __init__(self, expression):
         self.expression = expression
     def accept(self, visitor):
-        visitor.visitConcreteExpression(self)
+        return visitor.visitConcreteExpression(self)
 
 class CallExpressionList(expressionList):
     def __init__(self, expression, expressionList):
         self.expression = expression
         self.expressionList = expressionList
     def accept(self, visitor):
-        visitor.visitCallExpressionList(self)
+        return visitor.visitCallExpressionList(self)
 
 
 ''' returnStatement e classes concretas '''            
@@ -649,7 +649,7 @@ class ReturnStatementExpression(returnStatement):
     def __init__(self, expression):
         self.expression = expression
     def accept(self, visitor):
-        visitor.visitReturnStatementExpression(self)
+        return visitor.visitReturnStatementExpression(self)
 
 
 ''' ifStatement e classes concretas '''
@@ -664,7 +664,7 @@ class IfexpressionStatement(ifStatement):
         self.expression = expression
         self.statement = statement
     def accept(self, visitor):
-        visitor.visitIfexpressionStatement(self)
+        return visitor.visitIfexpressionStatement(self)
     
 class IfElseExpressionStatement(ifStatement):
     def __init__(self, IF, expression, statement, ELSE, statement01):
@@ -674,7 +674,7 @@ class IfElseExpressionStatement(ifStatement):
         self.ELSE = ELSE
         self.statement01 = statement01
     def accept(self, visitor):
-        visitor.visitIfElseExpressionStatement(self)
+        return visitor.visitIfElseExpressionStatement(self)
 
 
 ''' forStatement e classes concretas '''
@@ -689,7 +689,7 @@ class ConcreteForLoopParts(forStatement):
         self.forLoopParts = forLoopParts
         self.statement = statement
     def accept(self, visitor):
-        visitor.visitConcreteForLoopParts(self)
+        return visitor.visitConcreteForLoopParts(self)
 
 
 ''' forLoopParts e classes concretas '''
@@ -702,21 +702,21 @@ class ConcreteForInitializerStatement(forLoopParts):
     def __init__(self, forInitializerStatement):
         self.forInitializerStatement = forInitializerStatement
     def accept(self, visitor):
-        visitor.visitConcreteForInitializerStatement(self)
+        return visitor.visitConcreteForInitializerStatement(self)
     
 class ForInitializerStatementExpressionList(forLoopParts):
     def __init__(self, forInitializerStatement, expressionList):
         self.forInitializerStatement = forInitializerStatement
         self.expressionList = expressionList
     def accept(self, visitor):
-        visitor.visitForInitializerStatementExpressionList(self)
+        return visitor.visitForInitializerStatementExpressionList(self)
     
 class ForInitializerStatementExpression(forLoopParts):
     def __init__(self, forInitializerStatement, expression):
         self.forInitializerStatement = forInitializerStatement
         self.expression = expression
     def accept(self, visitor):
-        visitor.visitForInitializerStatementExpression(self)
+        return visitor.visitForInitializerStatementExpression(self)
     
 class ExpressionForInitializerStatementExpressionList(forLoopParts):
     def __init__(self, forInitializerStatement, expression, expressionList):
@@ -724,7 +724,7 @@ class ExpressionForInitializerStatementExpressionList(forLoopParts):
         self.expression = expression
         self.expressionList = expressionList
     def accept(self, visitor):
-        visitor.visitExpressionForInitializerStatementExpressionList(self)
+        return visitor.visitExpressionForInitializerStatementExpressionList(self)
 
 
 ''' forInitializerStatement e classes concretas '''
@@ -737,13 +737,13 @@ class ConcreteLocalVariableDeclaration(forInitializerStatement):
     def __init__(self, localVariableDeclaration):
         self.localVariableDeclaration = localVariableDeclaration
     def accept(self, visitor):
-        visitor.visitConcreteLocalVariableDeclaration(self)
+        return visitor.visitConcreteLocalVariableDeclaration(self)
 
 class CallConcreteExpression(forInitializerStatement):
     def __init__(self, expression):
         self.expression = expression
     def accept(self, visitor):
-        visitor.visitCallConcreteExpression(self)
+        return visitor.visitCallConcreteExpression(self)
 
 
 ''' whileStatement e classes concretas '''
@@ -758,7 +758,7 @@ class WhileStatementExpressionStatement(whileStatement):
         self.expression = expression
         self.statement = statement
     def accept(self, visitor):
-        visitor.visitWhileStatementExpressionStatement(self)
+        return visitor.visitWhileStatementExpressionStatement(self)
         
 ''' doStatement e classes concretas '''
 class doStatement(metaclass=ABCMeta):
@@ -773,7 +773,7 @@ class DOStatementWhileExpression(doStatement):
         self.WHILE = WHILE
         self.expression = expression
     def accept(self, visitor):
-        visitor.visitDOStatementWhileExpression(self)
+        return visitor.visitDOStatementWhileExpression(self)
 
 
 ''' switchStatement e classes concretas '''
@@ -788,7 +788,7 @@ class ConcreteSwitch(switchStatement):
         self.expression = expression
         self.switchCaseRepetition = switchCaseRepetition
     def accept(self, visitor):
-        visitor.visitConcreteSwitch(self)
+        return visitor.visitConcreteSwitch(self)
 
 class ConcreteDefaultCase(switchStatement):
     def __init__(self, switch, expression, switchCaseRepetition, defaultCase):
@@ -797,7 +797,7 @@ class ConcreteDefaultCase(switchStatement):
         self.switchCaseRepetition = switchCaseRepetition
         self.defaultCase = defaultCase
     def accept(self, visitor):
-        visitor.visitConcreteDefaultCase(self)
+        return visitor.visitConcreteDefaultCase(self)
 
 
 ''' switchCaseRepetition e classes concretas '''
@@ -811,13 +811,13 @@ class RepetitionSwitchCase(switchCaseRepetition):
         self.switchCase = switchCase
         self.switchCaseRepetition = switchCaseRepetition
     def accept(self, visitor):
-        visitor.visitRepetitionSwitchCase(self)
+        return visitor.visitRepetitionSwitchCase(self)
 
 class RepetitionSwitchCase2(switchCaseRepetition):
     def __init__(self, switchCase):
         self.switchCase = switchCase
     def accept(self, visitor):
-        visitor.visitRepetitionSwitchCase2(self)
+        return visitor.visitRepetitionSwitchCase2(self)
 
 
 ''' switchCase e classes concretas '''
@@ -832,14 +832,14 @@ class ExpressionSwitchCase(switchCase):
         self.expression = expression
         self.statements = statements
     def accept(self, visitor):
-        visitor.visitExpressionSwitchCase(self)
+        return visitor.visitExpressionSwitchCase(self)
         
 class LabelSwitchCase(switchCase):
     def __init__(self, label, switchCase):
         self.label = label
         self.switchCase = switchCase
     def accept(self, visitor):
-        visitor.visitLabelSwitchCase(self)
+        return visitor.visitLabelSwitchCase(self)
    
 ''' defaultCase e classes concretas '''
 class defaultCase(metaclass=ABCMeta):
@@ -852,14 +852,14 @@ class DefaultStatements(defaultCase):
         self.default = default
         self.statements = statements
     def accept(self, visitor):
-        visitor.visitDefaultStatements(self)
+        return visitor.visitDefaultStatements(self)
 
 class LabelDefaultCase(defaultCase):
     def __init__(self, label, defaultCase):
         self.label = label
         self.defaultCase = defaultCase
     def accept(self, visitor):
-        visitor.visitLabelDefaultCase(self)
+        return visitor.visitLabelDefaultCase(self)
         
         
 ''' label e classes concretas '''            
@@ -872,7 +872,7 @@ class IdPontos(label):
     def __init__(self, id):
         self.id = id
     def accept(self, visitor):
-        visitor.visitIdPontos(self)
+        return visitor.visitIdPontos(self)
 
 ''' break e classes concretas '''
 class BreakStatement(metaclass=ABCMeta):
@@ -884,11 +884,11 @@ class CallBreak(switchCase):
     def __init__(self, BREAK):
         self.BREAK = BREAK
     def accept(self, visitor):
-        visitor.visitCallBreak(self)
+        return visitor.visitCallBreak(self)
 
 class BreakID(switchCase):
     def __init__(self, BREAK, id):
         self.BREAK = BREAK
         self.id = id
     def accept(self, visitor):
-        visitor.visitBreakID(self)
+        return visitor.visitBreakID(self)
