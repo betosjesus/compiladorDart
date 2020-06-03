@@ -57,9 +57,9 @@ class Visitor:
         # print("visitConcreteVoidOrType")
         print(concretevoidOrType.type, end=' ')
 
-    def visitVoidOrTypeV(self, voidOrTypeV):
-        # print("visitVoidOrTypeV")
-        print(voidOrTypeV.void, end=' ')
+    # def visitVoidOrTypeV(self, voidOrTypeV):
+    #     # print("visitVoidOrTypeV")
+    #     print(voidOrTypeV.void, end=' ')
 
     ''' functionSignature '''
     def visitCallFormalParameterListId(self, callFormalParameterListId):

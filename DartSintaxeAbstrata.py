@@ -87,11 +87,11 @@ class ConcreteVoidOrType(voidOrType):
     def accept(self, visitor):
         return visitor.visitConcreteVoidOrType(self)
 
-class VoidOrTypeV(voidOrType):
-    def __init__(self, void):
-        self.void = void
-    def accept(self, visitor):
-        return visitor.visitVoidOrTypeV(self)
+# class VoidOrTypeV(voidOrType):
+#     def __init__(self, void):
+#         self.void = void
+#     def accept(self, visitor):
+#         return visitor.visitVoidOrTypeV(self)
 
 ''' functionSignature e classes concretas '''
 class functionSignature(metaclass=ABCMeta):

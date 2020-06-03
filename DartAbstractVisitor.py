@@ -46,9 +46,9 @@ class AbstractVisitor(metaclass=ABCMeta):
     def visitConcreteVoidOrType(self, concretevoidOrType):
         pass
 
-    @abstractmethod 
-    def visitVoidOrTypeV(self, voidOrTypeV):
-        pass
+    # @abstractmethod 
+    # def visitVoidOrTypeV(self, voidOrTypeV):
+    #     pass
 
 
     ''' functionSignature '''

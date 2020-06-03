@@ -37,13 +37,14 @@ def p_declaredIdentifier(p):
     else:
         p[0] = sa.DeclaredIdentifierId(p[1])
 
+
 def p_voidOrType(p):
-    '''voidOrType : type
-                  | VOID'''
-    if p[1] == 'void':
-        p[0] = sa.VoidOrTypeV(p[1])
-    else:
-        p[0] = sa.ConcreteVoidOrType(p[1])
+    '''voidOrType : type'''
+                #   | VOID
+    # if p[1] == 'void':
+    #     p[0] = sa.VoidOrTypeV(p[1])
+    # else:
+    p[0] = sa.ConcreteVoidOrType(p[1])
               
 
 def p_type(p):
@@ -51,7 +52,8 @@ def p_type(p):
              | INT
              | FLOAT
              | CHAR 
-             | STRING'''
+             | STRING
+             | VOID'''
     p[0] = p[1]
 
 def p_functionSignature(p):
@@ -430,21 +432,21 @@ lexer = lex.lex()
         ###############
 data =  '''  
 
-
-
-int soma(int a, int b)
+int soma (int c, int d)
 {
-    return a + b;
+    return c + d;
 }
 
-void main()
+void main (int a, int b)
 {
-    int a;
-    int b;
-    soma (a,b);
+    int y;
+    int z;
+    soma (a, b);
+
 }
 
 '''
+
 lexer.input(data)
 parser = yacc.yacc()
 result = parser.parse(debug=True)

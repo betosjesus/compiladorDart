@@ -42,7 +42,7 @@ class SemanticVisitor(AbstractVisitor):
         variableDeclarationID.declaredIdentifier.accept(self)
 
     def visitConcretevariableDeclaration(self, concretevariableDeclaration):
-       return[concretevariableDeclaration.id] + concretevariableDeclaration.variableDeclaration.accept(self)
+        return[concretevariableDeclaration.id] + concretevariableDeclaration.variableDeclaration.accept(self)
        
 
     ''' decIdentifier '''
@@ -55,10 +55,10 @@ class SemanticVisitor(AbstractVisitor):
 
     ''' voidOrType '''
     def visitConcreteVoidOrType(self, concretevoidOrType):
-        return [concretevoidOrType.type(self)]
+        return [concretevoidOrType.type]
 
-    def visitVoidOrTypeV(self, voidOrTypeV):        
-        return [voidOrTypeV.void]
+    # def visitVoidOrTypeV(self, voidOrTypeV):        
+    #     return voidOrTypeV.void
     
     
     ''' functionSignature '''
@@ -71,14 +71,12 @@ class SemanticVisitor(AbstractVisitor):
             callFormalParameterListId.accept(self.printer)
             print("\n\t[Erro] Chamada de funcao invalida. Tipos passados na chamada sao:", typeParams)
             print('\tenquanto que os tipos definidos no metodo sao:', bindable[st.PARAMS][1::2], '\n')
-        # elif (bindable != None and bindable[st.BINDABLE] == st.FUNCTION):
+        elif (bindable != None and bindable[st.BINDABLE] == st.FUNCTION):
             return bindable[st.TYPE]
-        # callFormalParameterListId.accept(self.printer)
-            print("\n\t[Erro] Chamada de funcao invalida. O id", callFormalParameterListId.id, "nao eh de uma funcao, nao foi definido ou foi definido apos esta funcao\n")
         else:
             callFormalParameterListId.accept(self.printer)
-            print("\n\t[Erro] Chamada de funcao invalida. O id", callFormalParameterListId.id,
-                  "nao eh de uma funcao, nao foi definido ou foi definido apos esta funcao\n")
+            print("\n\t[Erro] Chamada de funcao invalida. O id", callFormalParameterListId.id, "nao eh de uma funcao, nao foi definido ou foi definido apos esta funcao\n")
+        print("[visitCallFormalParameterListId]", typeParams)
         return None
     
     def visitCallFormalParameterListvoidOrType(self, callFormalParameterListvoidOrType):
@@ -88,11 +86,11 @@ class SemanticVisitor(AbstractVisitor):
             st.addFunction(callFormalParameterListvoidOrType.id, params, callFormalParameterListvoidOrType.voidOrType.type)
         else:
             st.addFunction(callFormalParameterListvoidOrType.id, params, callFormalParameterListvoidOrType.voidOrType.type)
-        st.beginScope(callFormalParameterListvoidOrType.id)
         print("[visitCallFormalParameterListvoidOrType]", params)
+        st.beginScope(callFormalParameterListvoidOrType.id)
         for k in range(0, len(params), 2):
             st.addVar(params[k], params[k+1])
-        return params
+
 
     ''' formalParameterList'''
     def visitCallNormalFormalParameters(self, callNormalFormalParameters):
@@ -110,10 +108,11 @@ class SemanticVisitor(AbstractVisitor):
         else:
             return [normalFormalParametersRepetition.simpleFormalParameter.accept(self)]
 
+
     ''' simlpleFormalParameter'''
     def visitCallVoidOrType(self, callVoidOrType):     
-        return st.INT
-        #st.addVar(callVoidOrType.id, callVoidOrType.voidOrType.type)
+        callVoidOrType.voidOrType.accept(self)
+        return  callVoidOrType.id
     
     def visitCallParameterExpression(self, callParameterExpression):        
         return [callParameterExpression.expression.accept(self)]
@@ -185,7 +184,7 @@ class SemanticVisitor(AbstractVisitor):
     def visitCallDeclaredIdentifier(self, callDeclaredIdentifier):        
         callDeclaredIdentifier.declaredIdentifier.accept(self)
 
-    def visitCallDeclaredInitializedIdentifier(self, callDeclaredInitializedIdentifier):        
+    def visitCallDeclaredInitializedIdentifier(self, callDeclaredInitializedIdentifier): 
         callDeclaredInitializedIdentifier.declaredIdentifier.accept(self)
         callDeclaredInitializedIdentifier.expression.accept(self)
 
@@ -347,6 +346,47 @@ class SemanticVisitor(AbstractVisitor):
     '''listLiteralID '''
     def visitCallListlistLiteralID(self, callListlistLiteralID):
         return [callListlistLiteralID.id] + callListlistLiteralID.listLiteral.accept(self)
+
+
+    ''' booleanLiteral'''
+
+    ''' booleanLiteral'''
+
+    ''' booleanLiteral'''
+
+    ''' booleanLiteral'''
+
+    ''' booleanLiteral'''
+
+    ''' booleanLiteral'''
+
+    ''' booleanLiteral'''
+
+    ''' booleanLiteral'''
+
+    ''' booleanLiteral'''
+
+    ''' booleanLiteral'''
+
+    ''' booleanLiteral'''
+
+    ''' booleanLiteral'''
+
+    ''' booleanLiteral'''
+
+    ''' booleanLiteral'''
+
+    ''' booleanLiteral'''
+
+    ''' booleanLiteral'''
+
+    ''' booleanLiteral'''
+
+    ''' booleanLiteral'''
+
+    ''' booleanLiteral'''
+
+    ''' booleanLiteral'''
 
     ''' booleanLiteral'''
     def visitbooleanLiteralTrue(self, booleanLiteralTrue):
