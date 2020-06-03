@@ -21,7 +21,7 @@ def p_topLevelDefinition(p):
 
 
 def p_variableDeclaration(p):
-    ''' variableDeclaration : declaredIdentifier 
+    ''' variableDeclaration : declaredIdentifier
                             | variableDeclaration COMMA ID '''
     if len(p) == 2:
         p[0] = sa.VariableDeclarationID(p[1])
@@ -31,7 +31,7 @@ def p_variableDeclaration(p):
 
 def p_declaredIdentifier(p):
     ''' declaredIdentifier : voidOrType ID 
-                           | ID'''
+                           | expression'''
     if len(p) == 3:
         p[0] = sa.DeclaredIdentifierType(p[1],p[2])
     else:
@@ -71,7 +71,7 @@ def p_formalParameterList(p):
     if len(p) == 4:
         p[0] = sa.CallNormalFormalParameters(p[2])
     else:
-        p[0] = sa.CallNormalFormalParameters(None)
+        p[0] = None
 
 
 def p_normalFormalParameters(p):
@@ -373,7 +373,7 @@ def p_doStatement(p):
 
 
 def p_switchStatement(p):
-    ''' switchStatement : SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition RCHAV 
+    ''' switchStatement : SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition RCHAV
                         | SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition defaultCase RCHAV'''
     if (len(p) == 8):
         p[0] = sa.ConcreteSwitch(p[1],p[3],p[6])
@@ -392,7 +392,7 @@ def p_switchCaseRepetition(p):
 
 def p_switchCase(p):
     ''' switchCase : CASE expression PONTOS statements 
-                   | label switchCase'''
+                  '''
     if len(p) == 3:
         p[0] = sa.LabelSwitchCase(p[1],p[2])
     else:
@@ -401,7 +401,7 @@ def p_switchCase(p):
 
 def p_defaultCase(p):
     ''' defaultCase : DEFAULT PONTOS statements 
-                    | label defaultCase'''
+                    '''
     if (len(p) == 4):
         p[0] = sa.DefaultStatements(p[1],p[3])
     else:
@@ -431,6 +431,12 @@ lexer = lex.lex()
 #     Test it out     #
         ###############
 data =  '''  
+
+
+int soma1 ()
+{
+    return c + d;
+}
 
 int soma (int c, int d)
 {
