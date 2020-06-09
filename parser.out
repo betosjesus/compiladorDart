@@ -56,7 +56,7 @@ Rule 40    localVariableDeclaration -> initializedVariableDeclaration PCOMMA
 Rule 41    initializedVariableDeclaration -> declaredIdentifier
 Rule 42    initializedVariableDeclaration -> declaredIdentifier ATRIBUIR expression
 Rule 43    initializedVariableDeclaration -> declaredIdentifier ATRIBUIR listLiteral
-Rule 44    initializedVariableDeclaration -> listLiteralID ATRIBUIR expression
+Rule 44    initializedVariableDeclaration -> literal ATRIBUIR expression
 Rule 45    expressionStatement -> PCOMMA
 Rule 46    expressionStatement -> expression PCOMMA
 Rule 47    expression -> orExpression
@@ -204,8 +204,8 @@ ifStatement          : 34
 initializedVariableDeclaration : 40
 label                : 
 listLiteral          : 43 80
-listLiteralID        : 44 76
-literal              : 72
+listLiteralID        : 76
+literal              : 44 72
 localVariableDeclaration : 32 95
 multExpression       : 60 61 62 64 65 66
 nonLabelledStatement : 29
@@ -698,8 +698,8 @@ state 24
     PCOMMA          reduce using rule 72 (primary -> literal .)
     COMMA           reduce using rule 72 (primary -> literal .)
     RPAREN          reduce using rule 72 (primary -> literal .)
-    ATRIBUIR        reduce using rule 72 (primary -> literal .)
     RCON            reduce using rule 72 (primary -> literal .)
+    ATRIBUIR        reduce using rule 72 (primary -> literal .)
     PONTOS          reduce using rule 72 (primary -> literal .)
 
 
@@ -830,8 +830,8 @@ state 27
     PCOMMA          reduce using rule 76 (literal -> listLiteralID .)
     COMMA           reduce using rule 76 (literal -> listLiteralID .)
     RPAREN          reduce using rule 76 (literal -> listLiteralID .)
-    RCON            reduce using rule 76 (literal -> listLiteralID .)
     ATRIBUIR        reduce using rule 76 (literal -> listLiteralID .)
+    RCON            reduce using rule 76 (literal -> listLiteralID .)
     PONTOS          reduce using rule 76 (literal -> listLiteralID .)
 
 
@@ -1188,15 +1188,22 @@ state 36
     (41) initializedVariableDeclaration -> . declaredIdentifier
     (42) initializedVariableDeclaration -> . declaredIdentifier ATRIBUIR expression
     (43) initializedVariableDeclaration -> . declaredIdentifier ATRIBUIR listLiteral
-    (44) initializedVariableDeclaration -> . listLiteralID ATRIBUIR expression
+    (44) initializedVariableDeclaration -> . literal ATRIBUIR expression
     (48) orExpression -> . andExpression
     (49) orExpression -> . orExpression OR andExpression
     (7) declaredIdentifier -> . voidOrType ID
     (8) declaredIdentifier -> . expression
-    (80) listLiteralID -> . ID listLiteral
+    (74) literal -> . ID
+    (75) literal -> . booleanLiteral
+    (76) literal -> . listLiteralID
+    (77) literal -> . NUMBER
+    (78) literal -> . LITERAL_STRING
     (50) andExpression -> . equalityExpression
     (51) andExpression -> . andExpression AND equalityExpression
     (9) voidOrType -> . type
+    (81) booleanLiteral -> . TRUE
+    (82) booleanLiteral -> . FALSE
+    (80) listLiteralID -> . ID listLiteral
     (52) equalityExpression -> . relacionalExpression
     (53) equalityExpression -> . equalityExpression IGUAL relacionalExpression
     (54) equalityExpression -> . equalityExpression NEG relacionalExpression
@@ -1225,15 +1232,8 @@ state 36
     (72) primary -> . literal
     (73) primary -> . LPAREN expression RPAREN
     (71) functionCall -> . functionSignature
-    (74) literal -> . ID
-    (75) literal -> . booleanLiteral
-    (76) literal -> . listLiteralID
-    (77) literal -> . NUMBER
-    (78) literal -> . LITERAL_STRING
     (16) functionSignature -> . ID formalParameterList
     (17) functionSignature -> . voidOrType ID formalParameterList
-    (81) booleanLiteral -> . TRUE
-    (82) booleanLiteral -> . FALSE
 
     RCHAV           shift and go to state 65
     LCHAV           shift and go to state 36
@@ -1246,6 +1246,10 @@ state 36
     SWITCH          shift and go to state 86
     BREAK           shift and go to state 87
     ID              shift and go to state 88
+    NUMBER          shift and go to state 28
+    LITERAL_STRING  shift and go to state 29
+    TRUE            shift and go to state 30
+    FALSE           shift and go to state 31
     VAR             shift and go to state 10
     INT             shift and go to state 11
     FLOAT           shift and go to state 12
@@ -1253,10 +1257,6 @@ state 36
     STRING          shift and go to state 14
     VOID            shift and go to state 15
     LPAREN          shift and go to state 25
-    NUMBER          shift and go to state 28
-    LITERAL_STRING  shift and go to state 29
-    TRUE            shift and go to state 30
-    FALSE           shift and go to state 31
 
     statements                     shift and go to state 64
     statement                      shift and go to state 66
@@ -1275,9 +1275,11 @@ state 36
     initializedVariableDeclaration shift and go to state 80
     orExpression                   shift and go to state 9
     declaredIdentifier             shift and go to state 89
-    listLiteralID                  shift and go to state 90
+    literal                        shift and go to state 90
     andExpression                  shift and go to state 16
     voidOrType                     shift and go to state 91
+    booleanLiteral                 shift and go to state 26
+    listLiteralID                  shift and go to state 27
     equalityExpression             shift and go to state 17
     type                           shift and go to state 8
     relacionalExpression           shift and go to state 18
@@ -1286,9 +1288,7 @@ state 36
     unaryExpression                shift and go to state 21
     primary                        shift and go to state 22
     functionCall                   shift and go to state 23
-    literal                        shift and go to state 24
     functionSignature              shift and go to state 58
-    booleanLiteral                 shift and go to state 26
 
 state 37
 
@@ -2535,15 +2535,22 @@ state 66
     (41) initializedVariableDeclaration -> . declaredIdentifier
     (42) initializedVariableDeclaration -> . declaredIdentifier ATRIBUIR expression
     (43) initializedVariableDeclaration -> . declaredIdentifier ATRIBUIR listLiteral
-    (44) initializedVariableDeclaration -> . listLiteralID ATRIBUIR expression
+    (44) initializedVariableDeclaration -> . literal ATRIBUIR expression
     (48) orExpression -> . andExpression
     (49) orExpression -> . orExpression OR andExpression
     (7) declaredIdentifier -> . voidOrType ID
     (8) declaredIdentifier -> . expression
-    (80) listLiteralID -> . ID listLiteral
+    (74) literal -> . ID
+    (75) literal -> . booleanLiteral
+    (76) literal -> . listLiteralID
+    (77) literal -> . NUMBER
+    (78) literal -> . LITERAL_STRING
     (50) andExpression -> . equalityExpression
     (51) andExpression -> . andExpression AND equalityExpression
     (9) voidOrType -> . type
+    (81) booleanLiteral -> . TRUE
+    (82) booleanLiteral -> . FALSE
+    (80) listLiteralID -> . ID listLiteral
     (52) equalityExpression -> . relacionalExpression
     (53) equalityExpression -> . equalityExpression IGUAL relacionalExpression
     (54) equalityExpression -> . equalityExpression NEG relacionalExpression
@@ -2572,15 +2579,8 @@ state 66
     (72) primary -> . literal
     (73) primary -> . LPAREN expression RPAREN
     (71) functionCall -> . functionSignature
-    (74) literal -> . ID
-    (75) literal -> . booleanLiteral
-    (76) literal -> . listLiteralID
-    (77) literal -> . NUMBER
-    (78) literal -> . LITERAL_STRING
     (16) functionSignature -> . ID formalParameterList
     (17) functionSignature -> . voidOrType ID formalParameterList
-    (81) booleanLiteral -> . TRUE
-    (82) booleanLiteral -> . FALSE
 
     RCHAV           reduce using rule 28 (statements -> statement .)
     CASE            reduce using rule 28 (statements -> statement .)
@@ -2595,6 +2595,10 @@ state 66
     SWITCH          shift and go to state 86
     BREAK           shift and go to state 87
     ID              shift and go to state 88
+    NUMBER          shift and go to state 28
+    LITERAL_STRING  shift and go to state 29
+    TRUE            shift and go to state 30
+    FALSE           shift and go to state 31
     VAR             shift and go to state 10
     INT             shift and go to state 11
     FLOAT           shift and go to state 12
@@ -2602,10 +2606,6 @@ state 66
     STRING          shift and go to state 14
     VOID            shift and go to state 15
     LPAREN          shift and go to state 25
-    NUMBER          shift and go to state 28
-    LITERAL_STRING  shift and go to state 29
-    TRUE            shift and go to state 30
-    FALSE           shift and go to state 31
 
     statement                      shift and go to state 66
     statements                     shift and go to state 116
@@ -2624,9 +2624,11 @@ state 66
     initializedVariableDeclaration shift and go to state 80
     orExpression                   shift and go to state 9
     declaredIdentifier             shift and go to state 89
-    listLiteralID                  shift and go to state 90
+    literal                        shift and go to state 90
     andExpression                  shift and go to state 16
     voidOrType                     shift and go to state 91
+    booleanLiteral                 shift and go to state 26
+    listLiteralID                  shift and go to state 27
     equalityExpression             shift and go to state 17
     type                           shift and go to state 8
     relacionalExpression           shift and go to state 18
@@ -2635,9 +2637,7 @@ state 66
     unaryExpression                shift and go to state 21
     primary                        shift and go to state 22
     functionCall                   shift and go to state 23
-    literal                        shift and go to state 24
     functionSignature              shift and go to state 58
-    booleanLiteral                 shift and go to state 26
 
 state 67
 
@@ -2653,6 +2653,10 @@ state 67
     SWITCH          reduce using rule 29 (statement -> nonLabelledStatement .)
     BREAK           reduce using rule 29 (statement -> nonLabelledStatement .)
     ID              reduce using rule 29 (statement -> nonLabelledStatement .)
+    NUMBER          reduce using rule 29 (statement -> nonLabelledStatement .)
+    LITERAL_STRING  reduce using rule 29 (statement -> nonLabelledStatement .)
+    TRUE            reduce using rule 29 (statement -> nonLabelledStatement .)
+    FALSE           reduce using rule 29 (statement -> nonLabelledStatement .)
     VAR             reduce using rule 29 (statement -> nonLabelledStatement .)
     INT             reduce using rule 29 (statement -> nonLabelledStatement .)
     FLOAT           reduce using rule 29 (statement -> nonLabelledStatement .)
@@ -2660,10 +2664,6 @@ state 67
     STRING          reduce using rule 29 (statement -> nonLabelledStatement .)
     VOID            reduce using rule 29 (statement -> nonLabelledStatement .)
     LPAREN          reduce using rule 29 (statement -> nonLabelledStatement .)
-    NUMBER          reduce using rule 29 (statement -> nonLabelledStatement .)
-    LITERAL_STRING  reduce using rule 29 (statement -> nonLabelledStatement .)
-    TRUE            reduce using rule 29 (statement -> nonLabelledStatement .)
-    FALSE           reduce using rule 29 (statement -> nonLabelledStatement .)
     RCHAV           reduce using rule 29 (statement -> nonLabelledStatement .)
     CASE            reduce using rule 29 (statement -> nonLabelledStatement .)
     DEFAULT         reduce using rule 29 (statement -> nonLabelledStatement .)
@@ -2684,6 +2684,10 @@ state 68
     SWITCH          reduce using rule 30 (nonLabelledStatement -> block .)
     BREAK           reduce using rule 30 (nonLabelledStatement -> block .)
     ID              reduce using rule 30 (nonLabelledStatement -> block .)
+    NUMBER          reduce using rule 30 (nonLabelledStatement -> block .)
+    LITERAL_STRING  reduce using rule 30 (nonLabelledStatement -> block .)
+    TRUE            reduce using rule 30 (nonLabelledStatement -> block .)
+    FALSE           reduce using rule 30 (nonLabelledStatement -> block .)
     VAR             reduce using rule 30 (nonLabelledStatement -> block .)
     INT             reduce using rule 30 (nonLabelledStatement -> block .)
     FLOAT           reduce using rule 30 (nonLabelledStatement -> block .)
@@ -2691,10 +2695,6 @@ state 68
     STRING          reduce using rule 30 (nonLabelledStatement -> block .)
     VOID            reduce using rule 30 (nonLabelledStatement -> block .)
     LPAREN          reduce using rule 30 (nonLabelledStatement -> block .)
-    NUMBER          reduce using rule 30 (nonLabelledStatement -> block .)
-    LITERAL_STRING  reduce using rule 30 (nonLabelledStatement -> block .)
-    TRUE            reduce using rule 30 (nonLabelledStatement -> block .)
-    FALSE           reduce using rule 30 (nonLabelledStatement -> block .)
     RCHAV           reduce using rule 30 (nonLabelledStatement -> block .)
     CASE            reduce using rule 30 (nonLabelledStatement -> block .)
     DEFAULT         reduce using rule 30 (nonLabelledStatement -> block .)
@@ -2715,6 +2715,10 @@ state 69
     SWITCH          reduce using rule 31 (nonLabelledStatement -> expressionStatement .)
     BREAK           reduce using rule 31 (nonLabelledStatement -> expressionStatement .)
     ID              reduce using rule 31 (nonLabelledStatement -> expressionStatement .)
+    NUMBER          reduce using rule 31 (nonLabelledStatement -> expressionStatement .)
+    LITERAL_STRING  reduce using rule 31 (nonLabelledStatement -> expressionStatement .)
+    TRUE            reduce using rule 31 (nonLabelledStatement -> expressionStatement .)
+    FALSE           reduce using rule 31 (nonLabelledStatement -> expressionStatement .)
     VAR             reduce using rule 31 (nonLabelledStatement -> expressionStatement .)
     INT             reduce using rule 31 (nonLabelledStatement -> expressionStatement .)
     FLOAT           reduce using rule 31 (nonLabelledStatement -> expressionStatement .)
@@ -2722,10 +2726,6 @@ state 69
     STRING          reduce using rule 31 (nonLabelledStatement -> expressionStatement .)
     VOID            reduce using rule 31 (nonLabelledStatement -> expressionStatement .)
     LPAREN          reduce using rule 31 (nonLabelledStatement -> expressionStatement .)
-    NUMBER          reduce using rule 31 (nonLabelledStatement -> expressionStatement .)
-    LITERAL_STRING  reduce using rule 31 (nonLabelledStatement -> expressionStatement .)
-    TRUE            reduce using rule 31 (nonLabelledStatement -> expressionStatement .)
-    FALSE           reduce using rule 31 (nonLabelledStatement -> expressionStatement .)
     RCHAV           reduce using rule 31 (nonLabelledStatement -> expressionStatement .)
     CASE            reduce using rule 31 (nonLabelledStatement -> expressionStatement .)
     DEFAULT         reduce using rule 31 (nonLabelledStatement -> expressionStatement .)
@@ -2746,6 +2746,10 @@ state 70
     SWITCH          reduce using rule 32 (nonLabelledStatement -> localVariableDeclaration .)
     BREAK           reduce using rule 32 (nonLabelledStatement -> localVariableDeclaration .)
     ID              reduce using rule 32 (nonLabelledStatement -> localVariableDeclaration .)
+    NUMBER          reduce using rule 32 (nonLabelledStatement -> localVariableDeclaration .)
+    LITERAL_STRING  reduce using rule 32 (nonLabelledStatement -> localVariableDeclaration .)
+    TRUE            reduce using rule 32 (nonLabelledStatement -> localVariableDeclaration .)
+    FALSE           reduce using rule 32 (nonLabelledStatement -> localVariableDeclaration .)
     VAR             reduce using rule 32 (nonLabelledStatement -> localVariableDeclaration .)
     INT             reduce using rule 32 (nonLabelledStatement -> localVariableDeclaration .)
     FLOAT           reduce using rule 32 (nonLabelledStatement -> localVariableDeclaration .)
@@ -2753,10 +2757,6 @@ state 70
     STRING          reduce using rule 32 (nonLabelledStatement -> localVariableDeclaration .)
     VOID            reduce using rule 32 (nonLabelledStatement -> localVariableDeclaration .)
     LPAREN          reduce using rule 32 (nonLabelledStatement -> localVariableDeclaration .)
-    NUMBER          reduce using rule 32 (nonLabelledStatement -> localVariableDeclaration .)
-    LITERAL_STRING  reduce using rule 32 (nonLabelledStatement -> localVariableDeclaration .)
-    TRUE            reduce using rule 32 (nonLabelledStatement -> localVariableDeclaration .)
-    FALSE           reduce using rule 32 (nonLabelledStatement -> localVariableDeclaration .)
     RCHAV           reduce using rule 32 (nonLabelledStatement -> localVariableDeclaration .)
     CASE            reduce using rule 32 (nonLabelledStatement -> localVariableDeclaration .)
     DEFAULT         reduce using rule 32 (nonLabelledStatement -> localVariableDeclaration .)
@@ -2777,6 +2777,10 @@ state 71
     SWITCH          reduce using rule 33 (nonLabelledStatement -> returnStatement .)
     BREAK           reduce using rule 33 (nonLabelledStatement -> returnStatement .)
     ID              reduce using rule 33 (nonLabelledStatement -> returnStatement .)
+    NUMBER          reduce using rule 33 (nonLabelledStatement -> returnStatement .)
+    LITERAL_STRING  reduce using rule 33 (nonLabelledStatement -> returnStatement .)
+    TRUE            reduce using rule 33 (nonLabelledStatement -> returnStatement .)
+    FALSE           reduce using rule 33 (nonLabelledStatement -> returnStatement .)
     VAR             reduce using rule 33 (nonLabelledStatement -> returnStatement .)
     INT             reduce using rule 33 (nonLabelledStatement -> returnStatement .)
     FLOAT           reduce using rule 33 (nonLabelledStatement -> returnStatement .)
@@ -2784,10 +2788,6 @@ state 71
     STRING          reduce using rule 33 (nonLabelledStatement -> returnStatement .)
     VOID            reduce using rule 33 (nonLabelledStatement -> returnStatement .)
     LPAREN          reduce using rule 33 (nonLabelledStatement -> returnStatement .)
-    NUMBER          reduce using rule 33 (nonLabelledStatement -> returnStatement .)
-    LITERAL_STRING  reduce using rule 33 (nonLabelledStatement -> returnStatement .)
-    TRUE            reduce using rule 33 (nonLabelledStatement -> returnStatement .)
-    FALSE           reduce using rule 33 (nonLabelledStatement -> returnStatement .)
     RCHAV           reduce using rule 33 (nonLabelledStatement -> returnStatement .)
     CASE            reduce using rule 33 (nonLabelledStatement -> returnStatement .)
     DEFAULT         reduce using rule 33 (nonLabelledStatement -> returnStatement .)
@@ -2808,6 +2808,10 @@ state 72
     SWITCH          reduce using rule 34 (nonLabelledStatement -> ifStatement .)
     BREAK           reduce using rule 34 (nonLabelledStatement -> ifStatement .)
     ID              reduce using rule 34 (nonLabelledStatement -> ifStatement .)
+    NUMBER          reduce using rule 34 (nonLabelledStatement -> ifStatement .)
+    LITERAL_STRING  reduce using rule 34 (nonLabelledStatement -> ifStatement .)
+    TRUE            reduce using rule 34 (nonLabelledStatement -> ifStatement .)
+    FALSE           reduce using rule 34 (nonLabelledStatement -> ifStatement .)
     VAR             reduce using rule 34 (nonLabelledStatement -> ifStatement .)
     INT             reduce using rule 34 (nonLabelledStatement -> ifStatement .)
     FLOAT           reduce using rule 34 (nonLabelledStatement -> ifStatement .)
@@ -2815,10 +2819,6 @@ state 72
     STRING          reduce using rule 34 (nonLabelledStatement -> ifStatement .)
     VOID            reduce using rule 34 (nonLabelledStatement -> ifStatement .)
     LPAREN          reduce using rule 34 (nonLabelledStatement -> ifStatement .)
-    NUMBER          reduce using rule 34 (nonLabelledStatement -> ifStatement .)
-    LITERAL_STRING  reduce using rule 34 (nonLabelledStatement -> ifStatement .)
-    TRUE            reduce using rule 34 (nonLabelledStatement -> ifStatement .)
-    FALSE           reduce using rule 34 (nonLabelledStatement -> ifStatement .)
     RCHAV           reduce using rule 34 (nonLabelledStatement -> ifStatement .)
     CASE            reduce using rule 34 (nonLabelledStatement -> ifStatement .)
     DEFAULT         reduce using rule 34 (nonLabelledStatement -> ifStatement .)
@@ -2839,6 +2839,10 @@ state 73
     SWITCH          reduce using rule 35 (nonLabelledStatement -> forStatement .)
     BREAK           reduce using rule 35 (nonLabelledStatement -> forStatement .)
     ID              reduce using rule 35 (nonLabelledStatement -> forStatement .)
+    NUMBER          reduce using rule 35 (nonLabelledStatement -> forStatement .)
+    LITERAL_STRING  reduce using rule 35 (nonLabelledStatement -> forStatement .)
+    TRUE            reduce using rule 35 (nonLabelledStatement -> forStatement .)
+    FALSE           reduce using rule 35 (nonLabelledStatement -> forStatement .)
     VAR             reduce using rule 35 (nonLabelledStatement -> forStatement .)
     INT             reduce using rule 35 (nonLabelledStatement -> forStatement .)
     FLOAT           reduce using rule 35 (nonLabelledStatement -> forStatement .)
@@ -2846,10 +2850,6 @@ state 73
     STRING          reduce using rule 35 (nonLabelledStatement -> forStatement .)
     VOID            reduce using rule 35 (nonLabelledStatement -> forStatement .)
     LPAREN          reduce using rule 35 (nonLabelledStatement -> forStatement .)
-    NUMBER          reduce using rule 35 (nonLabelledStatement -> forStatement .)
-    LITERAL_STRING  reduce using rule 35 (nonLabelledStatement -> forStatement .)
-    TRUE            reduce using rule 35 (nonLabelledStatement -> forStatement .)
-    FALSE           reduce using rule 35 (nonLabelledStatement -> forStatement .)
     RCHAV           reduce using rule 35 (nonLabelledStatement -> forStatement .)
     CASE            reduce using rule 35 (nonLabelledStatement -> forStatement .)
     DEFAULT         reduce using rule 35 (nonLabelledStatement -> forStatement .)
@@ -2870,6 +2870,10 @@ state 74
     SWITCH          reduce using rule 36 (nonLabelledStatement -> whileStatement .)
     BREAK           reduce using rule 36 (nonLabelledStatement -> whileStatement .)
     ID              reduce using rule 36 (nonLabelledStatement -> whileStatement .)
+    NUMBER          reduce using rule 36 (nonLabelledStatement -> whileStatement .)
+    LITERAL_STRING  reduce using rule 36 (nonLabelledStatement -> whileStatement .)
+    TRUE            reduce using rule 36 (nonLabelledStatement -> whileStatement .)
+    FALSE           reduce using rule 36 (nonLabelledStatement -> whileStatement .)
     VAR             reduce using rule 36 (nonLabelledStatement -> whileStatement .)
     INT             reduce using rule 36 (nonLabelledStatement -> whileStatement .)
     FLOAT           reduce using rule 36 (nonLabelledStatement -> whileStatement .)
@@ -2877,10 +2881,6 @@ state 74
     STRING          reduce using rule 36 (nonLabelledStatement -> whileStatement .)
     VOID            reduce using rule 36 (nonLabelledStatement -> whileStatement .)
     LPAREN          reduce using rule 36 (nonLabelledStatement -> whileStatement .)
-    NUMBER          reduce using rule 36 (nonLabelledStatement -> whileStatement .)
-    LITERAL_STRING  reduce using rule 36 (nonLabelledStatement -> whileStatement .)
-    TRUE            reduce using rule 36 (nonLabelledStatement -> whileStatement .)
-    FALSE           reduce using rule 36 (nonLabelledStatement -> whileStatement .)
     RCHAV           reduce using rule 36 (nonLabelledStatement -> whileStatement .)
     CASE            reduce using rule 36 (nonLabelledStatement -> whileStatement .)
     DEFAULT         reduce using rule 36 (nonLabelledStatement -> whileStatement .)
@@ -2901,6 +2901,10 @@ state 75
     SWITCH          reduce using rule 37 (nonLabelledStatement -> doStatement .)
     BREAK           reduce using rule 37 (nonLabelledStatement -> doStatement .)
     ID              reduce using rule 37 (nonLabelledStatement -> doStatement .)
+    NUMBER          reduce using rule 37 (nonLabelledStatement -> doStatement .)
+    LITERAL_STRING  reduce using rule 37 (nonLabelledStatement -> doStatement .)
+    TRUE            reduce using rule 37 (nonLabelledStatement -> doStatement .)
+    FALSE           reduce using rule 37 (nonLabelledStatement -> doStatement .)
     VAR             reduce using rule 37 (nonLabelledStatement -> doStatement .)
     INT             reduce using rule 37 (nonLabelledStatement -> doStatement .)
     FLOAT           reduce using rule 37 (nonLabelledStatement -> doStatement .)
@@ -2908,10 +2912,6 @@ state 75
     STRING          reduce using rule 37 (nonLabelledStatement -> doStatement .)
     VOID            reduce using rule 37 (nonLabelledStatement -> doStatement .)
     LPAREN          reduce using rule 37 (nonLabelledStatement -> doStatement .)
-    NUMBER          reduce using rule 37 (nonLabelledStatement -> doStatement .)
-    LITERAL_STRING  reduce using rule 37 (nonLabelledStatement -> doStatement .)
-    TRUE            reduce using rule 37 (nonLabelledStatement -> doStatement .)
-    FALSE           reduce using rule 37 (nonLabelledStatement -> doStatement .)
     RCHAV           reduce using rule 37 (nonLabelledStatement -> doStatement .)
     CASE            reduce using rule 37 (nonLabelledStatement -> doStatement .)
     DEFAULT         reduce using rule 37 (nonLabelledStatement -> doStatement .)
@@ -2932,6 +2932,10 @@ state 76
     SWITCH          reduce using rule 38 (nonLabelledStatement -> switchStatement .)
     BREAK           reduce using rule 38 (nonLabelledStatement -> switchStatement .)
     ID              reduce using rule 38 (nonLabelledStatement -> switchStatement .)
+    NUMBER          reduce using rule 38 (nonLabelledStatement -> switchStatement .)
+    LITERAL_STRING  reduce using rule 38 (nonLabelledStatement -> switchStatement .)
+    TRUE            reduce using rule 38 (nonLabelledStatement -> switchStatement .)
+    FALSE           reduce using rule 38 (nonLabelledStatement -> switchStatement .)
     VAR             reduce using rule 38 (nonLabelledStatement -> switchStatement .)
     INT             reduce using rule 38 (nonLabelledStatement -> switchStatement .)
     FLOAT           reduce using rule 38 (nonLabelledStatement -> switchStatement .)
@@ -2939,10 +2943,6 @@ state 76
     STRING          reduce using rule 38 (nonLabelledStatement -> switchStatement .)
     VOID            reduce using rule 38 (nonLabelledStatement -> switchStatement .)
     LPAREN          reduce using rule 38 (nonLabelledStatement -> switchStatement .)
-    NUMBER          reduce using rule 38 (nonLabelledStatement -> switchStatement .)
-    LITERAL_STRING  reduce using rule 38 (nonLabelledStatement -> switchStatement .)
-    TRUE            reduce using rule 38 (nonLabelledStatement -> switchStatement .)
-    FALSE           reduce using rule 38 (nonLabelledStatement -> switchStatement .)
     RCHAV           reduce using rule 38 (nonLabelledStatement -> switchStatement .)
     CASE            reduce using rule 38 (nonLabelledStatement -> switchStatement .)
     DEFAULT         reduce using rule 38 (nonLabelledStatement -> switchStatement .)
@@ -2963,6 +2963,10 @@ state 77
     SWITCH          reduce using rule 39 (nonLabelledStatement -> breakStatement .)
     BREAK           reduce using rule 39 (nonLabelledStatement -> breakStatement .)
     ID              reduce using rule 39 (nonLabelledStatement -> breakStatement .)
+    NUMBER          reduce using rule 39 (nonLabelledStatement -> breakStatement .)
+    LITERAL_STRING  reduce using rule 39 (nonLabelledStatement -> breakStatement .)
+    TRUE            reduce using rule 39 (nonLabelledStatement -> breakStatement .)
+    FALSE           reduce using rule 39 (nonLabelledStatement -> breakStatement .)
     VAR             reduce using rule 39 (nonLabelledStatement -> breakStatement .)
     INT             reduce using rule 39 (nonLabelledStatement -> breakStatement .)
     FLOAT           reduce using rule 39 (nonLabelledStatement -> breakStatement .)
@@ -2970,10 +2974,6 @@ state 77
     STRING          reduce using rule 39 (nonLabelledStatement -> breakStatement .)
     VOID            reduce using rule 39 (nonLabelledStatement -> breakStatement .)
     LPAREN          reduce using rule 39 (nonLabelledStatement -> breakStatement .)
-    NUMBER          reduce using rule 39 (nonLabelledStatement -> breakStatement .)
-    LITERAL_STRING  reduce using rule 39 (nonLabelledStatement -> breakStatement .)
-    TRUE            reduce using rule 39 (nonLabelledStatement -> breakStatement .)
-    FALSE           reduce using rule 39 (nonLabelledStatement -> breakStatement .)
     RCHAV           reduce using rule 39 (nonLabelledStatement -> breakStatement .)
     CASE            reduce using rule 39 (nonLabelledStatement -> breakStatement .)
     DEFAULT         reduce using rule 39 (nonLabelledStatement -> breakStatement .)
@@ -2994,6 +2994,10 @@ state 78
     SWITCH          reduce using rule 45 (expressionStatement -> PCOMMA .)
     BREAK           reduce using rule 45 (expressionStatement -> PCOMMA .)
     ID              reduce using rule 45 (expressionStatement -> PCOMMA .)
+    NUMBER          reduce using rule 45 (expressionStatement -> PCOMMA .)
+    LITERAL_STRING  reduce using rule 45 (expressionStatement -> PCOMMA .)
+    TRUE            reduce using rule 45 (expressionStatement -> PCOMMA .)
+    FALSE           reduce using rule 45 (expressionStatement -> PCOMMA .)
     VAR             reduce using rule 45 (expressionStatement -> PCOMMA .)
     INT             reduce using rule 45 (expressionStatement -> PCOMMA .)
     FLOAT           reduce using rule 45 (expressionStatement -> PCOMMA .)
@@ -3001,10 +3005,6 @@ state 78
     STRING          reduce using rule 45 (expressionStatement -> PCOMMA .)
     VOID            reduce using rule 45 (expressionStatement -> PCOMMA .)
     LPAREN          reduce using rule 45 (expressionStatement -> PCOMMA .)
-    NUMBER          reduce using rule 45 (expressionStatement -> PCOMMA .)
-    LITERAL_STRING  reduce using rule 45 (expressionStatement -> PCOMMA .)
-    TRUE            reduce using rule 45 (expressionStatement -> PCOMMA .)
-    FALSE           reduce using rule 45 (expressionStatement -> PCOMMA .)
     RCHAV           reduce using rule 45 (expressionStatement -> PCOMMA .)
     CASE            reduce using rule 45 (expressionStatement -> PCOMMA .)
     DEFAULT         reduce using rule 45 (expressionStatement -> PCOMMA .)
@@ -3166,15 +3166,22 @@ state 85
     (41) initializedVariableDeclaration -> . declaredIdentifier
     (42) initializedVariableDeclaration -> . declaredIdentifier ATRIBUIR expression
     (43) initializedVariableDeclaration -> . declaredIdentifier ATRIBUIR listLiteral
-    (44) initializedVariableDeclaration -> . listLiteralID ATRIBUIR expression
+    (44) initializedVariableDeclaration -> . literal ATRIBUIR expression
     (48) orExpression -> . andExpression
     (49) orExpression -> . orExpression OR andExpression
     (7) declaredIdentifier -> . voidOrType ID
     (8) declaredIdentifier -> . expression
-    (80) listLiteralID -> . ID listLiteral
+    (74) literal -> . ID
+    (75) literal -> . booleanLiteral
+    (76) literal -> . listLiteralID
+    (77) literal -> . NUMBER
+    (78) literal -> . LITERAL_STRING
     (50) andExpression -> . equalityExpression
     (51) andExpression -> . andExpression AND equalityExpression
     (9) voidOrType -> . type
+    (81) booleanLiteral -> . TRUE
+    (82) booleanLiteral -> . FALSE
+    (80) listLiteralID -> . ID listLiteral
     (52) equalityExpression -> . relacionalExpression
     (53) equalityExpression -> . equalityExpression IGUAL relacionalExpression
     (54) equalityExpression -> . equalityExpression NEG relacionalExpression
@@ -3203,15 +3210,8 @@ state 85
     (72) primary -> . literal
     (73) primary -> . LPAREN expression RPAREN
     (71) functionCall -> . functionSignature
-    (74) literal -> . ID
-    (75) literal -> . booleanLiteral
-    (76) literal -> . listLiteralID
-    (77) literal -> . NUMBER
-    (78) literal -> . LITERAL_STRING
     (16) functionSignature -> . ID formalParameterList
     (17) functionSignature -> . voidOrType ID formalParameterList
-    (81) booleanLiteral -> . TRUE
-    (82) booleanLiteral -> . FALSE
 
     LCHAV           shift and go to state 36
     PCOMMA          shift and go to state 78
@@ -3223,6 +3223,10 @@ state 85
     SWITCH          shift and go to state 86
     BREAK           shift and go to state 87
     ID              shift and go to state 88
+    NUMBER          shift and go to state 28
+    LITERAL_STRING  shift and go to state 29
+    TRUE            shift and go to state 30
+    FALSE           shift and go to state 31
     VAR             shift and go to state 10
     INT             shift and go to state 11
     FLOAT           shift and go to state 12
@@ -3230,10 +3234,6 @@ state 85
     STRING          shift and go to state 14
     VOID            shift and go to state 15
     LPAREN          shift and go to state 25
-    NUMBER          shift and go to state 28
-    LITERAL_STRING  shift and go to state 29
-    TRUE            shift and go to state 30
-    FALSE           shift and go to state 31
 
     statement                      shift and go to state 124
     expression                     shift and go to state 79
@@ -3251,9 +3251,11 @@ state 85
     initializedVariableDeclaration shift and go to state 80
     orExpression                   shift and go to state 9
     declaredIdentifier             shift and go to state 89
-    listLiteralID                  shift and go to state 90
+    literal                        shift and go to state 90
     andExpression                  shift and go to state 16
     voidOrType                     shift and go to state 91
+    booleanLiteral                 shift and go to state 26
+    listLiteralID                  shift and go to state 27
     equalityExpression             shift and go to state 17
     type                           shift and go to state 8
     relacionalExpression           shift and go to state 18
@@ -3262,9 +3264,7 @@ state 85
     unaryExpression                shift and go to state 21
     primary                        shift and go to state 22
     functionCall                   shift and go to state 23
-    literal                        shift and go to state 24
     functionSignature              shift and go to state 58
-    booleanLiteral                 shift and go to state 26
 
 state 86
 
@@ -3285,13 +3285,14 @@ state 87
 
 state 88
 
-    (80) listLiteralID -> ID . listLiteral
     (74) literal -> ID .
+    (80) listLiteralID -> ID . listLiteral
     (16) functionSignature -> ID . formalParameterList
     (79) listLiteral -> . LCON expressionList RCON
     (18) formalParameterList -> . LPAREN RPAREN
     (19) formalParameterList -> . LPAREN normalFormalParameters RPAREN
 
+    ATRIBUIR        reduce using rule 74 (literal -> ID .)
     SOMASOMA        reduce using rule 74 (literal -> ID .)
     SUBSUB          reduce using rule 74 (literal -> ID .)
     VEZES           reduce using rule 74 (literal -> ID .)
@@ -3308,7 +3309,6 @@ state 88
     AND             reduce using rule 74 (literal -> ID .)
     OR              reduce using rule 74 (literal -> ID .)
     PCOMMA          reduce using rule 74 (literal -> ID .)
-    ATRIBUIR        reduce using rule 74 (literal -> ID .)
     LCON            shift and go to state 40
     LPAREN          shift and go to state 39
 
@@ -3327,29 +3327,29 @@ state 89
 
 state 90
 
-    (44) initializedVariableDeclaration -> listLiteralID . ATRIBUIR expression
-    (76) literal -> listLiteralID .
+    (44) initializedVariableDeclaration -> literal . ATRIBUIR expression
+    (72) primary -> literal .
 
   ! shift/reduce conflict for ATRIBUIR resolved as shift
     ATRIBUIR        shift and go to state 129
-    SOMASOMA        reduce using rule 76 (literal -> listLiteralID .)
-    SUBSUB          reduce using rule 76 (literal -> listLiteralID .)
-    VEZES           reduce using rule 76 (literal -> listLiteralID .)
-    DIVIDIR         reduce using rule 76 (literal -> listLiteralID .)
-    RESTO           reduce using rule 76 (literal -> listLiteralID .)
-    SOMA            reduce using rule 76 (literal -> listLiteralID .)
-    SUBTRAIR        reduce using rule 76 (literal -> listLiteralID .)
-    MENOR           reduce using rule 76 (literal -> listLiteralID .)
-    MAIOR           reduce using rule 76 (literal -> listLiteralID .)
-    MENORI          reduce using rule 76 (literal -> listLiteralID .)
-    MAIORI          reduce using rule 76 (literal -> listLiteralID .)
-    IGUAL           reduce using rule 76 (literal -> listLiteralID .)
-    NEG             reduce using rule 76 (literal -> listLiteralID .)
-    AND             reduce using rule 76 (literal -> listLiteralID .)
-    OR              reduce using rule 76 (literal -> listLiteralID .)
-    PCOMMA          reduce using rule 76 (literal -> listLiteralID .)
+    SOMASOMA        reduce using rule 72 (primary -> literal .)
+    SUBSUB          reduce using rule 72 (primary -> literal .)
+    VEZES           reduce using rule 72 (primary -> literal .)
+    DIVIDIR         reduce using rule 72 (primary -> literal .)
+    RESTO           reduce using rule 72 (primary -> literal .)
+    SOMA            reduce using rule 72 (primary -> literal .)
+    SUBTRAIR        reduce using rule 72 (primary -> literal .)
+    MENOR           reduce using rule 72 (primary -> literal .)
+    MAIOR           reduce using rule 72 (primary -> literal .)
+    MENORI          reduce using rule 72 (primary -> literal .)
+    MAIORI          reduce using rule 72 (primary -> literal .)
+    IGUAL           reduce using rule 72 (primary -> literal .)
+    NEG             reduce using rule 72 (primary -> literal .)
+    AND             reduce using rule 72 (primary -> literal .)
+    OR              reduce using rule 72 (primary -> literal .)
+    PCOMMA          reduce using rule 72 (primary -> literal .)
 
-  ! ATRIBUIR        [ reduce using rule 76 (literal -> listLiteralID .) ]
+  ! ATRIBUIR        [ reduce using rule 72 (primary -> literal .) ]
 
 
 state 91
@@ -3878,6 +3878,10 @@ state 117
     SWITCH          reduce using rule 46 (expressionStatement -> expression PCOMMA .)
     BREAK           reduce using rule 46 (expressionStatement -> expression PCOMMA .)
     ID              reduce using rule 46 (expressionStatement -> expression PCOMMA .)
+    NUMBER          reduce using rule 46 (expressionStatement -> expression PCOMMA .)
+    LITERAL_STRING  reduce using rule 46 (expressionStatement -> expression PCOMMA .)
+    TRUE            reduce using rule 46 (expressionStatement -> expression PCOMMA .)
+    FALSE           reduce using rule 46 (expressionStatement -> expression PCOMMA .)
     VAR             reduce using rule 46 (expressionStatement -> expression PCOMMA .)
     INT             reduce using rule 46 (expressionStatement -> expression PCOMMA .)
     FLOAT           reduce using rule 46 (expressionStatement -> expression PCOMMA .)
@@ -3885,10 +3889,6 @@ state 117
     STRING          reduce using rule 46 (expressionStatement -> expression PCOMMA .)
     VOID            reduce using rule 46 (expressionStatement -> expression PCOMMA .)
     LPAREN          reduce using rule 46 (expressionStatement -> expression PCOMMA .)
-    NUMBER          reduce using rule 46 (expressionStatement -> expression PCOMMA .)
-    LITERAL_STRING  reduce using rule 46 (expressionStatement -> expression PCOMMA .)
-    TRUE            reduce using rule 46 (expressionStatement -> expression PCOMMA .)
-    FALSE           reduce using rule 46 (expressionStatement -> expression PCOMMA .)
     RCHAV           reduce using rule 46 (expressionStatement -> expression PCOMMA .)
     CASE            reduce using rule 46 (expressionStatement -> expression PCOMMA .)
     DEFAULT         reduce using rule 46 (expressionStatement -> expression PCOMMA .)
@@ -3909,6 +3909,10 @@ state 118
     SWITCH          reduce using rule 40 (localVariableDeclaration -> initializedVariableDeclaration PCOMMA .)
     BREAK           reduce using rule 40 (localVariableDeclaration -> initializedVariableDeclaration PCOMMA .)
     ID              reduce using rule 40 (localVariableDeclaration -> initializedVariableDeclaration PCOMMA .)
+    NUMBER          reduce using rule 40 (localVariableDeclaration -> initializedVariableDeclaration PCOMMA .)
+    LITERAL_STRING  reduce using rule 40 (localVariableDeclaration -> initializedVariableDeclaration PCOMMA .)
+    TRUE            reduce using rule 40 (localVariableDeclaration -> initializedVariableDeclaration PCOMMA .)
+    FALSE           reduce using rule 40 (localVariableDeclaration -> initializedVariableDeclaration PCOMMA .)
     VAR             reduce using rule 40 (localVariableDeclaration -> initializedVariableDeclaration PCOMMA .)
     INT             reduce using rule 40 (localVariableDeclaration -> initializedVariableDeclaration PCOMMA .)
     FLOAT           reduce using rule 40 (localVariableDeclaration -> initializedVariableDeclaration PCOMMA .)
@@ -3916,10 +3920,6 @@ state 118
     STRING          reduce using rule 40 (localVariableDeclaration -> initializedVariableDeclaration PCOMMA .)
     VOID            reduce using rule 40 (localVariableDeclaration -> initializedVariableDeclaration PCOMMA .)
     LPAREN          reduce using rule 40 (localVariableDeclaration -> initializedVariableDeclaration PCOMMA .)
-    NUMBER          reduce using rule 40 (localVariableDeclaration -> initializedVariableDeclaration PCOMMA .)
-    LITERAL_STRING  reduce using rule 40 (localVariableDeclaration -> initializedVariableDeclaration PCOMMA .)
-    TRUE            reduce using rule 40 (localVariableDeclaration -> initializedVariableDeclaration PCOMMA .)
-    FALSE           reduce using rule 40 (localVariableDeclaration -> initializedVariableDeclaration PCOMMA .)
     RCHAV           reduce using rule 40 (localVariableDeclaration -> initializedVariableDeclaration PCOMMA .)
     CASE            reduce using rule 40 (localVariableDeclaration -> initializedVariableDeclaration PCOMMA .)
     DEFAULT         reduce using rule 40 (localVariableDeclaration -> initializedVariableDeclaration PCOMMA .)
@@ -3940,6 +3940,10 @@ state 119
     SWITCH          reduce using rule 86 (returnStatement -> RETURN PCOMMA .)
     BREAK           reduce using rule 86 (returnStatement -> RETURN PCOMMA .)
     ID              reduce using rule 86 (returnStatement -> RETURN PCOMMA .)
+    NUMBER          reduce using rule 86 (returnStatement -> RETURN PCOMMA .)
+    LITERAL_STRING  reduce using rule 86 (returnStatement -> RETURN PCOMMA .)
+    TRUE            reduce using rule 86 (returnStatement -> RETURN PCOMMA .)
+    FALSE           reduce using rule 86 (returnStatement -> RETURN PCOMMA .)
     VAR             reduce using rule 86 (returnStatement -> RETURN PCOMMA .)
     INT             reduce using rule 86 (returnStatement -> RETURN PCOMMA .)
     FLOAT           reduce using rule 86 (returnStatement -> RETURN PCOMMA .)
@@ -3947,10 +3951,6 @@ state 119
     STRING          reduce using rule 86 (returnStatement -> RETURN PCOMMA .)
     VOID            reduce using rule 86 (returnStatement -> RETURN PCOMMA .)
     LPAREN          reduce using rule 86 (returnStatement -> RETURN PCOMMA .)
-    NUMBER          reduce using rule 86 (returnStatement -> RETURN PCOMMA .)
-    LITERAL_STRING  reduce using rule 86 (returnStatement -> RETURN PCOMMA .)
-    TRUE            reduce using rule 86 (returnStatement -> RETURN PCOMMA .)
-    FALSE           reduce using rule 86 (returnStatement -> RETURN PCOMMA .)
     RCHAV           reduce using rule 86 (returnStatement -> RETURN PCOMMA .)
     CASE            reduce using rule 86 (returnStatement -> RETURN PCOMMA .)
     DEFAULT         reduce using rule 86 (returnStatement -> RETURN PCOMMA .)
@@ -4058,15 +4058,22 @@ state 122
     (41) initializedVariableDeclaration -> . declaredIdentifier
     (42) initializedVariableDeclaration -> . declaredIdentifier ATRIBUIR expression
     (43) initializedVariableDeclaration -> . declaredIdentifier ATRIBUIR listLiteral
-    (44) initializedVariableDeclaration -> . listLiteralID ATRIBUIR expression
+    (44) initializedVariableDeclaration -> . literal ATRIBUIR expression
     (48) orExpression -> . andExpression
     (49) orExpression -> . orExpression OR andExpression
     (7) declaredIdentifier -> . voidOrType ID
     (8) declaredIdentifier -> . expression
-    (80) listLiteralID -> . ID listLiteral
+    (74) literal -> . ID
+    (75) literal -> . booleanLiteral
+    (76) literal -> . listLiteralID
+    (77) literal -> . NUMBER
+    (78) literal -> . LITERAL_STRING
     (50) andExpression -> . equalityExpression
     (51) andExpression -> . andExpression AND equalityExpression
     (9) voidOrType -> . type
+    (81) booleanLiteral -> . TRUE
+    (82) booleanLiteral -> . FALSE
+    (80) listLiteralID -> . ID listLiteral
     (52) equalityExpression -> . relacionalExpression
     (53) equalityExpression -> . equalityExpression IGUAL relacionalExpression
     (54) equalityExpression -> . equalityExpression NEG relacionalExpression
@@ -4095,18 +4102,15 @@ state 122
     (72) primary -> . literal
     (73) primary -> . LPAREN expression RPAREN
     (71) functionCall -> . functionSignature
-    (74) literal -> . ID
-    (75) literal -> . booleanLiteral
-    (76) literal -> . listLiteralID
-    (77) literal -> . NUMBER
-    (78) literal -> . LITERAL_STRING
     (16) functionSignature -> . ID formalParameterList
     (17) functionSignature -> . voidOrType ID formalParameterList
-    (81) booleanLiteral -> . TRUE
-    (82) booleanLiteral -> . FALSE
 
     PCOMMA          shift and go to state 140
     ID              shift and go to state 88
+    NUMBER          shift and go to state 28
+    LITERAL_STRING  shift and go to state 29
+    TRUE            shift and go to state 30
+    FALSE           shift and go to state 31
     VAR             shift and go to state 10
     INT             shift and go to state 11
     FLOAT           shift and go to state 12
@@ -4114,10 +4118,6 @@ state 122
     STRING          shift and go to state 14
     VOID            shift and go to state 15
     LPAREN          shift and go to state 25
-    NUMBER          shift and go to state 28
-    LITERAL_STRING  shift and go to state 29
-    TRUE            shift and go to state 30
-    FALSE           shift and go to state 31
 
     forLoopParts                   shift and go to state 138
     forInitializerStatement        shift and go to state 139
@@ -4126,9 +4126,11 @@ state 122
     initializedVariableDeclaration shift and go to state 80
     orExpression                   shift and go to state 9
     declaredIdentifier             shift and go to state 89
-    listLiteralID                  shift and go to state 90
+    literal                        shift and go to state 90
     andExpression                  shift and go to state 16
     voidOrType                     shift and go to state 91
+    booleanLiteral                 shift and go to state 26
+    listLiteralID                  shift and go to state 27
     equalityExpression             shift and go to state 17
     type                           shift and go to state 8
     relacionalExpression           shift and go to state 18
@@ -4137,9 +4139,7 @@ state 122
     unaryExpression                shift and go to state 21
     primary                        shift and go to state 22
     functionCall                   shift and go to state 23
-    literal                        shift and go to state 24
     functionSignature              shift and go to state 58
-    booleanLiteral                 shift and go to state 26
 
 state 123
 
@@ -4319,6 +4319,10 @@ state 126
     SWITCH          reduce using rule 107 (breakStatement -> BREAK PCOMMA .)
     BREAK           reduce using rule 107 (breakStatement -> BREAK PCOMMA .)
     ID              reduce using rule 107 (breakStatement -> BREAK PCOMMA .)
+    NUMBER          reduce using rule 107 (breakStatement -> BREAK PCOMMA .)
+    LITERAL_STRING  reduce using rule 107 (breakStatement -> BREAK PCOMMA .)
+    TRUE            reduce using rule 107 (breakStatement -> BREAK PCOMMA .)
+    FALSE           reduce using rule 107 (breakStatement -> BREAK PCOMMA .)
     VAR             reduce using rule 107 (breakStatement -> BREAK PCOMMA .)
     INT             reduce using rule 107 (breakStatement -> BREAK PCOMMA .)
     FLOAT           reduce using rule 107 (breakStatement -> BREAK PCOMMA .)
@@ -4326,10 +4330,6 @@ state 126
     STRING          reduce using rule 107 (breakStatement -> BREAK PCOMMA .)
     VOID            reduce using rule 107 (breakStatement -> BREAK PCOMMA .)
     LPAREN          reduce using rule 107 (breakStatement -> BREAK PCOMMA .)
-    NUMBER          reduce using rule 107 (breakStatement -> BREAK PCOMMA .)
-    LITERAL_STRING  reduce using rule 107 (breakStatement -> BREAK PCOMMA .)
-    TRUE            reduce using rule 107 (breakStatement -> BREAK PCOMMA .)
-    FALSE           reduce using rule 107 (breakStatement -> BREAK PCOMMA .)
     RCHAV           reduce using rule 107 (breakStatement -> BREAK PCOMMA .)
     CASE            reduce using rule 107 (breakStatement -> BREAK PCOMMA .)
     DEFAULT         reduce using rule 107 (breakStatement -> BREAK PCOMMA .)
@@ -4427,7 +4427,7 @@ state 128
 
 state 129
 
-    (44) initializedVariableDeclaration -> listLiteralID ATRIBUIR . expression
+    (44) initializedVariableDeclaration -> literal ATRIBUIR . expression
     (47) expression -> . orExpression
     (48) orExpression -> . andExpression
     (49) orExpression -> . orExpression OR andExpression
@@ -4486,7 +4486,7 @@ state 129
     STRING          shift and go to state 14
     VOID            shift and go to state 15
 
-    listLiteralID                  shift and go to state 27
+    literal                        shift and go to state 24
     expression                     shift and go to state 149
     orExpression                   shift and go to state 9
     andExpression                  shift and go to state 16
@@ -4497,9 +4497,9 @@ state 129
     unaryExpression                shift and go to state 21
     primary                        shift and go to state 22
     functionCall                   shift and go to state 23
-    literal                        shift and go to state 24
     functionSignature              shift and go to state 58
     booleanLiteral                 shift and go to state 26
+    listLiteralID                  shift and go to state 27
     voidOrType                     shift and go to state 60
     type                           shift and go to state 8
 
@@ -4767,6 +4767,10 @@ state 136
     SWITCH          reduce using rule 87 (returnStatement -> RETURN expression PCOMMA .)
     BREAK           reduce using rule 87 (returnStatement -> RETURN expression PCOMMA .)
     ID              reduce using rule 87 (returnStatement -> RETURN expression PCOMMA .)
+    NUMBER          reduce using rule 87 (returnStatement -> RETURN expression PCOMMA .)
+    LITERAL_STRING  reduce using rule 87 (returnStatement -> RETURN expression PCOMMA .)
+    TRUE            reduce using rule 87 (returnStatement -> RETURN expression PCOMMA .)
+    FALSE           reduce using rule 87 (returnStatement -> RETURN expression PCOMMA .)
     VAR             reduce using rule 87 (returnStatement -> RETURN expression PCOMMA .)
     INT             reduce using rule 87 (returnStatement -> RETURN expression PCOMMA .)
     FLOAT           reduce using rule 87 (returnStatement -> RETURN expression PCOMMA .)
@@ -4774,10 +4778,6 @@ state 136
     STRING          reduce using rule 87 (returnStatement -> RETURN expression PCOMMA .)
     VOID            reduce using rule 87 (returnStatement -> RETURN expression PCOMMA .)
     LPAREN          reduce using rule 87 (returnStatement -> RETURN expression PCOMMA .)
-    NUMBER          reduce using rule 87 (returnStatement -> RETURN expression PCOMMA .)
-    LITERAL_STRING  reduce using rule 87 (returnStatement -> RETURN expression PCOMMA .)
-    TRUE            reduce using rule 87 (returnStatement -> RETURN expression PCOMMA .)
-    FALSE           reduce using rule 87 (returnStatement -> RETURN expression PCOMMA .)
     RCHAV           reduce using rule 87 (returnStatement -> RETURN expression PCOMMA .)
     CASE            reduce using rule 87 (returnStatement -> RETURN expression PCOMMA .)
     DEFAULT         reduce using rule 87 (returnStatement -> RETURN expression PCOMMA .)
@@ -4967,6 +4967,10 @@ state 146
     SWITCH          reduce using rule 108 (breakStatement -> BREAK ID PCOMMA .)
     BREAK           reduce using rule 108 (breakStatement -> BREAK ID PCOMMA .)
     ID              reduce using rule 108 (breakStatement -> BREAK ID PCOMMA .)
+    NUMBER          reduce using rule 108 (breakStatement -> BREAK ID PCOMMA .)
+    LITERAL_STRING  reduce using rule 108 (breakStatement -> BREAK ID PCOMMA .)
+    TRUE            reduce using rule 108 (breakStatement -> BREAK ID PCOMMA .)
+    FALSE           reduce using rule 108 (breakStatement -> BREAK ID PCOMMA .)
     VAR             reduce using rule 108 (breakStatement -> BREAK ID PCOMMA .)
     INT             reduce using rule 108 (breakStatement -> BREAK ID PCOMMA .)
     FLOAT           reduce using rule 108 (breakStatement -> BREAK ID PCOMMA .)
@@ -4974,10 +4978,6 @@ state 146
     STRING          reduce using rule 108 (breakStatement -> BREAK ID PCOMMA .)
     VOID            reduce using rule 108 (breakStatement -> BREAK ID PCOMMA .)
     LPAREN          reduce using rule 108 (breakStatement -> BREAK ID PCOMMA .)
-    NUMBER          reduce using rule 108 (breakStatement -> BREAK ID PCOMMA .)
-    LITERAL_STRING  reduce using rule 108 (breakStatement -> BREAK ID PCOMMA .)
-    TRUE            reduce using rule 108 (breakStatement -> BREAK ID PCOMMA .)
-    FALSE           reduce using rule 108 (breakStatement -> BREAK ID PCOMMA .)
     RCHAV           reduce using rule 108 (breakStatement -> BREAK ID PCOMMA .)
     CASE            reduce using rule 108 (breakStatement -> BREAK ID PCOMMA .)
     DEFAULT         reduce using rule 108 (breakStatement -> BREAK ID PCOMMA .)
@@ -5000,9 +5000,9 @@ state 148
 
 state 149
 
-    (44) initializedVariableDeclaration -> listLiteralID ATRIBUIR expression .
+    (44) initializedVariableDeclaration -> literal ATRIBUIR expression .
 
-    PCOMMA          reduce using rule 44 (initializedVariableDeclaration -> listLiteralID ATRIBUIR expression .)
+    PCOMMA          reduce using rule 44 (initializedVariableDeclaration -> literal ATRIBUIR expression .)
 
 
 state 150
@@ -5055,15 +5055,22 @@ state 152
     (41) initializedVariableDeclaration -> . declaredIdentifier
     (42) initializedVariableDeclaration -> . declaredIdentifier ATRIBUIR expression
     (43) initializedVariableDeclaration -> . declaredIdentifier ATRIBUIR listLiteral
-    (44) initializedVariableDeclaration -> . listLiteralID ATRIBUIR expression
+    (44) initializedVariableDeclaration -> . literal ATRIBUIR expression
     (48) orExpression -> . andExpression
     (49) orExpression -> . orExpression OR andExpression
     (7) declaredIdentifier -> . voidOrType ID
     (8) declaredIdentifier -> . expression
-    (80) listLiteralID -> . ID listLiteral
+    (74) literal -> . ID
+    (75) literal -> . booleanLiteral
+    (76) literal -> . listLiteralID
+    (77) literal -> . NUMBER
+    (78) literal -> . LITERAL_STRING
     (50) andExpression -> . equalityExpression
     (51) andExpression -> . andExpression AND equalityExpression
     (9) voidOrType -> . type
+    (81) booleanLiteral -> . TRUE
+    (82) booleanLiteral -> . FALSE
+    (80) listLiteralID -> . ID listLiteral
     (52) equalityExpression -> . relacionalExpression
     (53) equalityExpression -> . equalityExpression IGUAL relacionalExpression
     (54) equalityExpression -> . equalityExpression NEG relacionalExpression
@@ -5092,15 +5099,8 @@ state 152
     (72) primary -> . literal
     (73) primary -> . LPAREN expression RPAREN
     (71) functionCall -> . functionSignature
-    (74) literal -> . ID
-    (75) literal -> . booleanLiteral
-    (76) literal -> . listLiteralID
-    (77) literal -> . NUMBER
-    (78) literal -> . LITERAL_STRING
     (16) functionSignature -> . ID formalParameterList
     (17) functionSignature -> . voidOrType ID formalParameterList
-    (81) booleanLiteral -> . TRUE
-    (82) booleanLiteral -> . FALSE
 
     LCHAV           shift and go to state 36
     PCOMMA          shift and go to state 78
@@ -5112,6 +5112,10 @@ state 152
     SWITCH          shift and go to state 86
     BREAK           shift and go to state 87
     ID              shift and go to state 88
+    NUMBER          shift and go to state 28
+    LITERAL_STRING  shift and go to state 29
+    TRUE            shift and go to state 30
+    FALSE           shift and go to state 31
     VAR             shift and go to state 10
     INT             shift and go to state 11
     FLOAT           shift and go to state 12
@@ -5119,10 +5123,6 @@ state 152
     STRING          shift and go to state 14
     VOID            shift and go to state 15
     LPAREN          shift and go to state 25
-    NUMBER          shift and go to state 28
-    LITERAL_STRING  shift and go to state 29
-    TRUE            shift and go to state 30
-    FALSE           shift and go to state 31
 
     expression                     shift and go to state 79
     statement                      shift and go to state 160
@@ -5140,9 +5140,11 @@ state 152
     initializedVariableDeclaration shift and go to state 80
     orExpression                   shift and go to state 9
     declaredIdentifier             shift and go to state 89
-    listLiteralID                  shift and go to state 90
+    literal                        shift and go to state 90
     andExpression                  shift and go to state 16
     voidOrType                     shift and go to state 91
+    booleanLiteral                 shift and go to state 26
+    listLiteralID                  shift and go to state 27
     equalityExpression             shift and go to state 17
     type                           shift and go to state 8
     relacionalExpression           shift and go to state 18
@@ -5151,9 +5153,7 @@ state 152
     unaryExpression                shift and go to state 21
     primary                        shift and go to state 22
     functionCall                   shift and go to state 23
-    literal                        shift and go to state 24
     functionSignature              shift and go to state 58
-    booleanLiteral                 shift and go to state 26
 
 state 153
 
@@ -5189,15 +5189,22 @@ state 153
     (41) initializedVariableDeclaration -> . declaredIdentifier
     (42) initializedVariableDeclaration -> . declaredIdentifier ATRIBUIR expression
     (43) initializedVariableDeclaration -> . declaredIdentifier ATRIBUIR listLiteral
-    (44) initializedVariableDeclaration -> . listLiteralID ATRIBUIR expression
+    (44) initializedVariableDeclaration -> . literal ATRIBUIR expression
     (48) orExpression -> . andExpression
     (49) orExpression -> . orExpression OR andExpression
     (7) declaredIdentifier -> . voidOrType ID
     (8) declaredIdentifier -> . expression
-    (80) listLiteralID -> . ID listLiteral
+    (74) literal -> . ID
+    (75) literal -> . booleanLiteral
+    (76) literal -> . listLiteralID
+    (77) literal -> . NUMBER
+    (78) literal -> . LITERAL_STRING
     (50) andExpression -> . equalityExpression
     (51) andExpression -> . andExpression AND equalityExpression
     (9) voidOrType -> . type
+    (81) booleanLiteral -> . TRUE
+    (82) booleanLiteral -> . FALSE
+    (80) listLiteralID -> . ID listLiteral
     (52) equalityExpression -> . relacionalExpression
     (53) equalityExpression -> . equalityExpression IGUAL relacionalExpression
     (54) equalityExpression -> . equalityExpression NEG relacionalExpression
@@ -5226,15 +5233,8 @@ state 153
     (72) primary -> . literal
     (73) primary -> . LPAREN expression RPAREN
     (71) functionCall -> . functionSignature
-    (74) literal -> . ID
-    (75) literal -> . booleanLiteral
-    (76) literal -> . listLiteralID
-    (77) literal -> . NUMBER
-    (78) literal -> . LITERAL_STRING
     (16) functionSignature -> . ID formalParameterList
     (17) functionSignature -> . voidOrType ID formalParameterList
-    (81) booleanLiteral -> . TRUE
-    (82) booleanLiteral -> . FALSE
 
     LCHAV           shift and go to state 36
     PCOMMA          shift and go to state 78
@@ -5246,6 +5246,10 @@ state 153
     SWITCH          shift and go to state 86
     BREAK           shift and go to state 87
     ID              shift and go to state 88
+    NUMBER          shift and go to state 28
+    LITERAL_STRING  shift and go to state 29
+    TRUE            shift and go to state 30
+    FALSE           shift and go to state 31
     VAR             shift and go to state 10
     INT             shift and go to state 11
     FLOAT           shift and go to state 12
@@ -5253,10 +5257,6 @@ state 153
     STRING          shift and go to state 14
     VOID            shift and go to state 15
     LPAREN          shift and go to state 25
-    NUMBER          shift and go to state 28
-    LITERAL_STRING  shift and go to state 29
-    TRUE            shift and go to state 30
-    FALSE           shift and go to state 31
 
     statement                      shift and go to state 161
     nonLabelledStatement           shift and go to state 67
@@ -5274,9 +5274,11 @@ state 153
     initializedVariableDeclaration shift and go to state 80
     orExpression                   shift and go to state 9
     declaredIdentifier             shift and go to state 89
-    listLiteralID                  shift and go to state 90
+    literal                        shift and go to state 90
     andExpression                  shift and go to state 16
     voidOrType                     shift and go to state 91
+    booleanLiteral                 shift and go to state 26
+    listLiteralID                  shift and go to state 27
     equalityExpression             shift and go to state 17
     type                           shift and go to state 8
     relacionalExpression           shift and go to state 18
@@ -5285,9 +5287,7 @@ state 153
     unaryExpression                shift and go to state 21
     primary                        shift and go to state 22
     functionCall                   shift and go to state 23
-    literal                        shift and go to state 24
     functionSignature              shift and go to state 58
-    booleanLiteral                 shift and go to state 26
 
 state 154
 
@@ -5434,15 +5434,22 @@ state 157
     (41) initializedVariableDeclaration -> . declaredIdentifier
     (42) initializedVariableDeclaration -> . declaredIdentifier ATRIBUIR expression
     (43) initializedVariableDeclaration -> . declaredIdentifier ATRIBUIR listLiteral
-    (44) initializedVariableDeclaration -> . listLiteralID ATRIBUIR expression
+    (44) initializedVariableDeclaration -> . literal ATRIBUIR expression
     (48) orExpression -> . andExpression
     (49) orExpression -> . orExpression OR andExpression
     (7) declaredIdentifier -> . voidOrType ID
     (8) declaredIdentifier -> . expression
-    (80) listLiteralID -> . ID listLiteral
+    (74) literal -> . ID
+    (75) literal -> . booleanLiteral
+    (76) literal -> . listLiteralID
+    (77) literal -> . NUMBER
+    (78) literal -> . LITERAL_STRING
     (50) andExpression -> . equalityExpression
     (51) andExpression -> . andExpression AND equalityExpression
     (9) voidOrType -> . type
+    (81) booleanLiteral -> . TRUE
+    (82) booleanLiteral -> . FALSE
+    (80) listLiteralID -> . ID listLiteral
     (52) equalityExpression -> . relacionalExpression
     (53) equalityExpression -> . equalityExpression IGUAL relacionalExpression
     (54) equalityExpression -> . equalityExpression NEG relacionalExpression
@@ -5471,15 +5478,8 @@ state 157
     (72) primary -> . literal
     (73) primary -> . LPAREN expression RPAREN
     (71) functionCall -> . functionSignature
-    (74) literal -> . ID
-    (75) literal -> . booleanLiteral
-    (76) literal -> . listLiteralID
-    (77) literal -> . NUMBER
-    (78) literal -> . LITERAL_STRING
     (16) functionSignature -> . ID formalParameterList
     (17) functionSignature -> . voidOrType ID formalParameterList
-    (81) booleanLiteral -> . TRUE
-    (82) booleanLiteral -> . FALSE
 
     LCHAV           shift and go to state 36
     PCOMMA          shift and go to state 78
@@ -5491,6 +5491,10 @@ state 157
     SWITCH          shift and go to state 86
     BREAK           shift and go to state 87
     ID              shift and go to state 88
+    NUMBER          shift and go to state 28
+    LITERAL_STRING  shift and go to state 29
+    TRUE            shift and go to state 30
+    FALSE           shift and go to state 31
     VAR             shift and go to state 10
     INT             shift and go to state 11
     FLOAT           shift and go to state 12
@@ -5498,10 +5502,6 @@ state 157
     STRING          shift and go to state 14
     VOID            shift and go to state 15
     LPAREN          shift and go to state 25
-    NUMBER          shift and go to state 28
-    LITERAL_STRING  shift and go to state 29
-    TRUE            shift and go to state 30
-    FALSE           shift and go to state 31
 
     expression                     shift and go to state 79
     statement                      shift and go to state 164
@@ -5519,9 +5519,11 @@ state 157
     initializedVariableDeclaration shift and go to state 80
     orExpression                   shift and go to state 9
     declaredIdentifier             shift and go to state 89
-    listLiteralID                  shift and go to state 90
+    literal                        shift and go to state 90
     andExpression                  shift and go to state 16
     voidOrType                     shift and go to state 91
+    booleanLiteral                 shift and go to state 26
+    listLiteralID                  shift and go to state 27
     equalityExpression             shift and go to state 17
     type                           shift and go to state 8
     relacionalExpression           shift and go to state 18
@@ -5530,9 +5532,7 @@ state 157
     unaryExpression                shift and go to state 21
     primary                        shift and go to state 22
     functionCall                   shift and go to state 23
-    literal                        shift and go to state 24
     functionSignature              shift and go to state 58
-    booleanLiteral                 shift and go to state 26
 
 state 158
 
@@ -5636,6 +5636,10 @@ state 160
     SWITCH          reduce using rule 88 (ifStatement -> IF LPAREN expression RPAREN statement .)
     BREAK           reduce using rule 88 (ifStatement -> IF LPAREN expression RPAREN statement .)
     ID              reduce using rule 88 (ifStatement -> IF LPAREN expression RPAREN statement .)
+    NUMBER          reduce using rule 88 (ifStatement -> IF LPAREN expression RPAREN statement .)
+    LITERAL_STRING  reduce using rule 88 (ifStatement -> IF LPAREN expression RPAREN statement .)
+    TRUE            reduce using rule 88 (ifStatement -> IF LPAREN expression RPAREN statement .)
+    FALSE           reduce using rule 88 (ifStatement -> IF LPAREN expression RPAREN statement .)
     VAR             reduce using rule 88 (ifStatement -> IF LPAREN expression RPAREN statement .)
     INT             reduce using rule 88 (ifStatement -> IF LPAREN expression RPAREN statement .)
     FLOAT           reduce using rule 88 (ifStatement -> IF LPAREN expression RPAREN statement .)
@@ -5643,10 +5647,6 @@ state 160
     STRING          reduce using rule 88 (ifStatement -> IF LPAREN expression RPAREN statement .)
     VOID            reduce using rule 88 (ifStatement -> IF LPAREN expression RPAREN statement .)
     LPAREN          reduce using rule 88 (ifStatement -> IF LPAREN expression RPAREN statement .)
-    NUMBER          reduce using rule 88 (ifStatement -> IF LPAREN expression RPAREN statement .)
-    LITERAL_STRING  reduce using rule 88 (ifStatement -> IF LPAREN expression RPAREN statement .)
-    TRUE            reduce using rule 88 (ifStatement -> IF LPAREN expression RPAREN statement .)
-    FALSE           reduce using rule 88 (ifStatement -> IF LPAREN expression RPAREN statement .)
     RCHAV           reduce using rule 88 (ifStatement -> IF LPAREN expression RPAREN statement .)
     CASE            reduce using rule 88 (ifStatement -> IF LPAREN expression RPAREN statement .)
     DEFAULT         reduce using rule 88 (ifStatement -> IF LPAREN expression RPAREN statement .)
@@ -5669,6 +5669,10 @@ state 161
     SWITCH          reduce using rule 90 (forStatement -> FOR LPAREN forLoopParts RPAREN statement .)
     BREAK           reduce using rule 90 (forStatement -> FOR LPAREN forLoopParts RPAREN statement .)
     ID              reduce using rule 90 (forStatement -> FOR LPAREN forLoopParts RPAREN statement .)
+    NUMBER          reduce using rule 90 (forStatement -> FOR LPAREN forLoopParts RPAREN statement .)
+    LITERAL_STRING  reduce using rule 90 (forStatement -> FOR LPAREN forLoopParts RPAREN statement .)
+    TRUE            reduce using rule 90 (forStatement -> FOR LPAREN forLoopParts RPAREN statement .)
+    FALSE           reduce using rule 90 (forStatement -> FOR LPAREN forLoopParts RPAREN statement .)
     VAR             reduce using rule 90 (forStatement -> FOR LPAREN forLoopParts RPAREN statement .)
     INT             reduce using rule 90 (forStatement -> FOR LPAREN forLoopParts RPAREN statement .)
     FLOAT           reduce using rule 90 (forStatement -> FOR LPAREN forLoopParts RPAREN statement .)
@@ -5676,10 +5680,6 @@ state 161
     STRING          reduce using rule 90 (forStatement -> FOR LPAREN forLoopParts RPAREN statement .)
     VOID            reduce using rule 90 (forStatement -> FOR LPAREN forLoopParts RPAREN statement .)
     LPAREN          reduce using rule 90 (forStatement -> FOR LPAREN forLoopParts RPAREN statement .)
-    NUMBER          reduce using rule 90 (forStatement -> FOR LPAREN forLoopParts RPAREN statement .)
-    LITERAL_STRING  reduce using rule 90 (forStatement -> FOR LPAREN forLoopParts RPAREN statement .)
-    TRUE            reduce using rule 90 (forStatement -> FOR LPAREN forLoopParts RPAREN statement .)
-    FALSE           reduce using rule 90 (forStatement -> FOR LPAREN forLoopParts RPAREN statement .)
     RCHAV           reduce using rule 90 (forStatement -> FOR LPAREN forLoopParts RPAREN statement .)
     CASE            reduce using rule 90 (forStatement -> FOR LPAREN forLoopParts RPAREN statement .)
     DEFAULT         reduce using rule 90 (forStatement -> FOR LPAREN forLoopParts RPAREN statement .)
@@ -5791,6 +5791,10 @@ state 164
     SWITCH          reduce using rule 98 (whileStatement -> WHILE LPAREN expression RPAREN statement .)
     BREAK           reduce using rule 98 (whileStatement -> WHILE LPAREN expression RPAREN statement .)
     ID              reduce using rule 98 (whileStatement -> WHILE LPAREN expression RPAREN statement .)
+    NUMBER          reduce using rule 98 (whileStatement -> WHILE LPAREN expression RPAREN statement .)
+    LITERAL_STRING  reduce using rule 98 (whileStatement -> WHILE LPAREN expression RPAREN statement .)
+    TRUE            reduce using rule 98 (whileStatement -> WHILE LPAREN expression RPAREN statement .)
+    FALSE           reduce using rule 98 (whileStatement -> WHILE LPAREN expression RPAREN statement .)
     VAR             reduce using rule 98 (whileStatement -> WHILE LPAREN expression RPAREN statement .)
     INT             reduce using rule 98 (whileStatement -> WHILE LPAREN expression RPAREN statement .)
     FLOAT           reduce using rule 98 (whileStatement -> WHILE LPAREN expression RPAREN statement .)
@@ -5798,10 +5802,6 @@ state 164
     STRING          reduce using rule 98 (whileStatement -> WHILE LPAREN expression RPAREN statement .)
     VOID            reduce using rule 98 (whileStatement -> WHILE LPAREN expression RPAREN statement .)
     LPAREN          reduce using rule 98 (whileStatement -> WHILE LPAREN expression RPAREN statement .)
-    NUMBER          reduce using rule 98 (whileStatement -> WHILE LPAREN expression RPAREN statement .)
-    LITERAL_STRING  reduce using rule 98 (whileStatement -> WHILE LPAREN expression RPAREN statement .)
-    TRUE            reduce using rule 98 (whileStatement -> WHILE LPAREN expression RPAREN statement .)
-    FALSE           reduce using rule 98 (whileStatement -> WHILE LPAREN expression RPAREN statement .)
     RCHAV           reduce using rule 98 (whileStatement -> WHILE LPAREN expression RPAREN statement .)
     CASE            reduce using rule 98 (whileStatement -> WHILE LPAREN expression RPAREN statement .)
     DEFAULT         reduce using rule 98 (whileStatement -> WHILE LPAREN expression RPAREN statement .)
@@ -5862,15 +5862,22 @@ state 167
     (41) initializedVariableDeclaration -> . declaredIdentifier
     (42) initializedVariableDeclaration -> . declaredIdentifier ATRIBUIR expression
     (43) initializedVariableDeclaration -> . declaredIdentifier ATRIBUIR listLiteral
-    (44) initializedVariableDeclaration -> . listLiteralID ATRIBUIR expression
+    (44) initializedVariableDeclaration -> . literal ATRIBUIR expression
     (48) orExpression -> . andExpression
     (49) orExpression -> . orExpression OR andExpression
     (7) declaredIdentifier -> . voidOrType ID
     (8) declaredIdentifier -> . expression
-    (80) listLiteralID -> . ID listLiteral
+    (74) literal -> . ID
+    (75) literal -> . booleanLiteral
+    (76) literal -> . listLiteralID
+    (77) literal -> . NUMBER
+    (78) literal -> . LITERAL_STRING
     (50) andExpression -> . equalityExpression
     (51) andExpression -> . andExpression AND equalityExpression
     (9) voidOrType -> . type
+    (81) booleanLiteral -> . TRUE
+    (82) booleanLiteral -> . FALSE
+    (80) listLiteralID -> . ID listLiteral
     (52) equalityExpression -> . relacionalExpression
     (53) equalityExpression -> . equalityExpression IGUAL relacionalExpression
     (54) equalityExpression -> . equalityExpression NEG relacionalExpression
@@ -5899,15 +5906,8 @@ state 167
     (72) primary -> . literal
     (73) primary -> . LPAREN expression RPAREN
     (71) functionCall -> . functionSignature
-    (74) literal -> . ID
-    (75) literal -> . booleanLiteral
-    (76) literal -> . listLiteralID
-    (77) literal -> . NUMBER
-    (78) literal -> . LITERAL_STRING
     (16) functionSignature -> . ID formalParameterList
     (17) functionSignature -> . voidOrType ID formalParameterList
-    (81) booleanLiteral -> . TRUE
-    (82) booleanLiteral -> . FALSE
 
     LCHAV           shift and go to state 36
     PCOMMA          shift and go to state 78
@@ -5919,6 +5919,10 @@ state 167
     SWITCH          shift and go to state 86
     BREAK           shift and go to state 87
     ID              shift and go to state 88
+    NUMBER          shift and go to state 28
+    LITERAL_STRING  shift and go to state 29
+    TRUE            shift and go to state 30
+    FALSE           shift and go to state 31
     VAR             shift and go to state 10
     INT             shift and go to state 11
     FLOAT           shift and go to state 12
@@ -5926,10 +5930,6 @@ state 167
     STRING          shift and go to state 14
     VOID            shift and go to state 15
     LPAREN          shift and go to state 25
-    NUMBER          shift and go to state 28
-    LITERAL_STRING  shift and go to state 29
-    TRUE            shift and go to state 30
-    FALSE           shift and go to state 31
 
     expression                     shift and go to state 79
     statement                      shift and go to state 173
@@ -5947,9 +5947,11 @@ state 167
     initializedVariableDeclaration shift and go to state 80
     orExpression                   shift and go to state 9
     declaredIdentifier             shift and go to state 89
-    listLiteralID                  shift and go to state 90
+    literal                        shift and go to state 90
     andExpression                  shift and go to state 16
     voidOrType                     shift and go to state 91
+    booleanLiteral                 shift and go to state 26
+    listLiteralID                  shift and go to state 27
     equalityExpression             shift and go to state 17
     type                           shift and go to state 8
     relacionalExpression           shift and go to state 18
@@ -5958,9 +5960,7 @@ state 167
     unaryExpression                shift and go to state 21
     primary                        shift and go to state 22
     functionCall                   shift and go to state 23
-    literal                        shift and go to state 24
     functionSignature              shift and go to state 58
-    booleanLiteral                 shift and go to state 26
 
 state 168
 
@@ -6094,6 +6094,10 @@ state 173
     SWITCH          reduce using rule 89 (ifStatement -> IF LPAREN expression RPAREN statement ELSE statement .)
     BREAK           reduce using rule 89 (ifStatement -> IF LPAREN expression RPAREN statement ELSE statement .)
     ID              reduce using rule 89 (ifStatement -> IF LPAREN expression RPAREN statement ELSE statement .)
+    NUMBER          reduce using rule 89 (ifStatement -> IF LPAREN expression RPAREN statement ELSE statement .)
+    LITERAL_STRING  reduce using rule 89 (ifStatement -> IF LPAREN expression RPAREN statement ELSE statement .)
+    TRUE            reduce using rule 89 (ifStatement -> IF LPAREN expression RPAREN statement ELSE statement .)
+    FALSE           reduce using rule 89 (ifStatement -> IF LPAREN expression RPAREN statement ELSE statement .)
     VAR             reduce using rule 89 (ifStatement -> IF LPAREN expression RPAREN statement ELSE statement .)
     INT             reduce using rule 89 (ifStatement -> IF LPAREN expression RPAREN statement ELSE statement .)
     FLOAT           reduce using rule 89 (ifStatement -> IF LPAREN expression RPAREN statement ELSE statement .)
@@ -6101,10 +6105,6 @@ state 173
     STRING          reduce using rule 89 (ifStatement -> IF LPAREN expression RPAREN statement ELSE statement .)
     VOID            reduce using rule 89 (ifStatement -> IF LPAREN expression RPAREN statement ELSE statement .)
     LPAREN          reduce using rule 89 (ifStatement -> IF LPAREN expression RPAREN statement ELSE statement .)
-    NUMBER          reduce using rule 89 (ifStatement -> IF LPAREN expression RPAREN statement ELSE statement .)
-    LITERAL_STRING  reduce using rule 89 (ifStatement -> IF LPAREN expression RPAREN statement ELSE statement .)
-    TRUE            reduce using rule 89 (ifStatement -> IF LPAREN expression RPAREN statement ELSE statement .)
-    FALSE           reduce using rule 89 (ifStatement -> IF LPAREN expression RPAREN statement ELSE statement .)
     RCHAV           reduce using rule 89 (ifStatement -> IF LPAREN expression RPAREN statement ELSE statement .)
     CASE            reduce using rule 89 (ifStatement -> IF LPAREN expression RPAREN statement ELSE statement .)
     DEFAULT         reduce using rule 89 (ifStatement -> IF LPAREN expression RPAREN statement ELSE statement .)
@@ -6125,6 +6125,10 @@ state 174
     SWITCH          reduce using rule 99 (doStatement -> DO statement WHILE LPAREN expression RPAREN PCOMMA .)
     BREAK           reduce using rule 99 (doStatement -> DO statement WHILE LPAREN expression RPAREN PCOMMA .)
     ID              reduce using rule 99 (doStatement -> DO statement WHILE LPAREN expression RPAREN PCOMMA .)
+    NUMBER          reduce using rule 99 (doStatement -> DO statement WHILE LPAREN expression RPAREN PCOMMA .)
+    LITERAL_STRING  reduce using rule 99 (doStatement -> DO statement WHILE LPAREN expression RPAREN PCOMMA .)
+    TRUE            reduce using rule 99 (doStatement -> DO statement WHILE LPAREN expression RPAREN PCOMMA .)
+    FALSE           reduce using rule 99 (doStatement -> DO statement WHILE LPAREN expression RPAREN PCOMMA .)
     VAR             reduce using rule 99 (doStatement -> DO statement WHILE LPAREN expression RPAREN PCOMMA .)
     INT             reduce using rule 99 (doStatement -> DO statement WHILE LPAREN expression RPAREN PCOMMA .)
     FLOAT           reduce using rule 99 (doStatement -> DO statement WHILE LPAREN expression RPAREN PCOMMA .)
@@ -6132,10 +6136,6 @@ state 174
     STRING          reduce using rule 99 (doStatement -> DO statement WHILE LPAREN expression RPAREN PCOMMA .)
     VOID            reduce using rule 99 (doStatement -> DO statement WHILE LPAREN expression RPAREN PCOMMA .)
     LPAREN          reduce using rule 99 (doStatement -> DO statement WHILE LPAREN expression RPAREN PCOMMA .)
-    NUMBER          reduce using rule 99 (doStatement -> DO statement WHILE LPAREN expression RPAREN PCOMMA .)
-    LITERAL_STRING  reduce using rule 99 (doStatement -> DO statement WHILE LPAREN expression RPAREN PCOMMA .)
-    TRUE            reduce using rule 99 (doStatement -> DO statement WHILE LPAREN expression RPAREN PCOMMA .)
-    FALSE           reduce using rule 99 (doStatement -> DO statement WHILE LPAREN expression RPAREN PCOMMA .)
     RCHAV           reduce using rule 99 (doStatement -> DO statement WHILE LPAREN expression RPAREN PCOMMA .)
     CASE            reduce using rule 99 (doStatement -> DO statement WHILE LPAREN expression RPAREN PCOMMA .)
     DEFAULT         reduce using rule 99 (doStatement -> DO statement WHILE LPAREN expression RPAREN PCOMMA .)
@@ -6156,6 +6156,10 @@ state 175
     SWITCH          reduce using rule 100 (switchStatement -> SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition RCHAV .)
     BREAK           reduce using rule 100 (switchStatement -> SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition RCHAV .)
     ID              reduce using rule 100 (switchStatement -> SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition RCHAV .)
+    NUMBER          reduce using rule 100 (switchStatement -> SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition RCHAV .)
+    LITERAL_STRING  reduce using rule 100 (switchStatement -> SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition RCHAV .)
+    TRUE            reduce using rule 100 (switchStatement -> SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition RCHAV .)
+    FALSE           reduce using rule 100 (switchStatement -> SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition RCHAV .)
     VAR             reduce using rule 100 (switchStatement -> SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition RCHAV .)
     INT             reduce using rule 100 (switchStatement -> SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition RCHAV .)
     FLOAT           reduce using rule 100 (switchStatement -> SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition RCHAV .)
@@ -6163,10 +6167,6 @@ state 175
     STRING          reduce using rule 100 (switchStatement -> SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition RCHAV .)
     VOID            reduce using rule 100 (switchStatement -> SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition RCHAV .)
     LPAREN          reduce using rule 100 (switchStatement -> SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition RCHAV .)
-    NUMBER          reduce using rule 100 (switchStatement -> SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition RCHAV .)
-    LITERAL_STRING  reduce using rule 100 (switchStatement -> SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition RCHAV .)
-    TRUE            reduce using rule 100 (switchStatement -> SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition RCHAV .)
-    FALSE           reduce using rule 100 (switchStatement -> SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition RCHAV .)
     RCHAV           reduce using rule 100 (switchStatement -> SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition RCHAV .)
     CASE            reduce using rule 100 (switchStatement -> SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition RCHAV .)
     DEFAULT         reduce using rule 100 (switchStatement -> SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition RCHAV .)
@@ -6216,6 +6216,10 @@ state 180
     SWITCH          reduce using rule 101 (switchStatement -> SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition defaultCase RCHAV .)
     BREAK           reduce using rule 101 (switchStatement -> SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition defaultCase RCHAV .)
     ID              reduce using rule 101 (switchStatement -> SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition defaultCase RCHAV .)
+    NUMBER          reduce using rule 101 (switchStatement -> SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition defaultCase RCHAV .)
+    LITERAL_STRING  reduce using rule 101 (switchStatement -> SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition defaultCase RCHAV .)
+    TRUE            reduce using rule 101 (switchStatement -> SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition defaultCase RCHAV .)
+    FALSE           reduce using rule 101 (switchStatement -> SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition defaultCase RCHAV .)
     VAR             reduce using rule 101 (switchStatement -> SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition defaultCase RCHAV .)
     INT             reduce using rule 101 (switchStatement -> SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition defaultCase RCHAV .)
     FLOAT           reduce using rule 101 (switchStatement -> SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition defaultCase RCHAV .)
@@ -6223,10 +6227,6 @@ state 180
     STRING          reduce using rule 101 (switchStatement -> SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition defaultCase RCHAV .)
     VOID            reduce using rule 101 (switchStatement -> SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition defaultCase RCHAV .)
     LPAREN          reduce using rule 101 (switchStatement -> SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition defaultCase RCHAV .)
-    NUMBER          reduce using rule 101 (switchStatement -> SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition defaultCase RCHAV .)
-    LITERAL_STRING  reduce using rule 101 (switchStatement -> SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition defaultCase RCHAV .)
-    TRUE            reduce using rule 101 (switchStatement -> SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition defaultCase RCHAV .)
-    FALSE           reduce using rule 101 (switchStatement -> SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition defaultCase RCHAV .)
     RCHAV           reduce using rule 101 (switchStatement -> SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition defaultCase RCHAV .)
     CASE            reduce using rule 101 (switchStatement -> SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition defaultCase RCHAV .)
     DEFAULT         reduce using rule 101 (switchStatement -> SWITCH LPAREN expression RPAREN LCHAV switchCaseRepetition defaultCase RCHAV .)
@@ -6269,15 +6269,22 @@ state 181
     (41) initializedVariableDeclaration -> . declaredIdentifier
     (42) initializedVariableDeclaration -> . declaredIdentifier ATRIBUIR expression
     (43) initializedVariableDeclaration -> . declaredIdentifier ATRIBUIR listLiteral
-    (44) initializedVariableDeclaration -> . listLiteralID ATRIBUIR expression
+    (44) initializedVariableDeclaration -> . literal ATRIBUIR expression
     (48) orExpression -> . andExpression
     (49) orExpression -> . orExpression OR andExpression
     (7) declaredIdentifier -> . voidOrType ID
     (8) declaredIdentifier -> . expression
-    (80) listLiteralID -> . ID listLiteral
+    (74) literal -> . ID
+    (75) literal -> . booleanLiteral
+    (76) literal -> . listLiteralID
+    (77) literal -> . NUMBER
+    (78) literal -> . LITERAL_STRING
     (50) andExpression -> . equalityExpression
     (51) andExpression -> . andExpression AND equalityExpression
     (9) voidOrType -> . type
+    (81) booleanLiteral -> . TRUE
+    (82) booleanLiteral -> . FALSE
+    (80) listLiteralID -> . ID listLiteral
     (52) equalityExpression -> . relacionalExpression
     (53) equalityExpression -> . equalityExpression IGUAL relacionalExpression
     (54) equalityExpression -> . equalityExpression NEG relacionalExpression
@@ -6306,15 +6313,8 @@ state 181
     (72) primary -> . literal
     (73) primary -> . LPAREN expression RPAREN
     (71) functionCall -> . functionSignature
-    (74) literal -> . ID
-    (75) literal -> . booleanLiteral
-    (76) literal -> . listLiteralID
-    (77) literal -> . NUMBER
-    (78) literal -> . LITERAL_STRING
     (16) functionSignature -> . ID formalParameterList
     (17) functionSignature -> . voidOrType ID formalParameterList
-    (81) booleanLiteral -> . TRUE
-    (82) booleanLiteral -> . FALSE
 
     LCHAV           shift and go to state 36
     PCOMMA          shift and go to state 78
@@ -6326,6 +6326,10 @@ state 181
     SWITCH          shift and go to state 86
     BREAK           shift and go to state 87
     ID              shift and go to state 88
+    NUMBER          shift and go to state 28
+    LITERAL_STRING  shift and go to state 29
+    TRUE            shift and go to state 30
+    FALSE           shift and go to state 31
     VAR             shift and go to state 10
     INT             shift and go to state 11
     FLOAT           shift and go to state 12
@@ -6333,10 +6337,6 @@ state 181
     STRING          shift and go to state 14
     VOID            shift and go to state 15
     LPAREN          shift and go to state 25
-    NUMBER          shift and go to state 28
-    LITERAL_STRING  shift and go to state 29
-    TRUE            shift and go to state 30
-    FALSE           shift and go to state 31
 
     statements                     shift and go to state 183
     statement                      shift and go to state 66
@@ -6355,9 +6355,11 @@ state 181
     initializedVariableDeclaration shift and go to state 80
     orExpression                   shift and go to state 9
     declaredIdentifier             shift and go to state 89
-    listLiteralID                  shift and go to state 90
+    literal                        shift and go to state 90
     andExpression                  shift and go to state 16
     voidOrType                     shift and go to state 91
+    booleanLiteral                 shift and go to state 26
+    listLiteralID                  shift and go to state 27
     equalityExpression             shift and go to state 17
     type                           shift and go to state 8
     relacionalExpression           shift and go to state 18
@@ -6366,9 +6368,7 @@ state 181
     unaryExpression                shift and go to state 21
     primary                        shift and go to state 22
     functionCall                   shift and go to state 23
-    literal                        shift and go to state 24
     functionSignature              shift and go to state 58
-    booleanLiteral                 shift and go to state 26
 
 state 182
 
@@ -6406,15 +6406,22 @@ state 182
     (41) initializedVariableDeclaration -> . declaredIdentifier
     (42) initializedVariableDeclaration -> . declaredIdentifier ATRIBUIR expression
     (43) initializedVariableDeclaration -> . declaredIdentifier ATRIBUIR listLiteral
-    (44) initializedVariableDeclaration -> . listLiteralID ATRIBUIR expression
+    (44) initializedVariableDeclaration -> . literal ATRIBUIR expression
     (48) orExpression -> . andExpression
     (49) orExpression -> . orExpression OR andExpression
     (7) declaredIdentifier -> . voidOrType ID
     (8) declaredIdentifier -> . expression
-    (80) listLiteralID -> . ID listLiteral
+    (74) literal -> . ID
+    (75) literal -> . booleanLiteral
+    (76) literal -> . listLiteralID
+    (77) literal -> . NUMBER
+    (78) literal -> . LITERAL_STRING
     (50) andExpression -> . equalityExpression
     (51) andExpression -> . andExpression AND equalityExpression
     (9) voidOrType -> . type
+    (81) booleanLiteral -> . TRUE
+    (82) booleanLiteral -> . FALSE
+    (80) listLiteralID -> . ID listLiteral
     (52) equalityExpression -> . relacionalExpression
     (53) equalityExpression -> . equalityExpression IGUAL relacionalExpression
     (54) equalityExpression -> . equalityExpression NEG relacionalExpression
@@ -6443,15 +6450,8 @@ state 182
     (72) primary -> . literal
     (73) primary -> . LPAREN expression RPAREN
     (71) functionCall -> . functionSignature
-    (74) literal -> . ID
-    (75) literal -> . booleanLiteral
-    (76) literal -> . listLiteralID
-    (77) literal -> . NUMBER
-    (78) literal -> . LITERAL_STRING
     (16) functionSignature -> . ID formalParameterList
     (17) functionSignature -> . voidOrType ID formalParameterList
-    (81) booleanLiteral -> . TRUE
-    (82) booleanLiteral -> . FALSE
 
     LCHAV           shift and go to state 36
     PCOMMA          shift and go to state 78
@@ -6463,6 +6463,10 @@ state 182
     SWITCH          shift and go to state 86
     BREAK           shift and go to state 87
     ID              shift and go to state 88
+    NUMBER          shift and go to state 28
+    LITERAL_STRING  shift and go to state 29
+    TRUE            shift and go to state 30
+    FALSE           shift and go to state 31
     VAR             shift and go to state 10
     INT             shift and go to state 11
     FLOAT           shift and go to state 12
@@ -6470,10 +6474,6 @@ state 182
     STRING          shift and go to state 14
     VOID            shift and go to state 15
     LPAREN          shift and go to state 25
-    NUMBER          shift and go to state 28
-    LITERAL_STRING  shift and go to state 29
-    TRUE            shift and go to state 30
-    FALSE           shift and go to state 31
 
     expression                     shift and go to state 79
     statements                     shift and go to state 184
@@ -6492,9 +6492,11 @@ state 182
     initializedVariableDeclaration shift and go to state 80
     orExpression                   shift and go to state 9
     declaredIdentifier             shift and go to state 89
-    listLiteralID                  shift and go to state 90
+    literal                        shift and go to state 90
     andExpression                  shift and go to state 16
     voidOrType                     shift and go to state 91
+    booleanLiteral                 shift and go to state 26
+    listLiteralID                  shift and go to state 27
     equalityExpression             shift and go to state 17
     type                           shift and go to state 8
     relacionalExpression           shift and go to state 18
@@ -6503,9 +6505,7 @@ state 182
     unaryExpression                shift and go to state 21
     primary                        shift and go to state 22
     functionCall                   shift and go to state 23
-    literal                        shift and go to state 24
     functionSignature              shift and go to state 58
-    booleanLiteral                 shift and go to state 26
 
 state 183
 

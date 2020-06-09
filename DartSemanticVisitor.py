@@ -90,13 +90,15 @@ class SemanticVisitor(AbstractVisitor):
 
     def visitCallFormalParameterListvoidOrType(self, callFormalParameterListvoidOrType):
         params = {}
-        if (callFormalParameterListvoidOrType.formalParameterList != None):
-            params = callFormalParameterListvoidOrType.formalParameterList.accept(self)
-            st.addFunction(callFormalParameterListvoidOrType.id, params,
-                           callFormalParameterListvoidOrType.voidOrType.type)
-        elif (callFormalParameterListvoidOrType.formalParameterList == None):
-            st.addFunction(callFormalParameterListvoidOrType.id, params,
-                           callFormalParameterListvoidOrType.voidOrType.type)
+        if (not isinstance(callFormalParameterListvoidOrType.formalParameterList, sa.expression)):
+            if (callFormalParameterListvoidOrType.formalParameterList != None):
+                params = callFormalParameterListvoidOrType.formalParameterList.accept(self)
+                st.addFunction(callFormalParameterListvoidOrType.id, params,
+                               callFormalParameterListvoidOrType.voidOrType.type)
+            elif (callFormalParameterListvoidOrType.formalParameterList == None):
+                st.addFunction(callFormalParameterListvoidOrType.id, params,
+                               callFormalParameterListvoidOrType.voidOrType.type)
+        #print (st.symbolTable)
         st.beginScope(callFormalParameterListvoidOrType.id)
         for k in range(0, len(params), 2):
             st.addVar(params[k], params[k + 1])
@@ -105,6 +107,7 @@ class SemanticVisitor(AbstractVisitor):
     ''' formalParameterList'''
     def visitCallNormalFormalParameters(self, callNormalFormalParameters):
         if (callNormalFormalParameters.normalFormalParameters != None):
+            #print(callNormalFormalParameters.normalFormalParameters.accept(self))
             return callNormalFormalParameters.normalFormalParameters.accept(self)
         else:
             return None
@@ -127,7 +130,7 @@ class SemanticVisitor(AbstractVisitor):
         return [callVoidOrType.id, callVoidOrType.voidOrType.type]
 
     def visitCallParameterExpression(self, callParameterExpression):
-        return callParameterExpression.expression.accept(self)
+        return [callParameterExpression.expression.accept(self)]
 
 
     ''' functionBody '''
@@ -278,7 +281,8 @@ class SemanticVisitor(AbstractVisitor):
         return callUnary.addExpression.accept(self)
 
     def visitCallConcretExpression(self, callConcretExpression):
-        return callConcretExpression.relacionalExpression.accept(self), callConcretExpression.addExpression.accept(self)
+        return st.BOOL if coercion(callConcretExpression.relacionalExpression.accept(self),
+                        callConcretExpression.addExpression.accept(self)) != None else None
 
 
     ''' addExpression '''
@@ -399,7 +403,7 @@ class SemanticVisitor(AbstractVisitor):
     ''' whileStatement '''
     def visitWhileStatementExpressionStatement(self, whileStatementExpressionStatement):
         type = whileStatementExpressionStatement.expression.accept(self)
-        if (not isinstance(type, sa.relacionalExpression) or type != st.BOOL):
+        if (type != st.BOOL):
             whileStatementExpressionStatement.expression.accept(self.printer)
             print("\n\t[Erro] A expressao ", end='')
             whileStatementExpressionStatement.expression.accept(self.printer)

@@ -464,9 +464,9 @@ void main (int a, int b)
 {
     int y;
     int z;
-    //soma (a, b);
+    //soma (3 int a, b);
     
-    heapSort(a);
+    heapSort(3, a, b);
 
 }
 

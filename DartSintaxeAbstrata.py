@@ -1,6 +1,6 @@
 from abc import abstractmethod
 from abc import ABCMeta
-from DartVisitor import Visitor
+#from DartVisitor import Visitor
 
 ''' topLevelDefinition e classes concretas '''
 class topLevelDefinition(metaclass=ABCMeta):
