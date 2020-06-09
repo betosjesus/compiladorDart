@@ -554,11 +554,11 @@ class literal(metaclass=ABCMeta):
     def accept(self, visitor):
         pass
 
-class CallLiteralListLiteral(literal):
+class CallLiteralListLiteralID(literal):
     def __init__(self, listLiteral):
-        self.listLiteral = listLiteral
+        self.listLiteralID = listLiteralID
     def accept(self, visitor):
-        return visitor.visitCallLiteralListLiteral(self)
+        return visitor.visitCallLiteralListLiteralID(self)
 
 class CallLiteralBooleanLiteral(literal):
     def __init__(self, booleanLiteral):
@@ -572,6 +572,11 @@ class CallLiteralId(literal):
     def accept(self, visitor):
         return visitor.visitCallLiteralId(self)
 
+class CallNum(literal):
+    def __init__(self, num):
+        self.num = num
+    def accept(self, visitor):
+        return visitor.visitCallNum(self)
 
 ''' listLiteral e classes concretas '''
 class listLiteral(metaclass=ABCMeta):

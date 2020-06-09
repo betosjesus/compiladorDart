@@ -285,7 +285,7 @@ class AbstractVisitor(metaclass=ABCMeta):
 
     ''' literal '''
     @abstractmethod 
-    def visitCallLiteralListLiteral(self, callLiteralListLiteral):
+    def visitCallLiteralListLiteralID(self, callLiteralListLiteral):
         pass
 
     @abstractmethod 
@@ -294,6 +294,10 @@ class AbstractVisitor(metaclass=ABCMeta):
 
     @abstractmethod 
     def visitCallLiteralId(self, callLiteralId):
+        pass
+    
+    @abstractmethod 
+    def visitCallNum(self, callnum):
         pass
         
 

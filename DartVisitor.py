@@ -373,9 +373,9 @@ class Visitor:
 
 
     ''' literal '''
-    def visitCallLiteralListLiteral(self, callLiteralListLiteral):
-        # print("visitCallLiteralListLiteral")
-        callLiteralListLiteral.listLiteral.accept(self)
+    def visitCallLiteralListLiteralID(self, callLiteralListLiteralID):
+        # print("visitCallLiteralListLiteralID")
+        callLiteralListLiteralID.listLiteralID.accept(self)
 
     def visitCallLiteralBooleanLiteral(self, callLiteralBooleanLiteral):
         #print("visitCallLiteralBooleanLiteral")
@@ -384,6 +384,10 @@ class Visitor:
     def visitCallLiteralId(self, callLiteralId):
         # print("visitCallLiteralId")
         print(callLiteralId.id, end='')
+    
+    def visitCallNum(self, callnum):
+        # print("visitCallNum")
+        print(callnum.num, end='')
         
 
     ''' listLiteral'''
