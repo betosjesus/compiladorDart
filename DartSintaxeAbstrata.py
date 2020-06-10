@@ -56,6 +56,7 @@ class ConcretevariableDeclaration(variableDeclaration):
     def accept(self, visitor):
         return visitor.visitConcretevariableDeclaration(self)
 
+
 ''' decIdentifier e classes concretas '''
 class declaredIdentifier(metaclass=ABCMeta):
     @abstractmethod
@@ -63,8 +64,8 @@ class declaredIdentifier(metaclass=ABCMeta):
         pass
 
 class DeclaredIdentifierType(declaredIdentifier):
-    def __init__(self, voidOrType, id):
-        self.voidOrType = voidOrType 
+    def __init__(self, type, id):
+        self.type = type 
         self.id = id 
     def accept(self, visitor):
         return visitor.visitDeclaredIdentifierType(self)
@@ -75,23 +76,6 @@ class DeclaredIdentifierId(declaredIdentifier):
     def accept(self, visitor):
         return visitor.visitDeclaredIdentifierId(self)
 
-''' voidOrType e classes concretas '''
-class voidOrType(metaclass=ABCMeta):
-    @abstractmethod
-    def accept(self, visitor):
-        pass
-
-class ConcreteVoidOrType(voidOrType):
-    def __init__(self, type):
-        self.type = type
-    def accept(self, visitor):
-        return visitor.visitConcreteVoidOrType(self)
-
-# class VoidOrTypeV(voidOrType):
-#     def __init__(self, void):
-#         self.void = void
-#     def accept(self, visitor):
-#         return visitor.visitVoidOrTypeV(self)
 
 ''' functionSignature e classes concretas '''
 class functionSignature(metaclass=ABCMeta):
@@ -107,8 +91,8 @@ class CallFormalParameterListId(functionSignature):
         return visitor.visitCallFormalParameterListId(self)
 
 class CallFormalParameterListvoidOrType(functionSignature):
-    def __init__(self, voidOrType, id, formalParameterList):
-        self.voidOrType = voidOrType
+    def __init__(self, type, id, formalParameterList):
+        self.type = type
         self.id = id
         self.formalParameterList = formalParameterList
     def accept(self, visitor):
@@ -154,8 +138,8 @@ class simlpleFormalParameter(metaclass=ABCMeta):
         pass
 
 class CallVoidOrType(simlpleFormalParameter):
-    def __init__(self, voidOrType, id):
-        self.voidOrType = voidOrType
+    def __init__(self, type, id):
+        self.type = type
         self.id = id
     def accept(self, visitor):
         return visitor.visitCallVoidOrType(self)  
@@ -838,13 +822,6 @@ class ExpressionSwitchCase(switchCase):
         self.statements = statements
     def accept(self, visitor):
         return visitor.visitExpressionSwitchCase(self)
-        
-class LabelSwitchCase(switchCase):
-    def __init__(self, label, switchCase):
-        self.label = label
-        self.switchCase = switchCase
-    def accept(self, visitor):
-        return visitor.visitLabelSwitchCase(self)
    
 ''' defaultCase e classes concretas '''
 class defaultCase(metaclass=ABCMeta):
@@ -866,18 +843,6 @@ class LabelDefaultCase(defaultCase):
     def accept(self, visitor):
         return visitor.visitLabelDefaultCase(self)
         
-        
-''' label e classes concretas '''            
-class label(metaclass=ABCMeta):
-    @abstractmethod
-    def accept(self, visitor):
-        pass
-    
-class IdPontos(label):
-    def __init__(self, id):
-        self.id = id
-    def accept(self, visitor):
-        return visitor.visitIdPontos(self)
 
 ''' break e classes concretas '''
 class BreakStatement(metaclass=ABCMeta):

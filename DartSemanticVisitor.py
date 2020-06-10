@@ -50,18 +50,10 @@ class SemanticVisitor(AbstractVisitor):
 
     ''' decIdentifier '''
     def visitDeclaredIdentifierType(self, declaredIdentifierType):
-        st.addVar(declaredIdentifierType.id, declaredIdentifierType.voidOrType.type)
+        st.addVar(declaredIdentifierType.id, declaredIdentifierType.type)
 
     def visitDeclaredIdentifierId(self, declaredIdentifierId):
         return declaredIdentifierId.expression.accept(self)
-
-
-    ''' voidOrType '''
-    def visitConcreteVoidOrType(self, concretevoidOrType):
-        return concretevoidOrType.type(self)
-
-    def visitVoidOrTypeV(self, voidOrTypeV):
-        return [voidOrTypeV.void]
 
 
     ''' functionSignature '''
@@ -94,10 +86,10 @@ class SemanticVisitor(AbstractVisitor):
             if (callFormalParameterListvoidOrType.formalParameterList != None):
                 params = callFormalParameterListvoidOrType.formalParameterList.accept(self)
                 st.addFunction(callFormalParameterListvoidOrType.id, params,
-                               callFormalParameterListvoidOrType.voidOrType.type)
+                               callFormalParameterListvoidOrType.type)
             elif (callFormalParameterListvoidOrType.formalParameterList == None):
                 st.addFunction(callFormalParameterListvoidOrType.id, params,
-                               callFormalParameterListvoidOrType.voidOrType.type)
+                               callFormalParameterListvoidOrType.type)
         #print (st.symbolTable)
         st.beginScope(callFormalParameterListvoidOrType.id)
         for k in range(0, len(params), 2):
@@ -107,7 +99,6 @@ class SemanticVisitor(AbstractVisitor):
     ''' formalParameterList'''
     def visitCallNormalFormalParameters(self, callNormalFormalParameters):
         if (callNormalFormalParameters.normalFormalParameters != None):
-            #print(callNormalFormalParameters.normalFormalParameters.accept(self))
             return callNormalFormalParameters.normalFormalParameters.accept(self)
         else:
             return None
@@ -127,7 +118,7 @@ class SemanticVisitor(AbstractVisitor):
 
     ''' simlpleFormalParameter'''
     def visitCallVoidOrType(self, callVoidOrType):
-        return [callVoidOrType.id, callVoidOrType.voidOrType.type]
+        return [callVoidOrType.id, callVoidOrType.type]
 
     def visitCallParameterExpression(self, callParameterExpression):
         return [callParameterExpression.expression.accept(self)]
@@ -171,29 +162,28 @@ class SemanticVisitor(AbstractVisitor):
     def visitConcreteReturnStatement(self, concreteReturnStatement):
         concreteReturnStatement.returnStatement.accept(self)
 
-    # def visitConcreteIfStatement(self, concreteIfStatement):
-    #      nonLabelledStatementblock.ifStatement.accept(self)
+    def visitConcreteIfStatement(self, concreteIfStatement):
+         concreteIfStatement.ifStatement.accept(self)
 
-    # def visitConcreteForStatement(self, concreteForStatement):
-    #     nonLabelledStatementblock.forStatement.accept(self)
+    def visitConcreteForStatement(self, concreteForStatement):
+        concreteForStatement.forStatement.accept(self)
 
     def visitConcreteWhileStatement(self, concreteWhileStatement):
         concreteWhileStatement.whileStatement.accept(self)
 
-    # def visitConcreteDoStatement(self, concreteDoStatement):
-    #      nonLabelledStatementblock.doStatement.accept(self)
+    def visitConcreteDoStatement(self, concreteDoStatement):
+         concreteDoStatement.doStatement.accept(self)
 
-    # def visitConcreteSwitchStatement(self, concreteSwitchStatement):
-    #      nonLabelledStatementblock.switchStatement.accept(self)
+    def visitConcreteSwitchStatement(self, concreteSwitchStatement):
+         concreteSwitchStatement.switchStatement.accept(self)
 
-    # def visitConcreteBreakStatement(self, concreteBreakStatement):
-    #      nonLabelledStatementblock.breakStatement.accept(self)
+    def visitConcreteBreakStatement(self, concreteBreakStatement):
+         concreteBreakStatement.breakStatement.accept(self)
 
 
     ''' localVariableDeclaration '''
     def visitCallLocalInitializedVariableDeclaration(self, localVariableDeclaration):
         localVariableDeclaration.initializedVariableDeclaration.accept(self)
-
 
     ''' initializedVariableDeclaration '''
     def visitCallDeclaredIdentifier(self, callDeclaredIdentifier):
@@ -273,7 +263,8 @@ class SemanticVisitor(AbstractVisitor):
         return callRelacionalExpression.relacionalExpression.accept(self)
 
     def visitCallEqualityExpression(self, callEqualityExpression):
-        return callEqualityExpression.equalityExpression.accept(self), callEqualityExpression.relacionalExpression.accept(self)
+        return st.BOOL if coercion(callEqualityExpression.equalityExpression.accept(self), 
+                        callEqualityExpression.relacionalExpression.accept(self)) != None else None
 
 
     ''' relacionalExpression '''
@@ -334,7 +325,6 @@ class SemanticVisitor(AbstractVisitor):
             print('\n\t[Erro] Tipo invalido. ', end='')
         else: 
             concreteunaryExpression.unaryExpression.accept(self.printer)
-            return typeVar
 
 
     ''' primary '''
@@ -410,3 +400,144 @@ class SemanticVisitor(AbstractVisitor):
             print(" eh", type, end='')
             print(". Deveria ser boolean\n")
         whileStatementExpressionStatement.statement.accept(self)
+    
+
+    ''' ifStatement '''
+    def visitIfexpressionStatement(self, ifexpressionStatement):
+        type = ifexpressionStatement.expression.accept(self)
+        if (type != st.BOOL):
+            ifexpressionStatement.expression.accept(self.printer)
+            print("\n\t[Erro] A expressao ", end='')
+            ifexpressionStatement.expression.accept(self.printer)
+            print(" eh", type, end='')
+            print(". Deveria ser boolean\n")
+        ifexpressionStatement.statement.accept(self)   
+    
+    def visitIfElseExpressionStatement(self, ifElseExpressionStatement):
+        type = ifElseExpressionStatement.expression.accept(self)
+        if (type != st.BOOL):
+            ifElseExpressionStatement.expression.accept(self.printer)
+            print("\n\t[Erro] A expressao ", end='')
+            ifElseExpressionStatement.expression.accept(self.printer)
+            print(" eh", type, end='')
+            print(". Deveria ser boolean\n")
+        ifElseExpressionStatement.statement.accept(self)
+        ifElseExpressionStatement.statement01.accept(self)   
+
+
+    ''' doStatement '''
+    def visitDOStatementWhileExpression(self, DOStatementWhileExpression):      
+        type = DOStatementWhileExpression.expression.accept(self)
+        DOStatementWhileExpression.statement.accept(self)
+        if (type != st.BOOL):
+            DOStatementWhileExpression.expression.accept(self.printer)
+            print("\n\t[Erro] A expressao ", end='')
+            DOStatementWhileExpression.expression.accept(self.printer)
+            print(" eh", type, end='')
+            print(". Deveria ser boolean\n")     
+    
+
+    ''' switchStatement '''
+    def visitConcreteSwitch(self, concreteSwitch):
+        type = concreteSwitch.expression.accept(self)
+        if (type != st.INT):
+            concreteSwitch.expression.accept(self.printer)  
+            print("\n\t[Erro] A expressao ", end='')
+            concreteSwitch.expression.accept(self.printer)
+            print(" eh", type, end='')
+            print(". Deveria ser INTEIRO\n")    
+        concreteSwitch.switchCaseRepetition.accept(self)    
+      
+    def visitConcreteDefaultCase(self, concreteDefaultCase):
+        type = concreteDefaultCase.expression.accept(self)
+        if (type != st.INT):
+            concreteDefaultCase.expression.accept(self.printer)
+            print("\n\t[Erro] A expressao ", end='')
+            concreteDefaultCase.expression.accept(self.printer)
+            print(" eh", type, end='')
+            print(". Deveria ser INTEIRO\n")   
+        concreteDefaultCase.switchCaseRepetition.accept(self)
+        concreteDefaultCase.defaultCase.accept(self)        
+
+
+    ''' switchCaseRepetition '''
+    def visitRepetitionSwitchCase(self, repetitionSwitchCase):
+        repetitionSwitchCase.switchCase.accept(self)
+        repetitionSwitchCase.switchCaseRepetition.accept(self)
+        
+    def visitRepetitionSwitchCase2(self, repetitionSwitchCase2):
+        repetitionSwitchCase2.switchCase.accept(self)
+
+
+    ''' switchCase'''
+    def visitExpressionSwitchCase(self, expressionSwitchCase):
+        type = expressionSwitchCase.expression.accept(self)
+        if (type != st.INT):
+            expressionSwitchCase.expression.accept(self.printer)
+            print("\n\t[Erro] A expressao ", end='')
+            expressionSwitchCase.expression.accept(self.printer)
+            print(" eh", type, end='')
+            print(". Deveria ser INTEIRO\n")   
+        expressionSwitchCase.statements.accept(self)
+
+
+    ''' defaultCase'''
+    def visitDefaultStatements(self, defaultStatements):
+        defaultStatements.statements.accept(self)
+    
+    def visitLabelDefaultCase(self, labelDefaultCase):
+        labelDefaultCase.label.accept(self)
+        labelDefaultCase.defaultCase.accept(self)
+    
+
+    ''' break '''
+    def visitCallBreak(self, callBreak):
+        return callBreak.BREAK
+    
+    def visitBreakID(self, breakID):
+        return breakID.id
+
+
+    ''' forStatement '''
+    def visitConcreteForLoopParts(self, concreteForLoopParts):
+        concreteForLoopParts.forLoopParts.accept(self)
+        concreteForLoopParts.statement.accept(self)    
+
+    ''' forLoopParts '''
+    def visitConcreteForInitializerStatement(self, concreteForInitializerStatement):
+        return concreteForInitializerStatement.forInitializerStatement.accept(self)
+        
+    def visitForInitializerStatementExpressionList(self, forInitializerStatementExpressionList):
+        forInitializerStatementExpressionList.forInitializerStatement.accept(self)
+        forInitializerStatementExpressionList.expressionList.accept(self)     
+
+    def visitForInitializerStatementExpression(self, forInitializerStatementExpression):
+        forInitializerStatementExpression.forInitializerStatement.accept(self)
+        type = forInitializerStatementExpression.expression.accept(self)
+        if (type != st.BOOL):
+            forInitializerStatementExpression.expression.accept(self.printer)
+            print("\n\t[Erro] A expressao ", end='')
+            forInitializerStatementExpression.expression.accept(self.printer)
+            print(" eh", type, end='')
+            print(". Deveria ser boolean\n")
+
+
+    def visitExpressionForInitializerStatementExpressionList(self, expressionForInitializerStatementExpressionList):
+        expressionForInitializerStatementExpressionList.forInitializerStatement.accept(self)
+        type = expressionForInitializerStatementExpressionList.expression.accept(self)
+        if (type != st.BOOL):
+            expressionForInitializerStatementExpressionList.expression.accept(self.printer)
+            print("\n\t[Erro] A expressao ", end='')
+            expressionForInitializerStatementExpressionList.expression.accept(self.printer)
+            print(" eh", type, end='')
+            print(". Deveria ser boolean\n")       
+        expressionForInitializerStatementExpressionList.expressionList.accept(self)         
+
+
+    ''' forInitializerStatement '''
+    def visitConcreteLocalVariableDeclaration(self, concreteLocalVariableDeclaration):
+        return concreteLocalVariableDeclaration.localVariableDeclaration.accept(self)     
+
+    def visitCallConcreteExpression(self, callConcreteExpression):
+        if (callConcreteExpression.expression != None):
+            return callConcreteExpression.expression.accept(self)

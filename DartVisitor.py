@@ -45,21 +45,13 @@ class Visitor:
     ''' decIdentifier'''
     def visitDeclaredIdentifierType(self, declaredIdentifierType):
         # print("visitDeclaredIdentifierType")
-        declaredIdentifierType.voidOrType.accept(self)
+        print(declaredIdentifierType.type, end=' ')
         print(declaredIdentifierType.id, end='')
     
     def visitDeclaredIdentifierId(self, declaredIdentifierId):
         # print("visitDeclaredIdentifierId")
         print(declaredIdentifierId.id, end='')
 
-    ''' VoidOrType'''
-    def visitConcreteVoidOrType(self, concretevoidOrType):
-        # print("visitConcreteVoidOrType")
-        print(concretevoidOrType.type, end=' ')
-
-    # def visitVoidOrTypeV(self, voidOrTypeV):
-    #     # print("visitVoidOrTypeV")
-    #     print(voidOrTypeV.void, end=' ')
 
     ''' functionSignature '''
     def visitCallFormalParameterListId(self, callFormalParameterListId):
@@ -69,7 +61,7 @@ class Visitor:
     
     def visitCallFormalParameterListvoidOrType(self, callFormalParameterListvoidOrType):
         # print("visitCallFormalParameterListvoidOrType")
-        callFormalParameterListvoidOrType.voidOrType.accept(self)
+        print(callFormalParameterListvoidOrType.type, end='')
         print(callFormalParameterListvoidOrType.id, end='')
         callFormalParameterListvoidOrType.formalParameterList.accept(self)
             
@@ -98,7 +90,7 @@ class Visitor:
     ''' simlpleFormalParameter '''
     def visitCallVoidOrType(self, callVoidOrType):
         # print("visitCallVoidOrType")        
-        callVoidOrType.voidOrType.accept(self)
+        print(callVoidOrType.type, end='')
         print(callVoidOrType.id, end='')
     
     def visitCallParameterExpression(self, callParameterExpression):
@@ -571,11 +563,6 @@ class Visitor:
         print(' : ', end='')
         expressionSwitchCase.statements.accept(self)
 
-    def visitLabelSwitchCase(self, labelSwitchCase):
-        # print("visitLabelSwitchCase")
-        labelSwitchCase.label.accept(self)
-        labelSwitchCase.switchCase.accept(self)
-
     ''' defaultCase'''
     def visitDefaultStatements(self, defaultStatements):
         # print("visitDefaultStatements")
@@ -587,14 +574,6 @@ class Visitor:
         # print("visitLabelDefaultCase")
         labelDefaultCase.label.accept(self)
         labelDefaultCase.defaultCase.accept(self)
-
-
-    ''' label ''' 
-    def visitIdPontos(self, idPontos):
-        # print("visitIdPontos")
-        print(idPontos.id, end='')
-        print(' : ', end='')
-    
 
     ''' break '''
     def visitCallBreak(self, callBreak):

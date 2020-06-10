@@ -41,16 +41,6 @@ class AbstractVisitor(metaclass=ABCMeta):
         pass
 
 
-    ''' VoidOrType'''
-    @abstractmethod 
-    def visitConcreteVoidOrType(self, concretevoidOrType):
-        pass
-
-    # @abstractmethod 
-    # def visitVoidOrTypeV(self, voidOrTypeV):
-    #     pass
-
-
     ''' functionSignature '''
     @abstractmethod 
     def visitCallFormalParameterListId(self, callFormalParameterListId):
@@ -132,29 +122,29 @@ class AbstractVisitor(metaclass=ABCMeta):
     def visitConcreteReturnStatement(self, concreteReturnStatement):
         pass
     
-    # @abstractmethod 
-    # def visitConcreteIfStatement(self, concreteIfStatement):
-    #     pass
+    @abstractmethod 
+    def visitConcreteIfStatement(self, concreteIfStatement):
+        pass
     
-    # @abstractmethod 
-    # def visitConcreteForStatement(self, concreteForStatement):
-    #     pass
+    @abstractmethod 
+    def visitConcreteForStatement(self, concreteForStatement):
+        pass
 
     @abstractmethod 
     def visitConcreteWhileStatement(self, concreteWhileStatement):
         pass
 
-    # @abstractmethod 
-    # def visitConcreteDoStatement(self, concreteDoStatement):
-    #     pass
+    @abstractmethod 
+    def visitConcreteDoStatement(self, concreteDoStatement):
+        pass
 
-    # @abstractmethod 
-    # def visitConcreteSwitchStatement(self, concreteSwitchStatement):
-    #     pass
+    @abstractmethod 
+    def visitConcreteSwitchStatement(self, concreteSwitchStatement):
+        pass
 
-    # @abstractmethod 
-    # def visitConcreteBreakStatement(self, concreteBreakStatement):
-    #     pass
+    @abstractmethod 
+    def visitConcreteBreakStatement(self, concreteBreakStatement):
+        pass
 
 
     ''' localVariableDeclaration'''
@@ -334,54 +324,54 @@ class AbstractVisitor(metaclass=ABCMeta):
         pass
 
 
-    # " ReturnStatementExpression "
-    # @abstractmethod 
-    # def visitReturnStatementExpression(self, returnStatementExpression):
-    #     pass
+    " ReturnStatementExpression "
+    @abstractmethod 
+    def visitReturnStatementExpression(self, returnStatementExpression):
+        pass
 
 
-    # ''' ifStatement '''
-    # @abstractmethod 
-    # def visitIfexpressionStatement(self, ifexpressionStatement):
-    #     pass
+    ''' ifStatement '''
+    @abstractmethod 
+    def visitIfexpressionStatement(self, ifexpressionStatement):
+        pass
 
-    # @abstractmethod 
-    # def visitIfElseExpressionStatement(self, ifElseExpressionStatement):
-    #     pass
-
-
-    # ''' forStatement '''
-    # @abstractmethod 
-    # def visitConcreteForLoopParts(self, concreteForLoopParts):
-    #     pass   
+    @abstractmethod 
+    def visitIfElseExpressionStatement(self, ifElseExpressionStatement):
+        pass
 
 
-    # ''' forLoopParts '''
-    # @abstractmethod 
-    # def visitConcreteForInitializerStatement(self, concreteForInitializerStatement):
-    #     pass
-
-    # @abstractmethod 
-    # def visitForInitializerStatementExpressionList(self, forInitializerStatementExpressionList):
-    #     pass 
-
-    # @abstractmethod 
-    # def visitForInitializerStatementExpression(self, forInitializerStatementExpression):
-    #     pass 
-
-    # @abstractmethod 
-    # def visitExpressionForInitializerStatementExpressionList(self, expressionForInitializerStatementExpressionList):
-    #     pass       
+    ''' forStatement '''
+    @abstractmethod 
+    def visitConcreteForLoopParts(self, concreteForLoopParts):
+        pass   
 
 
-    # ''' forInitializerStatement '''
-    # @abstractmethod 
-    # def visitConcreteLocalVariableDeclaration(self, concreteLocalVariableDeclaration):
-    #     pass    
+    ''' forLoopParts '''
+    @abstractmethod 
+    def visitConcreteForInitializerStatement(self, concreteForInitializerStatement):
+        pass
 
-    # @abstractmethod 
-    # def visitCallConcreteExpression(self, callConcreteExpression):
-    #     pass
+    @abstractmethod 
+    def visitForInitializerStatementExpressionList(self, forInitializerStatementExpressionList):
+        pass 
+
+    @abstractmethod 
+    def visitForInitializerStatementExpression(self, forInitializerStatementExpression):
+        pass 
+
+    @abstractmethod 
+    def visitExpressionForInitializerStatementExpressionList(self, expressionForInitializerStatementExpressionList):
+        pass       
+
+
+    ''' forInitializerStatement '''
+    @abstractmethod 
+    def visitConcreteLocalVariableDeclaration(self, concreteLocalVariableDeclaration):
+        pass    
+
+    @abstractmethod 
+    def visitCallConcreteExpression(self, callConcreteExpression):
+        pass
 
    
     ''' whileStatement  '''
@@ -390,66 +380,52 @@ class AbstractVisitor(metaclass=ABCMeta):
         pass
 
 
-    # ''' doStatement '''
-    # @abstractmethod 
-    # def visitDOStatementWhileExpression(self, DOStatementWhileExpression):
-    #     pass
+    ''' doStatement '''
+    @abstractmethod 
+    def visitDOStatementWhileExpression(self, DOStatementWhileExpression):
+        pass
 
 
-    # ''' switchCaseRepetition '''
-    # @abstractmethod 
-    # def visitRepetitionSwitchCase(self, repetitionSwitchCase):
-    #     pass
+    ''' switchCaseRepetition '''
+    @abstractmethod 
+    def visitRepetitionSwitchCase(self, repetitionSwitchCase):
+        pass
         
-    # @abstractmethod 
-    # def visitRepetitionSwitchCase2(self, repetitionSwitchCase2):
-    #     pass
+    @abstractmethod 
+    def visitRepetitionSwitchCase2(self, repetitionSwitchCase2):
+        pass
 
 
-    # ''' switchStatement '''
-    # @abstractmethod 
-    # def visitConcreteSwitch(self, concreteSwitch):
-    #     pass
+    ''' switchStatement '''
+    @abstractmethod 
+    def visitConcreteSwitch(self, concreteSwitch):
+        pass
     
-    # @abstractmethod 
-    # def visitConcreteDefaultCase(self, concreteDefaultCase):
-    #     pass
+    @abstractmethod 
+    def visitConcreteDefaultCase(self, concreteDefaultCase):
+        pass
 
 
-    # ''' switchCase'''
-    # @abstractmethod 
-    # def visitExpressionSwitchCase(self, expressionSwitchCase):
-    #     pass
-
-    # @abstractmethod 
-    # def visitLabelSwitchCase(self, labelSwitchCase):
-    #     pass
+    ''' switchCase'''
+    @abstractmethod 
+    def visitExpressionSwitchCase(self, expressionSwitchCase):
+        pass
 
 
-    # ''' defaultCase'''
-    # @abstractmethod 
-    # def visitDefaultStatements(self, defaultStatements):
-    #     pass
-    
-    # @abstractmethod 
-    # def visitLabelDefaultCase(self, labelDefaultCase):
-    #     pass
-
-
-    # ''' label ''' 
-    # @abstractmethod 
-    # def visitIdPontos(self, idPontos):
-    #     pass
+    ''' defaultCase'''
+    @abstractmethod 
+    def visitDefaultStatements(self, defaultStatements):
+        pass
     
 
-    # ''' break '''
-    # @abstractmethod 
-    # def visitCallBreak(self, callBreak):
-    #     pass
+    ''' break '''
+    @abstractmethod 
+    def visitCallBreak(self, callBreak):
+        pass
     
-    # @abstractmethod
-    # def visitBreakID(self, breakID):
-    #     pass
+    @abstractmethod
+    def visitBreakID(self, breakID):
+        pass
 
 
 

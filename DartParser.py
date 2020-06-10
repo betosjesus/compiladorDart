@@ -30,21 +30,12 @@ def p_variableDeclaration(p):
 
 
 def p_declaredIdentifier(p):
-    ''' declaredIdentifier : voidOrType ID 
+    ''' declaredIdentifier : type ID 
                            | expression'''
     if len(p) == 3:
         p[0] = sa.DeclaredIdentifierType(p[1],p[2])
     else:
         p[0] = sa.DeclaredIdentifierId(p[1])
-
-
-def p_voidOrType(p):
-    '''voidOrType : type'''
-                #   | VOID
-    # if p[1] == 'void':
-    #     p[0] = sa.VoidOrTypeV(p[1])
-    # else:
-    p[0] = sa.ConcreteVoidOrType(p[1])
               
 
 def p_type(p):
@@ -58,7 +49,7 @@ def p_type(p):
 
 def p_functionSignature(p):
     ''' functionSignature : ID formalParameterList
-                          | voidOrType ID formalParameterList '''
+                          | type ID formalParameterList '''
     if(len(p) == 3):
         p[0] = sa.CallFormalParameterListId(p[1], p[2])
     else: 
@@ -84,7 +75,7 @@ def p_normalFormalParameters(p):
 
 
 def p_simlpleFormalParameter(p):
-    ''' simpleFormalParameter : voidOrType ID
+    ''' simpleFormalParameter : type ID
                               | expression'''
     if(len(p) == 3):
         p[0] = sa.CallVoidOrType(p[1],p[2])
@@ -391,26 +382,16 @@ def p_switchCaseRepetition(p):
 
 
 def p_switchCase(p):
-    ''' switchCase : CASE expression PONTOS statements 
-                  '''
-    if len(p) == 3:
-        p[0] = sa.LabelSwitchCase(p[1],p[2])
-    else:
-        p[0] = sa.ExpressionSwitchCase(p[1],p[2],p[4])
+    ''' switchCase : CASE expression PONTOS statements '''
+    p[0] = sa.ExpressionSwitchCase(p[1],p[2],p[4])
 
 
 def p_defaultCase(p):
-    ''' defaultCase : DEFAULT PONTOS statements 
-                    '''
+    ''' defaultCase : DEFAULT PONTOS statements '''
     if (len(p) == 4):
         p[0] = sa.DefaultStatements(p[1],p[3])
     else:
         p[0] = sa.LabelDefaultCase(p[1],p[2])
-
-
-def p_label(p):
-    ''' label : ID PONTOS '''
-    p[0] = sa.IdPontos(p[1])
 
 
 def p_breakStatement(p):
@@ -447,26 +428,54 @@ int soma ()
 
 void heapSort(int a) {
 
-    int count = a;
+    int melhorFruta;
+    int g = 8
     int end;
-    end = count + 17;
+    end = g;
+    int w = 20;
 
-    while (end > 0) {
+/*
+    do{
       int tmp = a[end];
       a[end] = a[0];
       a[0] = tmp;
-      //end--;
-    }
+      //end--; 
+    } while(w < 50);
+    //else
+    //int tmp = a;
+*/
+
+    switch (melhorFruta) {
+    case 1: a = melhorFruta;
+        break;
+    case 2:   int b;
+        break;
+    case 3: int a;
+        break;
+    default: 'as opções são entre 1 e 3!';
+   }
 }
 
 
 void main (int a, int b)
 {
-    int y;
+
+    int g = 8;
+    int end;
+    end = g;
+
     int z;
+    //float c = 5.5;
+    float piorFruta = 9;
     //soma (3 int a, b);
     
-    heapSort(3, a, b);
+    //heapSort(b);
+    
+    /*for(melhorFruta; melhorFruta != piorFruta; melhorFruta++) {
+      int tmp = a[end];
+      a[end] = a[0];
+      a[0] = tmp;
+    }*/
 
 }
 
