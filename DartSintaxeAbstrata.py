@@ -70,11 +70,11 @@ class DeclaredIdentifierType(declaredIdentifier):
     def accept(self, visitor):
         return visitor.visitDeclaredIdentifierType(self)
 
-class DeclaredIdentifierId(declaredIdentifier):
-    def __init__(self, id):
-        self.id = id 
-    def accept(self, visitor):
-        return visitor.visitDeclaredIdentifierId(self)
+# class DeclaredIdentifierId(declaredIdentifier):
+#     def __init__(self, id):
+#         self.id = id 
+#     def accept(self, visitor):
+#         return visitor.visitDeclaredIdentifierId(self)
 
 
 ''' functionSignature e classes concretas '''
@@ -144,11 +144,11 @@ class CallVoidOrType(simlpleFormalParameter):
     def accept(self, visitor):
         return visitor.visitCallVoidOrType(self)  
 
-class CallParameterExpression(simlpleFormalParameter):
-    def __init__(self, expression):
-        self.expression = expression
-    def accept(self, visitor):
-        return visitor.visitCallParameterExpression(self)  
+# class CallParameterExpression(simlpleFormalParameter):
+#     def __init__(self, expression):
+#         self.expression = expression
+#     def accept(self, visitor):
+#         return visitor.visitCallParameterExpression(self)  
     
 
 ''' functionBody e classes concretas '''
@@ -309,19 +309,19 @@ class CallDeclaredInitializedIdentifier(initializedVariableDeclaration):
     def accept(self, visitor):
         return visitor.visitCallDeclaredInitializedIdentifier(self)
 
-class CallDeclaredInitializedIdentifierListLiteral(initializedVariableDeclaration):
-    def __init__(self, declaredIdentifier, listLiteral):
-        self.declaredIdentifier = declaredIdentifier
-        self.listLiteral = listLiteral
-    def accept(self, visitor):
-        return visitor.visitCallDeclaredInitializedIdentifierListLiteral(self)
-
-class CallIdListIdAtribuirExpression(initializedVariableDeclaration):
-    def __init__(self, listLiteralID, expression):
-        self.listLiteralID = listLiteralID
+class CallLiteralAtribuirExp(initializedVariableDeclaration):
+    def __init__(self, literal, expression):
+        self.literal = literal
         self.expression = expression
     def accept(self, visitor):
-        return visitor.visitCallIdListAtribuirIdList(self)
+        return visitor.visitCallLiteralAtribuirExp(self)
+
+class CalliniRepeticion(initializedVariableDeclaration):
+    def __init__(self, initializedVariableDeclaration, id):
+        self.initializedVariableDeclaration = initializedVariableDeclaration
+        self.id = id
+    def accept(self, visitor):
+        return visitor.visitCalliniRepeticion(self)
 
 
 ''' expressionStatement e classes concretas '''
@@ -543,6 +543,12 @@ class CallLiteralListLiteralID(literal):
         self.listLiteralID = listLiteralID
     def accept(self, visitor):
         return visitor.visitCallLiteralListLiteralID(self)
+
+class CallLiteralListLiteral(literal):
+    def __init__(self, listLiteral):
+        self.listLiteral = listLiteral
+    def accept(self, visitor):
+        return visitor.visitCallLiteralListLiteral(self)
 
 class CallLiteralBooleanLiteral(literal):
     def __init__(self, booleanLiteral):

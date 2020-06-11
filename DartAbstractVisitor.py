@@ -35,10 +35,6 @@ class AbstractVisitor(metaclass=ABCMeta):
     @abstractmethod 
     def visitDeclaredIdentifierType(self, declaredIdentifierType):
         pass
-    
-    @abstractmethod 
-    def visitDeclaredIdentifierId(self, declaredIdentifierId):
-        pass
 
 
     ''' functionSignature '''
@@ -72,9 +68,9 @@ class AbstractVisitor(metaclass=ABCMeta):
     def visitCallVoidOrType(self, callVoidOrType):
         pass
     
-    @abstractmethod 
-    def visitCallParameterExpression(self, callParameterExpression):
-        pass
+    # @abstractmethod 
+    # def visitCallParameterExpression(self, callParameterExpression):
+    #     pass
         
         
     ''' FunctionBody '''
@@ -159,16 +155,17 @@ class AbstractVisitor(metaclass=ABCMeta):
         pass
 
     @abstractmethod 
-    def visitCallDeclaredInitializedIdentifierListLiteral(self, callDeclaredInitializedIdentifierListLiteral):
+    def visitCallLiteralAtribuirExp(self, callLiteralAtribuirExp):
         pass
 
     @abstractmethod 
     def visitCallDeclaredInitializedIdentifier(self, callDeclaredInitializedIdentifier):
         pass
-
+    
     @abstractmethod 
-    def visitCallIdListAtribuirIdList(self, callIdListAtribuirIdList):
+    def visitCalliniRepeticion(self, callIRepeticion):
         pass
+
 
     ''' expressionStatement '''
     @abstractmethod 

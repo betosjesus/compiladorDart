@@ -1,4 +1,4 @@
-import ply.yacc as yacc
+bimport ply.yacc as yacc
 from DartLex import *
 import DartSintaxeAbstrata as sa
 import DartVisitor as vis
@@ -30,12 +30,8 @@ def p_variableDeclaration(p):
 
 
 def p_declaredIdentifier(p):
-    ''' declaredIdentifier : type ID 
-                           | expression'''
-    if len(p) == 3:
-        p[0] = sa.DeclaredIdentifierType(p[1],p[2])
-    else:
-        p[0] = sa.DeclaredIdentifierId(p[1])
+    ''' declaredIdentifier : type ID '''
+    p[0] = sa.DeclaredIdentifierType(p[1],p[2])
               
 
 def p_type(p):
@@ -75,12 +71,11 @@ def p_normalFormalParameters(p):
 
 
 def p_simlpleFormalParameter(p):
-    ''' simpleFormalParameter : type ID
-                              | expression'''
-    if(len(p) == 3):
-        p[0] = sa.CallVoidOrType(p[1],p[2])
-    else:
-        p[0] = sa.CallParameterExpression(p[1])
+    ''' simpleFormalParameter : type ID'''
+    # if(len(p) == 3):
+    p[0] = sa.CallVoidOrType(p[1],p[2])
+    # else:
+    #     p[0] = sa.CallParameterExpression(p[1])
 
 
 def p_functionBody(p):
@@ -150,17 +145,16 @@ def p_localVariableDeclaration(p):
 def p_initializedVariableDeclaration(p):
     ''' initializedVariableDeclaration : declaredIdentifier
                                        | declaredIdentifier ATRIBUIR expression
-                                       | declaredIdentifier ATRIBUIR listLiteral
                                        | literal ATRIBUIR expression
-                                       '''                                     
+                                       | initializedVariableDeclaration COMMA ID '''
     if (len(p) == 2):
         p[0] = sa.CallDeclaredIdentifier(p[1])
     elif (len(p) == 4 and isinstance(p[3], sa.expression)):
         p[0] = sa.CallDeclaredInitializedIdentifier(p[1], p[3])
-    elif (len(p) == 4 and p[2] == '='):
-        p[0] = sa.CallDeclaredInitializedIdentifierListLiteral(p[1], p[3])
+    elif (isinstance(p[1], sa.initializedVariableDeclaration) and p[2] == ','):
+        p[0] = sa.CalliniRepeticion(p[1], p[3])
     else:
-        p[0] = sa.CallIdListIdAtribuirExpression(p[1], p[3])
+        p[0] = sa.CallLiteralAtribuirExp(p[1], p[3])
 
 
 def p_expressionStatement(p):
@@ -267,6 +261,7 @@ def p_literal(p):
     ''' literal : ID 
                 | booleanLiteral 
                 | listLiteralID
+                | listLiteral
                 | NUMBER
                 | LITERAL_STRING'''              
     if isinstance(p[1],str) and (p[1][0] != "\"" or p[1][0] != "'"):
@@ -275,16 +270,17 @@ def p_literal(p):
         p[0] = sa.CallLiteralListLiteralID(p[1])
     elif len(p) == 2 and isinstance(p[1], sa.booleanLiteral):
         p[0] = sa.CallLiteralBooleanLiteral(p[1])
+    elif len(p) == 2 and isinstance(p[1], sa.listLiteral):
+        p[0] = sa.CallLiteralListLiteral(p[1])
     else:
         p[0] = sa.CallNum(p[1])
-
 
 def p_listLiteral(p): 
     '''listLiteral : LCON expressionList RCON '''
     p[0] = sa.ExpressionListlistLiteral(p[2])
 
 def p_listLiteralID(p): 
-    '''listLiteralID : ID listLiteral '''
+    '''listLiteralID : ID listLiteral'''
     p[0] = sa.CallListlistLiteralID(p[1], p[2])
 
 def p_booleanLiteral(p): 
@@ -412,72 +408,12 @@ lexer = lex.lex()
 #     Test it out     #
         ###############
 data =  '''  
-/*
-int soma1 (int e, int f)
-{
-    return e + f;
-}
-
-int soma ()
-{
-    int c = 3;
-    int d = 4;
-    return true;
-}
-*/
-
-void heapSort(int a) {
-
-    int melhorFruta;
-    int g = 8
-    int end;
-    end = g;
-    int w = 20;
-
-/*
-    do{
-      int tmp = a[end];
-      a[end] = a[0];
-      a[0] = tmp;
-      //end--; 
-    } while(w < 50);
-    //else
-    //int tmp = a;
-*/
-
-    switch (melhorFruta) {
-    case 1: a = melhorFruta;
-        break;
-    case 2:   int b;
-        break;
-    case 3: int a;
-        break;
-    default: 'as opções são entre 1 e 3!';
-   }
-}
-
 
 void main (int a, int b)
 {
-
-    int g = 8;
-    int end;
-    end = g;
-
-    int z;
-    //float c = 5.5;
-    float piorFruta = 9;
-    //soma (3 int a, b);
-    
-    //heapSort(b);
-    
-    /*for(melhorFruta; melhorFruta != piorFruta; melhorFruta++) {
-      int tmp = a[end];
-      a[end] = a[0];
-      a[0] = tmp;
-    }*/
-
+    c = b;
 }
+
 
 '''
 

@@ -52,9 +52,6 @@ class SemanticVisitor(AbstractVisitor):
     def visitDeclaredIdentifierType(self, declaredIdentifierType):
         st.addVar(declaredIdentifierType.id, declaredIdentifierType.type)
 
-    def visitDeclaredIdentifierId(self, declaredIdentifierId):
-        return declaredIdentifierId.expression.accept(self)
-
 
     ''' functionSignature '''
     def visitCallFormalParameterListId(self, callFormalParameterListId):
@@ -120,8 +117,8 @@ class SemanticVisitor(AbstractVisitor):
     def visitCallVoidOrType(self, callVoidOrType):
         return [callVoidOrType.id, callVoidOrType.type]
 
-    def visitCallParameterExpression(self, callParameterExpression):
-        return [callParameterExpression.expression.accept(self)]
+    # def visitCallParameterExpression(self, callParameterExpression):
+    #     return [callParameterExpression.expression.accept(self)]
 
 
     ''' functionBody '''
@@ -185,21 +182,34 @@ class SemanticVisitor(AbstractVisitor):
     def visitCallLocalInitializedVariableDeclaration(self, localVariableDeclaration):
         localVariableDeclaration.initializedVariableDeclaration.accept(self)
 
+
     ''' initializedVariableDeclaration '''
     def visitCallDeclaredIdentifier(self, callDeclaredIdentifier):
-        callDeclaredIdentifier.declaredIdentifier.accept(self)
+        if (callDeclaredIdentifier.declaredIdentifier != None):
+            print(callDeclaredIdentifier.declaredIdentifier.accept(self.printer))
+            return callDeclaredIdentifier.declaredIdentifier.accept(self)
+        else:
+            print ('Variavel não definida')
+
+    #    bindable = st.getBindable(callFormalParameterListId.id)
+    #     if (callFormalParameterListId.formalParameterList != None):
+    #         if (bindable != None and bindable[st.BINDABLE] == st.FUNCTION):
+    #             typeParams = callFormalParameterListId.formalParameterList.accept(self)
+    #             if (list(bindable[st.PARAMS][1::2]) == typeParams):
+    #                 return bindable[st.TYPE]
+
 
     def visitCallDeclaredInitializedIdentifier(self, callDeclaredInitializedIdentifier):
         callDeclaredInitializedIdentifier.declaredIdentifier.accept(self)
         callDeclaredInitializedIdentifier.expression.accept(self)
-    
-    def visitCallDeclaredInitializedIdentifierListLiteral(self, callDeclaredInitializedIdentifierListLiteral):
-        callDeclaredInitializedIdentifierListLiteral.declaredIdentifier.accept(self)
-        callDeclaredInitializedIdentifierListLiteral.listLiteral.accept(self)
 
-    def visitCallIdListAtribuirIdList(self, callIdListIdAtribuirExpression):
-        callIdListIdAtribuirExpression.listLiteralID.accept(self)
-        callIdListIdAtribuirExpression.expression.accept(self)
+    def visitCalliniRepeticion(self, callIRepeticion):
+        callIRepeticion.initializedVariableDeclaration.accept(self)
+        print(callIRepeticion.id, end='')
+
+        def visitCallLiteralAtribuirExp(self, callLiteralAtribuirExp):
+        callLiteralAtribuirExp.literal.accept(self)
+        callLiteralAtribuirExp.expression.accept(self)
 
 
     ''' returnStatement'''
@@ -324,7 +334,7 @@ class SemanticVisitor(AbstractVisitor):
         if (typeVar != st.INT):
             print('\n\t[Erro] Tipo invalido. ', end='')
         else: 
-            concreteunaryExpression.unaryExpression.accept(self.printer)
+            concreteunaryExpression.unaryExpression.accept(self)
 
 
     ''' primary '''
@@ -346,7 +356,7 @@ class SemanticVisitor(AbstractVisitor):
 
     def visitCallLiteralId(self, callLiteralId):
         idName = st.getBindable(callLiteralId.id)
-        # print ("[visitCallLiteralId]", st.symbolTable)
+        print ("[visitCallLiteralId]", st.symbolTable)
         if (idName != None):
             return idName[st.TYPE]
         return None

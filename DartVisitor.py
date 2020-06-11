@@ -35,23 +35,19 @@ class Visitor:
         # print ("visitVariableDeclarationID")
          variableDeclarationID.declaredIdentifier.accept(self)
 
-
     def visitConcretevariableDeclaration(self, concretevariableDeclaration):
         # print("visitConcretevariableDeclaration")
         concretevariableDeclaration.variableDeclaration.accept(self)
         print(', ', end='')
         print(concretevariableDeclaration.id, end='')
 
+
     ''' decIdentifier'''
     def visitDeclaredIdentifierType(self, declaredIdentifierType):
         # print("visitDeclaredIdentifierType")
         print(declaredIdentifierType.type, end=' ')
         print(declaredIdentifierType.id, end='')
-    
-    def visitDeclaredIdentifierId(self, declaredIdentifierId):
-        # print("visitDeclaredIdentifierId")
-        print(declaredIdentifierId.id, end='')
-
+        
 
     ''' functionSignature '''
     def visitCallFormalParameterListId(self, callFormalParameterListId):
@@ -93,9 +89,9 @@ class Visitor:
         print(callVoidOrType.type, end='')
         print(callVoidOrType.id, end='')
     
-    def visitCallParameterExpression(self, callParameterExpression):
-        # print("visitCallParameterExpression")        
-        callParameterExpression.expression.accept(self)
+    # def visitCallParameterExpression(self, callParameterExpression):
+    #     # print("visitCallParameterExpression")        
+    #     callParameterExpression.expression.accept(self)
         
         
     ''' FunctionBody '''
@@ -196,11 +192,11 @@ class Visitor:
         # print("visitCallDeclaredIdentifier")
         callDeclaredIdentifier.declaredIdentifier.accept(self)
 
-    def visitCallDeclaredInitializedIdentifierListLiteral(self, callDeclaredInitializedIdentifierListLiteral):
-        # print("visitCallDeclaredInitializedIdentifierListLiteral")
-        callDeclaredInitializedIdentifierListLiteral.declaredIdentifier.accept(self)
+    def visitCallLiteralAtribuirExp(self, callLiteralAtribuirExp):
+        # print("visitCallLiteralAtribuirExp")
+        callLiteralAtribuirExp.literal.accept(self)
         print(' = ', end='')
-        callDeclaredInitializedIdentifierListLiteral.listLiteral.accept(self)
+        callLiteralAtribuirExp.expression.accept(self)
 
     def visitCallDeclaredInitializedIdentifier(self, callDeclaredInitializedIdentifier):
         # print("visitCallDeclaredInitializedIdentifier")
@@ -208,12 +204,11 @@ class Visitor:
         print(' = ', end='')
         callDeclaredInitializedIdentifier.expression.accept(self)
 
-    def visitCallIdListAtribuirIdList(self, callIdListIdAtribuirExpression):
-        # print("visitCallIdListAtribuirIdList")
-        callIdListIdAtribuirExpression.listLiteralID.accept(self)
-        print(' = ', end='')
-        callIdListIdAtribuirExpression.expression.accept(self)
-
+    def visitCalliniRepeticion(self, callIRepeticion):
+        # print("visitCalliniRepeticion")
+        callIRepeticion.initializedVariableDeclaration.accept(self)
+        print(', ', end='')
+        print(callIRepeticion.id, end='')
 
     ''' expressionStatement '''
     def visitConcretexpression(self, concretexpression):
@@ -368,6 +363,10 @@ class Visitor:
     def visitCallLiteralListLiteralID(self, callLiteralListLiteralID):
         # print("visitCallLiteralListLiteralID")
         callLiteralListLiteralID.listLiteralID.accept(self)
+
+    def visitCallLiteralListLiteral(self, callLiteralListLiteral):
+        # print("visitCallLiteralListLiteral")
+        callLiteralListLiteral.listLiteral.accept(self)
 
     def visitCallLiteralBooleanLiteral(self, callLiteralBooleanLiteral):
         #print("visitCallLiteralBooleanLiteral")
