@@ -8,7 +8,7 @@ reservadas = ['IF', 'ELSE', 'SWITCH', 'CASE', 'DEFAULT', 'BREAK',
              'FOR', 'DO', 'WHILE', 'INT', 'FLOAT', 'CHAR', 'STRING',
              'VOID', 'TRUE', 'FALSE',
              'NULL', 'CLASS', 'FINAL', 'CONST', 'VAR', 'FUNCTION',
-             'RETURN'
+             'RETURN', 'BOOLEAN'
             ]
 
 tokens = reservadas + [
@@ -74,11 +74,12 @@ t_COMMA = r','
 t_PCOMMA = r';'
 t_PONTOS = r':'
 
-t_INTEGER = r'\d+'
+
+t_NUMBER = r'\d+'
 t_FLOAT = r'((\d*\.\d+)(E[\+-]?\d+)?|([1-9]\d*E[\+-]?\d+))'
 t_LITERAL_STRING = r'\"([^\\\n]|(\\.))*?\" | \'([^\\\n]|(\\.))*?\''
 
-
+#".99999"
 def t_ID(t):
     r'[a-zA-Z][a-zA-Z0-9]*'
     if t.value.upper() in reservadas:
@@ -87,10 +88,10 @@ def t_ID(t):
 
     return t
 
-def t_NUMBER(t):
-   r'\d+'
-   t.value = int(t.value)
-   return t
+# def t_NUMBER(t):
+#    r'\d+'
+#    t.value = int(t.value)
+#    return t
 
 def t_error(t):
    print("Illegal character '%s'" % t.value[0])

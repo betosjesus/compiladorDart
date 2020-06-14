@@ -1,4 +1,4 @@
-bimport ply.yacc as yacc
+import ply.yacc as yacc
 from DartLex import *
 import DartSintaxeAbstrata as sa
 import DartVisitor as vis
@@ -40,7 +40,8 @@ def p_type(p):
              | FLOAT
              | CHAR 
              | STRING
-             | VOID'''
+             | VOID
+             | BOOLEAN'''
     p[0] = p[1]
 
 def p_functionSignature(p):
@@ -263,17 +264,21 @@ def p_literal(p):
                 | listLiteralID
                 | listLiteral
                 | NUMBER
-                | LITERAL_STRING'''              
-    if isinstance(p[1],str) and (p[1][0] != "\"" or p[1][0] != "'"):
+                | LITERAL_STRING'''
+    if (isinstance(p[1], str) and p[1].replace(".","").isdigit()):
+        print("@@@@@@@",p[1])
+        p[0] = sa.CallNum(p[1])
+    elif isinstance(p[1],str) and (p[1][0] not in ["'", '"']):
         p[0] = sa.CallLiteralId(p[1])
+    # elif isinstance(p[1], str)
+    #     p[0] = sa.CallLiteralString(p[1])
     elif len(p) == 2 and isinstance(p[1], sa.listLiteralID):
         p[0] = sa.CallLiteralListLiteralID(p[1])
     elif len(p) == 2 and isinstance(p[1], sa.booleanLiteral):
         p[0] = sa.CallLiteralBooleanLiteral(p[1])
     elif len(p) == 2 and isinstance(p[1], sa.listLiteral):
         p[0] = sa.CallLiteralListLiteral(p[1])
-    else:
-        p[0] = sa.CallNum(p[1])
+
 
 def p_listLiteral(p): 
     '''listLiteral : LCON expressionList RCON '''
@@ -411,6 +416,7 @@ data =  '''
 
 void main (int a, int b)
 {
+    int e = 10;
     c = b;
 }
 

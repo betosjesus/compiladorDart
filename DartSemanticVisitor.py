@@ -51,6 +51,7 @@ class SemanticVisitor(AbstractVisitor):
     ''' decIdentifier '''
     def visitDeclaredIdentifierType(self, declaredIdentifierType):
         st.addVar(declaredIdentifierType.id, declaredIdentifierType.type)
+        return declaredIdentifierType.type
 
 
     ''' functionSignature '''
@@ -200,14 +201,31 @@ class SemanticVisitor(AbstractVisitor):
 
 
     def visitCallDeclaredInitializedIdentifier(self, callDeclaredInitializedIdentifier):
-        callDeclaredInitializedIdentifier.declaredIdentifier.accept(self)
-        callDeclaredInitializedIdentifier.expression.accept(self)
+        typeId = callDeclaredInitializedIdentifier.declaredIdentifier.accept(self)
+        typeExp = callDeclaredInitializedIdentifier.expression.accept(self)
+        #print( "Expressao asadsdasdasdasdasdasdasdas ")
+        #callDeclaredInitializedIdentifier.expression.accept(self.printer)
+        #print(" ", type(callDeclaredInitializedIdentifier.expression))
+        #print (typeExp)
+        if (typeId == None):
+            print ("O identificador ", end='')
+            callDeclaredInitializedIdentifier.declaredIdentifier.accept(self.printer)
+            print (" não foi declarado")
+        elif (typeId == st.FLOAT and (not typeExp in st.Number)):
+            callDeclaredInitializedIdentifier.accept(self.printer)
+            print (" tipos incompativeis. A expressao da esquerda eh", typeId, end='')
+            print("e a expressao da direita eh", typeExp)
+        elif (typeId != typeExp):
+            callDeclaredInitializedIdentifier.accept(self.printer)
+            print (" tipos incompativeis. A expressao da esquerda eh", typeId, end='')
+            print(" e a expressao da direita eh", typeExp)
+
 
     def visitCalliniRepeticion(self, callIRepeticion):
         callIRepeticion.initializedVariableDeclaration.accept(self)
         print(callIRepeticion.id, end='')
 
-        def visitCallLiteralAtribuirExp(self, callLiteralAtribuirExp):
+    def visitCallLiteralAtribuirExp(self, callLiteralAtribuirExp):
         callLiteralAtribuirExp.literal.accept(self)
         callLiteralAtribuirExp.expression.accept(self)
 
@@ -231,11 +249,13 @@ class SemanticVisitor(AbstractVisitor):
 
     '''expression '''
     def visitCallExpression(self, callExpression):
+        print("[visitCallExpression]")
         return callExpression.orExpression.accept(self)
         
 
     ''' orExpression '''
     def visitCallandExpression(self, callandExpression):
+        print ("[visitCallandExpression]")
         return callandExpression.andExpression.accept(self)
 
     def visitExpressionORexpression(self, expressionORexpression):
@@ -253,6 +273,7 @@ class SemanticVisitor(AbstractVisitor):
 
     ''' andExpression '''
     def visitCalligualExpression(self, calligualExpression):
+        print("[visitCalligualExpression]")
         return calligualExpression.equalityExpression.accept(self)
 
     def visitCallAndExpressionIgual(self, callAndExpressionIgual):
@@ -270,6 +291,7 @@ class SemanticVisitor(AbstractVisitor):
 
     ''' equalityExpression '''
     def visitCallRelacionalExpression(self, callRelacionalExpression):
+        print("[visitCallRelacionalExpression]")
         return callRelacionalExpression.relacionalExpression.accept(self)
 
     def visitCallEqualityExpression(self, callEqualityExpression):
@@ -279,6 +301,7 @@ class SemanticVisitor(AbstractVisitor):
 
     ''' relacionalExpression '''
     def visitCallUnary(self, callUnary):
+        print("[visitCallUnary]")
         return callUnary.addExpression.accept(self)
 
     def visitCallConcretExpression(self, callConcretExpression):
@@ -288,6 +311,7 @@ class SemanticVisitor(AbstractVisitor):
 
     ''' addExpression '''
     def visitCallMultExpression(self, callMultExpression):
+        print("[visitCallMultExpression]")
         return callMultExpression.multExpression.accept(self)
 
     def visitCallAddExpressionMult(self, callAddExpressionMult):
@@ -306,6 +330,7 @@ class SemanticVisitor(AbstractVisitor):
 
     ''' multExpression '''
     def visitCallUnaryExp(self, callUnaryExp):
+        print("[CallUnaryExp]")
         return callUnaryExp.unaryExpression.accept(self)
 
     def visitCallUnaryExpMultExpression(self, callUnaryExpMultExpression):
@@ -324,6 +349,7 @@ class SemanticVisitor(AbstractVisitor):
 
     ''' unaryExpression '''
     def visitConcreteprimaryExpression(self, concreteprimaryExpression):
+        print("[visitConcreteprimaryExpression]")
         return concreteprimaryExpression.primary.accept(self)
 
     def visitCallfunctioncall(self, callfunctioncall):
@@ -334,13 +360,16 @@ class SemanticVisitor(AbstractVisitor):
         if (typeVar != st.INT):
             print('\n\t[Erro] Tipo invalido. ', end='')
         else: 
-            concreteunaryExpression.unaryExpression.accept(self)
+            return typeVar
 
 
     ''' primary '''
     def visitCallPrimaryLiteral(self, callPrimaryLiteral):
+        print("[visitCallPrimaryLiteral]")
+        print(type(callPrimaryLiteral.literal))
         if isinstance(callPrimaryLiteral.literal, sa.literal):
             return callPrimaryLiteral.literal.accept(self)
+
 
     def visitCallPrimaryExpression(self, callPrimaryExpression):
         return callPrimaryExpression.expression.accept(self)        
@@ -355,17 +384,21 @@ class SemanticVisitor(AbstractVisitor):
         return st.BOOL
 
     def visitCallLiteralId(self, callLiteralId):
+        print("[visitCallLiteralId]")
+        print(callLiteralId.id)
         idName = st.getBindable(callLiteralId.id)
-        print ("[visitCallLiteralId]", st.symbolTable)
+        #print ("[visitCallLiteralId]", st.symbolTable)
         if (idName != None):
             return idName[st.TYPE]
         return None
     
     def visitCallNum(self, callnum):
-        if (isinstance(callnum.num, int)):
+        print("[visitCallNum] ", callnum.num)
+        if (callnum.num.isdigit()):
             return st.INT
-        elif (isinstance(callnum.num, float)):
+        else:
             return st.FLOAT
+
 
 
     ''' listLiteral'''
