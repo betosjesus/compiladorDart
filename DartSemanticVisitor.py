@@ -20,6 +20,7 @@ class SemanticVisitor(AbstractVisitor):
     def __init__(self):
         self.printer = Visitor()
         st.beginScope('main')
+        st.addFunction("print", ["a", st.STRING], None)
 
 
     ''' topLevelDefinition'''
@@ -178,9 +179,15 @@ class SemanticVisitor(AbstractVisitor):
     def visitConcreteBreakStatement(self, concreteBreakStatement):
          concreteBreakStatement.breakStatement.accept(self)
 
-
+#############################3
+    ########3
+    ###############
+    ###########3
     ''' localVariableDeclaration '''
     def visitCallLocalInitializedVariableDeclaration(self, localVariableDeclaration):
+        if (localVariableDeclaration.initializedVariableDeclaration.accept(self) != None):
+            # for fazendo add var
+            print(localVariableDeclaration.initializedVariableDeclaration.accept(self))
         return localVariableDeclaration.initializedVariableDeclaration.accept(self)
 
 
@@ -191,6 +198,7 @@ class SemanticVisitor(AbstractVisitor):
 
     def visitCallDeclaredInitializedIdentifier(self, callDeclaredInitializedIdentifier):
         typeId = callDeclaredInitializedIdentifier.declaredIdentifier.accept(self)
+
         typeExp = callDeclaredInitializedIdentifier.expression.accept(self)
         if (typeId == None):
             print (" O identificador ", end='')
@@ -207,8 +215,11 @@ class SemanticVisitor(AbstractVisitor):
 
 
     def visitCalliniRepeticion(self, callIRepeticion):
-        callIRepeticion.initializedVariableDeclaration.accept(self)
-        return callIRepeticion.id 
+        #callIRepeticion.initializedVariableDeclaration.accept(self)
+        if (isinstance(callIRepeticion.initializedVariableDeclaration.accept(self), str)):
+            return [callIRepeticion.initializedVariableDeclaration.accept(self)] + [callIRepeticion.id]
+        else:
+            return callIRepeticion.initializedVariableDeclaration.accept(self) + [callIRepeticion.id]
 
     def visitCallLiteralAtribuirExp(self, callLiteralAtribuirExp):
         callLiteralAtribuirExp.literal.accept(self)

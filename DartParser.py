@@ -271,7 +271,7 @@ def p_literal(p):
         p[0] = sa.CallNum(p[1])
     elif isinstance(p[1],str) and (p[1][0] not in ["'", '"']):
         p[0] = sa.CallLiteralId(p[1])
-    # elif isinstance(p[1], str)
+    # elif isinstance(p[1], str):
     #     p[0] = sa.CallLiteralString(p[1])
     elif len(p) == 2 and isinstance(p[1], sa.listLiteralID):
         p[0] = sa.CallLiteralListLiteralID(p[1])
@@ -418,9 +418,9 @@ void insertionSort(int arr){
     for (int i = 1; i < arr; i++){
     int key = i;
     int j = i - 1;
-
+    
     while ((j >= 0) && (arr > key)){
-      //arr[j+1] = arr[j];
+      //arr[j+1] = "arr[j];";
       j--;
     }
   }
@@ -428,7 +428,9 @@ void insertionSort(int arr){
 
 void main() {
 
-  int arr=8;
+  int arr, b, c, d, e, f, g, h, i, j;
+  b = 35;
+  c = 48;
 
   //print(arr);
   insertionSort(arr);
