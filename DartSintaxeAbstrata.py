@@ -144,11 +144,11 @@ class CallVoidOrType(simlpleFormalParameter):
     def accept(self, visitor):
         return visitor.visitCallVoidOrType(self)  
 
-# class CallParameterExpression(simlpleFormalParameter):
-#     def __init__(self, expression):
-#         self.expression = expression
-#     def accept(self, visitor):
-#         return visitor.visitCallParameterExpression(self)  
+class CallParameterExpression(simlpleFormalParameter):
+    def __init__(self, expression):
+        self.expression = expression
+    def accept(self, visitor):
+        return visitor.visitCallParameterExpression(self)  
     
 
 ''' functionBody e classes concretas '''

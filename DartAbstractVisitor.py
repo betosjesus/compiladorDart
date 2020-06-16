@@ -68,9 +68,9 @@ class AbstractVisitor(metaclass=ABCMeta):
     def visitCallVoidOrType(self, callVoidOrType):
         pass
     
-    # @abstractmethod 
-    # def visitCallParameterExpression(self, callParameterExpression):
-    #     pass
+    @abstractmethod 
+    def visitCallParameterExpression(self, callParameterExpression):
+        pass
         
         
     ''' FunctionBody '''
@@ -273,6 +273,9 @@ class AbstractVisitor(metaclass=ABCMeta):
     ''' literal '''
     @abstractmethod 
     def visitCallLiteralListLiteralID(self, callLiteralListLiteral):
+        pass
+
+    def visitCallLiteralListLiteral(self, callLiteralListLiteral):
         pass
 
     @abstractmethod 

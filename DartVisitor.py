@@ -89,9 +89,9 @@ class Visitor:
         print(callVoidOrType.type, end='')
         print(callVoidOrType.id, end='')
     
-    # def visitCallParameterExpression(self, callParameterExpression):
-    #     # print("visitCallParameterExpression")        
-    #     callParameterExpression.expression.accept(self)
+    def visitCallParameterExpression(self, callParameterExpression):
+        # print("visitCallParameterExpression")        
+        callParameterExpression.expression.accept(self)
         
         
     ''' FunctionBody '''

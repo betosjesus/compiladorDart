@@ -72,11 +72,12 @@ def p_normalFormalParameters(p):
 
 
 def p_simlpleFormalParameter(p):
-    ''' simpleFormalParameter : type ID'''
-    # if(len(p) == 3):
-    p[0] = sa.CallVoidOrType(p[1],p[2])
-    # else:
-    #     p[0] = sa.CallParameterExpression(p[1])
+    ''' simpleFormalParameter : type ID
+                              | expression'''
+    if(len(p) == 3):
+        p[0] = sa.CallVoidOrType(p[1],p[2])
+    else:
+        p[0] = sa.CallParameterExpression(p[1])
 
 
 def p_functionBody(p):
@@ -264,9 +265,9 @@ def p_literal(p):
                 | listLiteralID
                 | listLiteral
                 | NUMBER
+                | FLOAT
                 | LITERAL_STRING'''
     if (isinstance(p[1], str) and p[1].replace(".","").isdigit()):
-        print("@@@@@@@",p[1])
         p[0] = sa.CallNum(p[1])
     elif isinstance(p[1],str) and (p[1][0] not in ["'", '"']):
         p[0] = sa.CallLiteralId(p[1])
@@ -413,14 +414,26 @@ lexer = lex.lex()
 #     Test it out     #
         ###############
 data =  '''  
+void insertionSort(int arr){
+    for (int i = 1; i < arr; i++){
+    int key = i;
+    int j = i - 1;
 
-void main (int a, int b)
-{
-    int e = 10;
-    c = b;
+    while ((j >= 0) && (arr > key)){
+      //arr[j+1] = arr[j];
+      j--;
+    }
+  }
 }
 
+void main() {
 
+  int arr=8;
+
+  //print(arr);
+  insertionSort(arr);
+  //print(arr);
+}
 '''
 
 lexer.input(data)
@@ -430,3 +443,5 @@ result = parser.parse(debug=True)
 visitor = sv.SemanticVisitor()
 # visitor = vis.Visitor()
 result.accept(visitor)
+
+# https://sites.google.com/site/dartlangexamples/api/dart-core/functions/print
