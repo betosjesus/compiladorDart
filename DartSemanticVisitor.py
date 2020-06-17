@@ -20,8 +20,8 @@ class SemanticVisitor(AbstractVisitor):
     def __init__(self):
         self.printer = Visitor()
         st.beginScope('main')
-        st.addFunction("print", ["a", st.STRING], None)
-
+        st.addFunction("print", ["p", st.STRING], None)
+       
 
     ''' topLevelDefinition'''
     def visitTopLevelDefinitionVariable(self, topLevelDefinitionVariable):
@@ -89,11 +89,9 @@ class SemanticVisitor(AbstractVisitor):
             elif (callFormalParameterListvoidOrType.formalParameterList == None):
                 st.addFunction(callFormalParameterListvoidOrType.id, params,
                                callFormalParameterListvoidOrType.type)
-        #print (st.symbolTable)
         st.beginScope(callFormalParameterListvoidOrType.id)
         for k in range(0, len(params), 2):
             st.addVar(params[k], params[k + 1])
-
 
     ''' formalParameterList'''
     def visitCallNormalFormalParameters(self, callNormalFormalParameters):
@@ -179,16 +177,15 @@ class SemanticVisitor(AbstractVisitor):
     def visitConcreteBreakStatement(self, concreteBreakStatement):
          concreteBreakStatement.breakStatement.accept(self)
 
-#############################3
-    ########3
-    ###############
-    ###########3
+
     ''' localVariableDeclaration '''
     def visitCallLocalInitializedVariableDeclaration(self, localVariableDeclaration):
-        if (localVariableDeclaration.initializedVariableDeclaration.accept(self) != None):
-            # for fazendo add var
-            print(localVariableDeclaration.initializedVariableDeclaration.accept(self))
-        return localVariableDeclaration.initializedVariableDeclaration.accept(self)
+        var = localVariableDeclaration.initializedVariableDeclaration.accept(self)
+        #print ("[visitCallLocalInitializedVariableDeclaration]", var)
+        if (var != None):
+            for k in range (0, len(var)):
+                st.addVar(var[k], var[0])
+            return localVariableDeclaration.initializedVariableDeclaration.accept(self)
 
 
     ''' initializedVariableDeclaration '''
@@ -198,7 +195,6 @@ class SemanticVisitor(AbstractVisitor):
 
     def visitCallDeclaredInitializedIdentifier(self, callDeclaredInitializedIdentifier):
         typeId = callDeclaredInitializedIdentifier.declaredIdentifier.accept(self)
-
         typeExp = callDeclaredInitializedIdentifier.expression.accept(self)
         if (typeId == None):
             print (" O identificador ", end='')
@@ -386,8 +382,10 @@ class SemanticVisitor(AbstractVisitor):
             return st.INT
         else:
             return st.FLOAT
-
-
+    
+    def visitCallLiteralString(self, callLiteralString):
+        if isinstance(callLiteralString.string, str):
+            return st.STRING
 
     ''' listLiteral'''
     def visitExpressionListlistLiteral(self, expressionListlistLiteral):

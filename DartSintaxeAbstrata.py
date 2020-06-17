@@ -568,6 +568,12 @@ class CallNum(literal):
     def accept(self, visitor):
         return visitor.visitCallNum(self)
 
+class CallLiteralString(literal):
+    def __init__(self, string):
+        self.string = string
+    def accept(self, visitor):
+        return visitor.visitCallLiteralString(self)
+
 ''' listLiteral e classes concretas '''
 class listLiteral(metaclass=ABCMeta):
     @abstractmethod

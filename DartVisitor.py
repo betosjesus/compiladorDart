@@ -301,7 +301,7 @@ class Visitor:
 
     ''' multExpression '''
     def visitCallUnaryExp(self, callUnaryExp):
-        #print("visitCallUnaryExp")
+        # print("visitCallUnaryExp")
         callUnaryExp.unaryExpression.accept(self)
     
     def visitCallUnaryExpMultExpression(self, callUnaryExpMultExpression):
@@ -380,6 +380,10 @@ class Visitor:
     def visitCallNum(self, callnum):
         # print("visitCallNum")
         print(callnum.num, end='')
+
+    def visitCallLiteralString(self, callLiteralString):
+        # print("visitCallLiteralString")
+        print(callLiteralString.string, end='')
         
 
     ''' listLiteral'''

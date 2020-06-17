@@ -1,15 +1,5 @@
 Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
-Unused terminals:
-
-    CLASS
-    CONST
-    FINAL
-    FUNCTION
-    INTEGER
-    NOT
-    NULL
-
 Grammar
 
 Rule 0     S' -> topLevel
@@ -130,23 +120,18 @@ BOOLEAN              : 14
 BREAK                : 107 108
 CASE                 : 105
 CHAR                 : 11
-CLASS                : 
 COMMA                : 6 20 43 84 86
-CONST                : 
 DEFAULT              : 106
 DIVIDIR              : 64
 DO                   : 100
 ELSE                 : 90
 FALSE                : 83
-FINAL                : 
 FLOAT                : 10 78
 FOR                  : 91
-FUNCTION             : 
 ID                   : 6 7 15 16 21 43 73 81 108
 IF                   : 89 90
 IGUAL                : 52
 INT                  : 9
-INTEGER              : 
 LCHAV                : 24 25 101 102
 LCON                 : 80
 LITERAL_STRING       : 79
@@ -156,8 +141,6 @@ MAIORI               : 58
 MENOR                : 55
 MENORI               : 57
 NEG                  : 53
-NOT                  : 
-NULL                 : 
 NUMBER               : 77
 OR                   : 48
 PCOMMA               : 1 2 39 44 45 87 88 92 93 94 95 97 98 100 107 108

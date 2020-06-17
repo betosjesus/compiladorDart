@@ -6,18 +6,16 @@ import ply.lex as lex
 
 reservadas = ['IF', 'ELSE', 'SWITCH', 'CASE', 'DEFAULT', 'BREAK', 
              'FOR', 'DO', 'WHILE', 'INT', 'FLOAT', 'CHAR', 'STRING',
-             'VOID', 'TRUE', 'FALSE',
-             'NULL', 'CLASS', 'FINAL', 'CONST', 'VAR', 'FUNCTION',
-             'RETURN', 'BOOLEAN'
+             'VOID', 'TRUE', 'FALSE', 'VAR', 'RETURN', 'BOOLEAN'
             ]
 
 tokens = reservadas + [
        # Literais
-         'ID', 'NUMBER', 'INTEGER', 'LITERAL_STRING',
+         'ID', 'NUMBER', 'LITERAL_STRING',
        # Operators (+,-,*,/,%,==,<,>,<=,>=,!=,!,||,&&,++)
          'SOMA', 'SUBTRAIR', 'VEZES', 'DIVIDIR', 'RESTO',
          'IGUAL', 'MENOR', 'MAIOR', 'MENORI', 'MAIORI',
-         'NEG', 'NOT', 'OR', 'AND',
+         'NEG', 'OR', 'AND',
          'ATRIBUIR', 'SOMASOMA', 'SUBSUB',
       # Delimitadores ( ) [ ] { } , . ; :
          'LPAREN', 'RPAREN', 'LCON', 'RCON', 'LCHAV', 'RCHAV',
@@ -58,7 +56,6 @@ t_MAIOR = r'>'
 t_MENORI = r'<='
 t_MAIORI = r'>='
 t_NEG = r'!='
-t_NOT = r'!'
 t_OR = r'\|\|'
 t_AND = r'&&'
 t_ATRIBUIR = r'='
@@ -79,19 +76,12 @@ t_NUMBER = r'\d+'
 t_FLOAT = r'((\d*\.\d+)(E[\+-]?\d+)?|([1-9]\d*E[\+-]?\d+))'
 t_LITERAL_STRING = r'\"([^\\\n]|(\\.))*?\" | \'([^\\\n]|(\\.))*?\''
 
-#".99999"
 def t_ID(t):
     r'[a-zA-Z][a-zA-Z0-9]*'
     if t.value.upper() in reservadas:
         t.value = t.value
         t.type = t.value.upper()
-
     return t
-
-# def t_NUMBER(t):
-#    r'\d+'
-#    t.value = int(t.value)
-#    return t
 
 def t_error(t):
    print("Illegal character '%s'" % t.value[0])

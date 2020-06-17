@@ -290,6 +290,10 @@ class AbstractVisitor(metaclass=ABCMeta):
     def visitCallNum(self, callnum):
         pass
         
+    @abstractmethod
+    def visitCallLiteralString(self, callLiteralString):
+        pass
+
 
     ''' listLiteral'''
     @abstractmethod 

@@ -2,7 +2,7 @@
 symbolTable = []
 INT = 'int'
 FLOAT = 'float'
-STRING = 'string'
+STRING = 'String'
 BOOL = 'boolean'
 VAR = 'var'
 TYPE = 'type'

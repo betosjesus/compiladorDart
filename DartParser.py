@@ -271,8 +271,8 @@ def p_literal(p):
         p[0] = sa.CallNum(p[1])
     elif isinstance(p[1],str) and (p[1][0] not in ["'", '"']):
         p[0] = sa.CallLiteralId(p[1])
-    # elif isinstance(p[1], str):
-    #     p[0] = sa.CallLiteralString(p[1])
+    elif isinstance(p[1], str):
+        p[0] = sa.CallLiteralString(p[1])
     elif len(p) == 2 and isinstance(p[1], sa.listLiteralID):
         p[0] = sa.CallLiteralListLiteralID(p[1])
     elif len(p) == 2 and isinstance(p[1], sa.booleanLiteral):
@@ -414,28 +414,103 @@ lexer = lex.lex()
 #     Test it out     #
         ###############
 data =  '''  
-void insertionSort(int arr){
-    for (int i = 1; i < arr; i++){
-    int key = i;
-    int j = i - 1;
-    
-    while ((j >= 0) && (arr > key)){
-      //arr[j+1] = "arr[j];";
-      j--;
-    }
-  }
+
+int soma(int parcela1, int parcela2, int parcela3){
+    return parcela1 + parcela2 + parcela3 + 10;
+ }
+ 
+int subtracao(int valor1, int valor2){
+    return valor1 - valor2;
+}
+
+float multiplicacao (float valor1, float valor2){
+    return valor1 * valor2;
 }
 
 void main() {
 
-  int arr, b, c, d, e, f, g, h, i, j;
-  b = 35;
-  c = 48;
+    /*   DECLARAÇAO
+        DE VARIAVEIS   */
+        
+    int par2, par3;
+    int par1 = 50;
+    par3 = 6;
+    par2 = 50;
 
-  //print(arr);
-  insertionSort(arr);
-  //print(arr);
+    float vl1 = 5.5;
+    float vl2;
+    vl2 = 6.5;
+
+    int q = 8;
+    int w = 10;
+
+    int resposta;
+    int outraResposta;
+
+    //Observacao, tenha doh:
+    String melhorProfessor = "Cabojinha";
+    String precisoDeNota = "AJUDE A GENTE PROFESSOR";
+ 
+    int escolha;
+    
+    if(q > w){
+       do{
+            switch(escolha){
+                case 1:
+                    for( int i = 0; i > 10 ; i ++)
+                        soma(par1,par2,par3);
+                    break;
+                case 2:
+                    while(w>q)
+                        subtracao(par1,par2);
+                    break;
+                case 3:
+                    for(int i = 0; i >10 ; i ++){
+                        multiplicacao(vl1,vl2);
+                        print(melhorProfessor);
+                    }
+                    break;
+                default:
+                    break;
+                    print("Opção Incorreta! Escolha entre 1 e 3, por favor");
+                    
+            }
+        }while(resposta == 9 && outraResposta != 7);
+    }
+    else
+        print("Não foi possivel fazer suas contas"); 
+} 
+ 
+/* ****************************************
+                OUTRO TESTE                
+   **************************************** */
+
+/*
+
+int sumparabolac(int a){
+    return a;
 }
+
+int sumparabola(int a, int b, int c){
+    return a + b + true;
+}
+
+int some (int a, int b){
+    a = 88 + 44;
+    b = 70;
+    sumparabola(1, 2, 3);        
+    while (true){
+        c = 38;
+        sumparabola(5, true, false);
+        while (c){
+            sumparabola(5, true, true);
+        }
+    }
+    sumparabolac(2);
+    return true;
+}
+
+*/
 '''
 
 lexer.input(data)
@@ -446,4 +521,3 @@ visitor = sv.SemanticVisitor()
 # visitor = vis.Visitor()
 result.accept(visitor)
 
-# https://sites.google.com/site/dartlangexamples/api/dart-core/functions/print
